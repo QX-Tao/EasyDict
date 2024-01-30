@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="7dp"
+    android:layout_marginBottom="7dp">
+
+    <TextView
+        android:id="@+id/tv_item_lang"
+        android:textColor="@color/theme_color_gol"
+        android:background="@color/colorBgLightYellow3"
+        android:textStyle="bold"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_item_word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="16sp"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@color/theme_color_gol" />
+
+</LinearLayout>

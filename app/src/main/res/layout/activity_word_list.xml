@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBgWhite2"
+    tools:context=".ui.activity.wordlist.WordListActivity">
+
+    <View
+        android:id="@+id/v_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        app:layout_constraintTop_toTopOf="@+id/v_holder"
+        app:layout_constraintBottom_toBottomOf="@+id/v_holder"
+        app:layout_constraintStart_toStartOf="@+id/v_holder"
+        app:layout_constraintEnd_toEndOf="@+id/v_holder"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            android:background="@color/colorBgWhite2"
+            app:layout_behavior="com.qxtao.easydict.ui.view.FixAppBarLayoutBehavior">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                app:contentScrim="@color/colorBgWhite2"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/mcv_list_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorBgWhite1"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/tv_list_info"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@id/tv_list_category"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:text="@string/def_str"
+                            android:textColor="@color/secondTextColor"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_list_category"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:text="@string/def_str"
+                            android:drawablePadding="5dp"
+                            android:padding="10dp"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:textColor="@color/secondInsTextColor"
+                            android:textSize="14sp"
+                            app:drawableEndCompat="@drawable/ic_unfold_up_and_down"/>
+
+                    </RelativeLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list_word"
+            android:paddingTop="5dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_list_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_words_in_this_category"
+                android:textColor="@color/secondTextColor"
+                android:textSize="13sp"
+                app:drawableTopCompat="@drawable/ic_category_no_word" />
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.qxtao.easydict.ui.view.LoadingView
+            android:id="@+id/lv_loading"
+            android:background="@color/colorBgWhite2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:ballColor="@color/themeMainColor"
+            app:internal="60"
+            app:duration="200"
+            app:max_radius="20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_loading_fail"
+            android:background="@color/colorBgWhite2"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:gravity="center"
+                android:padding="20dp"
+                android:drawablePadding="15dp"
+                android:textSize="17sp"
+                android:textColor="@color/secondTextColor"
+                android:text="@string/failed_to_load_click_the_screen_to_try_again"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:drawableTopCompat="@drawable/ic_loading_fail" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/include_title_bar_second"
+            layout="@layout/include_title_bar_second"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:visibility="gone"
+            android:id="@+id/mcv_voice"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardBackgroundColor="@color/themeMainColor"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="15dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp" >
+
+            <Button
+                android:id="@+id/bt_switch_voice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/def_str"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/secondTextColor"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:stateListAnimator="@null"
+                android:outlineProvider="none" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

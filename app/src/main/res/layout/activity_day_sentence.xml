@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBgLightBlack1"
+    tools:context=".ui.activity.daysentence.DaySentenceActivity">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/day_sentence_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_height="match_parent">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+            <ImageButton
+                tools:ignore="SpeakableTextPresentCheck|TouchTargetSizeCheck"
+                android:id="@+id/iv_back_button"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical|start"
+                android:tooltipText="@string/back"
+                android:background="@drawable/bg_ripple_r18"
+                android:src="@drawable/ic_back_white"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginEnd="36dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_gravity="center_vertical|center"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:id="@+id/tv_title" />
+
+            <ImageButton
+                tools:ignore="SpeakableTextPresentCheck|TouchTargetSizeCheck"
+                android:id="@+id/iv_switch_button"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical|end"
+                android:tooltipText="@string/switch_pager"
+                android:background="@drawable/bg_ripple_r18"
+                android:src="@drawable/ic_switch_white"/>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

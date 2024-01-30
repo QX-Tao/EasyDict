@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/colorBgWhite1"
+    android:layout_marginTop="7dp"
+    android:layout_marginBottom="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_super_header_word"
+        android:layout_marginBottom="7dp"
+        android:textSize="16sp"
+        android:textColor="@color/secondTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        app:flexWrap="wrap"
+        android:layout_marginBottom="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_head_word"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/theme_color_gol"
+            android:layout_marginEnd="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"/>
+
+        <TextView
+            android:id="@+id/tv_phonetic"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textColor="@color/thirdTextColor"
+            android:layout_marginEnd="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"/>
+
+        <per.wsj.library.AndRatingBar
+            android:id="@+id/rb_star"
+            android:isIndicator="true"
+            app:scaleFactor="0.7"
+            app:keepOriginColor="true"
+            app:starDrawable="@drawable/ic_star2"
+            app:starColor="@color/theme_color_gol"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"/>
+
+        <TextView
+            android:id="@+id/tv_word_form"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textColor="@color/thirdTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"/>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <TextView
+        android:textIsSelectable="true"
+        android:id="@+id/tv_item_tran"
+        android:layout_marginBottom="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondTextColor"
+        android:textSize="16sp" />
+
+    <TextView
+        android:textIsSelectable="true"
+        android:id="@+id/tv_item_exam"
+        android:layout_marginBottom="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondInsTextColor"
+        android:textSize="14sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_item_collins"
+        android:nestedScrollingEnabled="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

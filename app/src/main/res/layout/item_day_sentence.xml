@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mcv_day_sentence_item_content"
+        app:cardBackgroundColor="@color/colorBgLightBlack1"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:minHeight="90dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_day_sentence_item_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:alpha="0.6"
+                android:scaleType="centerCrop"
+                android:transitionName="mainTrans" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:padding="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_day_sentence_item_date"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/bg_ripple_r10"
+                    android:id="@+id/iv_unfold"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:padding="3dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toStartOf="@id/iv_ds_sound"
+                    app:layout_constraintTop_toTopOf="@+id/tv_day_sentence_item_date"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_day_sentence_item_date"
+                    android:src="@drawable/ic_unfold_white" />
+
+                <ImageView
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/bg_ripple_r10"
+                    android:id="@+id/iv_ds_sound"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:padding="3dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_day_sentence_item_date"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_day_sentence_item_date"
+                    android:src="@drawable/ic_sound" />
+
+                <TextView
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_day_sentence_item_date"
+                    android:id="@+id/tv_day_sentence_item_sentence_en"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_day_sentence_item_sentence_en"
+                    android:id="@+id/tv_day_sentence_item_sentence_ch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.qxtao.easydict.ui.view.LoadingView
+                android:id="@+id/lv_loading"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:ballColor="@color/themeMainColor"
+                app:internal="60"
+                app:duration="200"
+                app:max_radius="20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_loading_fail"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp">
+
+                <TextView
+                    android:gravity="center"
+                    android:textSize="17sp"
+                    android:textColor="@color/white"
+                    android:text="@string/failed_to_load_click_here_to_try_again"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
+

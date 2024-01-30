@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--默认配置，明文通信，使用系统证书-->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <!--trust system while release only-->
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- 有道域名，允许Http通讯 -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">ydschool-online.nos.netease.com</domain>
+        <domain includeSubdomains="true">oimagea7.ydstatic.com</domain>
+        <trust-anchors>
+            <!--trust system while release only-->
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!--debug模式，可以使用用户自己安装的正式，比如charles抓包安装的证书，这个配置只在 android:debuggable 为 "true" 时将应用的重写，IDE 和构建工具生成的非发布版本通常属于此情况-->
+    <debug-overrides>
+        <!-- Trust user added CAs while debuggable only -->
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>

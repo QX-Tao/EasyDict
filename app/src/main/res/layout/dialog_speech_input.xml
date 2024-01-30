@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:text="@string/speech_input"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"
+        android:textSize="19sp"
+        android:layout_gravity="center"
+        android:textColor="@color/firstTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:cardBackgroundColor="@color/colorBgWhite5"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:singleLine="true"
+            style="@style/EditTextStyle"
+            android:textCursorDrawable="@drawable/sp_edittext_cursor"
+            android:textColorHint="@color/secondInsTextColor"
+            android:textColor="@color/firstInsTextColor"
+            android:drawablePadding="12dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:hint="@string/please_speech"
+            android:maxLines="1"
+            tools:ignore="VisualLintTextFieldSize"
+            app:drawableStartCompat="@drawable/ic_voice3" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/tv_wrong"
+        android:text="@string/go_wrong_try_again"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textColor="@color/colorBgRed1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_input"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_height="36dp"
+            android:layout_width="wrap_content"
+            android:background="@drawable/bg_ripple_r36"
+            android:textSize="14sp"
+            android:textColor="@color/themeMainColor"
+            android:text="@string/input"/>
+
+        <View
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_r36"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_height="36dp"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/themeMainColor"
+            android:text="@string/cancel"/>
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_height="36dp"
+            android:layout_width="wrap_content"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_r36"
+            android:textSize="14sp"
+            android:textColor="@color/secondInsTextColor"
+            android:text="@string/confirm"/>
+
+    </LinearLayout>
+
+</LinearLayout>

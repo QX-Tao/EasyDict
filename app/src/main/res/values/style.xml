@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@null</item>
+        <item name="android:textColorHighlight">@color/themeMainLightColor</item>
+    </style>
+
+    <declare-styleable name="LoadingView">
+        <attr name="min_radius" format="integer" />
+        <attr name="max_radius" format="integer" />
+        <attr name="ballColor" format="color" />
+        <attr name="duration" format="integer" />
+        <attr name="internal" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="expandableText" format="string" />
+        <attr name="expandedSuffix" format="string" />
+        <attr name="foldedSuffix" format="string" />
+        <attr name="foldLines" format="integer" />
+        <attr name="suffixTextColor" format="color" />
+        <attr name="expandDuration" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="AlignTextView">
+        <attr name="alignOnlyOneLine" format="boolean"/>
+    </declare-styleable>
+
+</resources>

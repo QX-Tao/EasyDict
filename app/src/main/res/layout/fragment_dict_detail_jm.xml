@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layout_constraintTop_toTopOf="parent"
+    android:id="@+id/nsv_content"
+    android:clipToPadding="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.dict.DictDetailJMFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/colorBgWhite2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--  第一部分：英汉基础信息  -->
+        <LinearLayout
+            android:visibility="gone"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:id="@+id/ll_eh_header_part"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/rv_eh_header_explain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/rv_eh_header_inflection"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="15dp"
+                android:id="@+id/tv_eh_header_exam_type"
+                android:textColor="@color/thirdTextColor"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <!--  第二部分：汉英基本信息  -->
+        <LinearLayout
+            android:visibility="gone"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:id="@+id/ll_he_header_part"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/rv_he_header_explain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <!--  第三部分：双语例句  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:id="@+id/cl_blng_sents_part"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/bilingual_example"
+                android:id="@+id/tv_blng_sents_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_blng_sents_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_blng_sents_part_title"
+                android:id="@+id/tv_blng_sents_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_blng_sents_part_title"
+                android:id="@+id/rv_blng_sents_part_classification"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/rv_blng_sents_part_classification"
+                android:id="@+id/rv_blng_sents_part_sents"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第四部分：权威例句  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_auth_sents_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/authoritative_example"
+                android:id="@+id/tv_auth_sents_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_auth_sents_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_auth_sents_part_title"
+                android:id="@+id/tv_auth_sents_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_auth_sents_part_title"
+                android:id="@+id/rv_auth_sents_part"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第五部分：网络释义  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_web_trans_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/web_trans"
+                android:id="@+id/tv_web_trans_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_web_trans_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_web_trans_part_title"
+                android:id="@+id/tv_web_trans_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_web_trans_part_title"
+                android:id="@+id/rv_web_trans_part_mean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第六部分：专业释义  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_special_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/special_trans"
+                android:id="@+id/tv_special_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_special_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_special_part_title"
+                android:id="@+id/tv_special_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_special_part_title"
+                android:id="@+id/rv_special_part_mean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第七部分：同反义词  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_thesaurus_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/thesaurus"
+                android:id="@+id/tv_thesaurus_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_thesaurus_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_thesaurus_part_title"
+                android:id="@+id/tv_thesaurus_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_thesaurus_part_title"
+                android:id="@+id/rv_thesaurus_part_mean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第八部分：同义词  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_synonym_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/synonym"
+                android:id="@+id/tv_synonym_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_synonym_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_synonym_part_title"
+                android:id="@+id/tv_synonym_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_synonym_part_title"
+                android:id="@+id/rv_synonym_part_mean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第九部分：反义词  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_antonym_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/antonym"
+                android:id="@+id/tv_antonym_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_antonym_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_antonym_part_title"
+                android:id="@+id/tv_antonym_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_antonym_part_title"
+                android:id="@+id/rv_antonym_part_mean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第十部分：短语词组  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_phrase_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/phrase"
+                android:id="@+id/tv_phrase_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_phrase_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_phrase_part_title"
+                android:id="@+id/tv_phrase_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_phrase_part_more"
+                android:id="@+id/rv_phrase_part_mean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第十一部分：同根词  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_rel_word_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/rel_word"
+                android:id="@+id/tv_rel_word_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_rel_word_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_rel_word_part_title"
+                android:id="@+id/tv_rel_word_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <TextView
+                android:id="@+id/tv_rel_word_part_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/root_from_eee"
+                android:textSize="16sp"
+                android:textColor="@color/secondTextColor"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_rel_word_part_title"/>
+
+            <TextView
+                android:id="@+id/tv_rel_word_part_inf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/theme_color_gol"
+                app:layout_constraintStart_toEndOf="@id/tv_rel_word_part_word"
+                app:layout_constraintBottom_toBottomOf="@id/tv_rel_word_part_word"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_rel_word_part_word"
+                android:id="@+id/rv_rel_word_part_mean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第十二部分：词源  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_etym_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/etym"
+                android:id="@+id/tv_etym_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_etym_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_etym_part_title"
+                android:id="@+id/tv_etym_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_etym_part_title"
+                android:id="@+id/rv_etym_part_mean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第十三部分：百科  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/cl_baike_digest_part"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/firstTextColor"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/baike"
+                android:id="@+id/tv_baike_digest_part_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textColor="@color/thirdTextColor"
+                android:textSize="15sp"
+                android:text="@string/more"
+                android:drawablePadding="5dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_ripple_r24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_baike_digest_part_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_baike_digest_part_title"
+                android:id="@+id/tv_baike_digest_part_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_right3" />
+
+            <TextView
+                android:id="@+id/tv_baike_digest_part_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textSize="18sp"
+                android:textColor="@color/theme_color_gol"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_title"/>
+
+            <com.qxtao.easydict.ui.view.ExpandableTextView
+                android:id="@+id/tv_baike_digest_part_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:maxHeight="120dp"
+                android:textIsSelectable="true"
+                app:foldLines="6"
+                app:foldedSuffix="@string/empty_string"
+                app:expandedSuffix="@string/empty_string"
+                android:textSize="15sp"
+                android:textColor="@color/secondTextColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_word"/>
+
+            <TextView
+                android:id="@+id/tv_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="12sp"
+                android:text="@string/source_"
+                android:textColor="@color/thirdInsTextColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_desc"/>
+
+            <TextView
+                android:id="@+id/tv_source_baike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="5dp"
+                android:textSize="12sp"
+                android:textColor="@color/thirdInsTextColor"
+                app:layout_constraintStart_toEndOf="@+id/tv_source"
+                app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_desc"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  第十四部分：拼写错误  -->
+        <LinearLayout
+            android:visibility="gone"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:id="@+id/ll_typos_part"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/thirdInsTextColor"
+                android:text="@string/are_you_looking_for"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/rv_typos_explain"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <!--  第十五部分：重新输入  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:padding="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorBgWhite1"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cl_retype_part">
+
+            <TextView
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/tv_not_result_desc"
+                android:textSize="16sp"
+                android:text="@string/not_result_desc"
+                android:textColor="@color/secondTextColor"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_marginTop="15dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/themeMainColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_not_result_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_retype"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:text="@string/retype"
+                    android:textColor="@color/secondTextColor"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

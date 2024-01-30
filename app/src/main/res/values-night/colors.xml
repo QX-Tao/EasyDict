@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorBgWhite1">#FF333944</color>
+    <color name="colorBgWhite2">#FF2C3039</color>
+    <color name="colorBgWhite3">#ff21252C</color>
+    <color name="colorBgWhite4">#FF424242</color>
+    <color name="colorBgWhite5">#FF343434</color>
+    <color name="colorBgWhite6">#FF484D57</color>
+    <color name="colorBgWhite7">#FF373D47</color>
+    <color name="colorBgWhite8">#BB2C3039</color>
+    <color name="colorBgWhite10">#FF111111</color>
+    <color name="colorAccent">#FF7E5F00</color>
+    <color name="mainColor">#FF424242</color>
+    <color name="themeMainColor">#FF7E5F00</color>
+    <color name="themeMainVariantColor">#FF918800</color>
+    <color name="themeMainLightColor">#FF655D3C</color>
+    <color name="themeSecondColor">#FFCCA700</color>
+    <color name="themeSecondVariantColor">#FFB6AB00</color>
+    <color name="firstTextColor">#FFFFFFFF</color>
+    <color name="secondTextColor">#DEFFFFFF</color>
+    <color name="thirdTextColor">#99FFFFFF</color>
+    <color name="forthTextColor">#66FFFFFF</color>
+    <color name="titleColor">#FFFFFFFF</color>
+    <color name="rippleColor">#14FFFFFF</color>
+    <color name="lineColor">#FFCFCFCF</color>
+    <color name="divColor">#FF3C3C3C</color>
+    <color name="firstInsTextColor">#FFCFCFCF</color>
+    <color name="secondInsTextColor">#88CFCFCF</color>
+    <color name="thirdInsTextColor">#55CFCFCF</color>
+    <color name="forthInsTextColor">#552C3039</color>
+    <color name="firstStatusColor">#FF646464</color>
+    <color name="secondStatusColor">#FF424242</color>"
+    <color name="colorBgLightYellow1">#FF7E5F00</color>
+    <color name="colorBgLightYellow2">#FF231D0D</color>
+    <color name="colorBgLightYellow3">#FF544D38</color>
+    <color name="colorBgLightYellow4">#FF7E5F00</color>
+    <color name="colorBgLightYellow5">#FF544D38</color>
+    <color name="colorBgLightBlack4">#11FFFFFF</color>
+    <color name="colorBgRed1">#FF7E2C1F</color>
+    <color name="colorBgBlue1">#FF5D85AC</color>
+    <color name="colorBgGreen1">#004444</color>
+    <color name="colorBgGreen3">#004444</color>
+
+
+
+
+</resources>

@@ -1,0 +1,43 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.EasyDict" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/themeMainColor</item>
+        <item name="colorPrimaryVariant">@color/themeMainVariantColor</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/themeSecondColor</item>
+        <item name="colorSecondaryVariant">@color/themeSecondVariantColor</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">@color/trans</item>
+        <item name="android:isLightTheme">true</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+
+    <!-- Starting Theme. -->
+    <style name="Theme.EasyDict.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorBgWhite1</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_animate_icon</item>
+        <item name="windowSplashScreenAnimationDuration">500</item>
+        <item name="postSplashScreenTheme">@style/Theme.EasyDict</item>
+    </style>
+
+    <!-- NoActionBar Theme. -->
+    <style name="Theme.EasyDict.NoActionBarTheme" parent="Theme.EasyDict">
+        <item name="android:windowBackground">@color/colorBgWhite2</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimaryDark">@color/colorBgWhite2</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- PhotoView Theme. -->
+    <style name="Theme.EasyDict.PhotoViewTheme" parent="Theme.EasyDict">
+        <item name="android:navigationBarColor">@color/trans</item>
+        <item name="android:windowBackground">@color/trans</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+    </style>
+
+</resources>
