@@ -109,8 +109,10 @@ class DictSearchEditFragment : BaseFragment<FragmentDictSearchEditBinding>(Fragm
     }
 
     override fun onPause() {
-        dictViewModel.setSearchText(etEditUnfold.text.toString(), etEditUnfold.selectionStart)
-        dictViewModel.setHasShowRvInfo(first = etEditUnfold.text.isEmpty())
+        if (this::dictViewModel.isInitialized){
+            dictViewModel.setSearchText(etEditUnfold.text.toString(), etEditUnfold.selectionStart)
+            dictViewModel.setHasShowRvInfo(first = etEditUnfold.text.isEmpty())
+        }
         super.onPause()
     }
 

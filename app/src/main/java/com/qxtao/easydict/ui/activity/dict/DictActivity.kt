@@ -1,13 +1,10 @@
 package com.qxtao.easydict.ui.activity.dict
 
 import android.Manifest
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
@@ -24,14 +21,12 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AlertDialog
-import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.qxtao.easydict.R
@@ -61,8 +56,7 @@ import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 import java.util.Locale
-import java.util.Timer
-import kotlin.concurrent.schedule
+import kotlin.system.exitProcess
 
 
 @RuntimePermissions
@@ -113,6 +107,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                         withContext(Dispatchers.Main) {
                             showShortToast(getString(R.string.configure_simple_dict_error_desc))
                             finish()
+                            exitProcess(0)
                         }
                     }
                 }
@@ -497,8 +492,10 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
 
     override fun onStop() {
         super.onStop()
-        dictViewModel.stopPlaySound()
-        dictViewModel.deleteSearchRecord()
+        if (this::dictViewModel.isInitialized){
+            dictViewModel.stopPlaySound()
+            dictViewModel.deleteSearchRecord()
+        }
     }
 
     override fun isDisplaySplashScreen(): Boolean  = true

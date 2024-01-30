@@ -122,8 +122,8 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
 
     override fun onDestroy1() {
         super.onDestroy1()
-        dailySentenceData.close()
-        daySentenceViewModel.stopPlaySound()
+        if (this::dailySentenceData.isInitialized) dailySentenceData.close()
+        if (this::daySentenceViewModel.isInitialized) daySentenceViewModel.stopPlaySound()
     }
 
 }

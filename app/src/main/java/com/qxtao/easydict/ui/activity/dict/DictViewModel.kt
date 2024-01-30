@@ -128,7 +128,7 @@ class DictViewModel(
     }
 
     // 获取推荐单词
-    private fun getDictSearchSugWord(){
+    fun getDictSearchSugWord(){
         viewModelScope.launch(Dispatchers.IO) {
             val list = simpleDictData.getRandomSimpleDictList()
             withContext(Dispatchers.Main) {

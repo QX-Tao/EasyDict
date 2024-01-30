@@ -113,7 +113,7 @@ class SimpleDictData (
             null,
             null,
             "RANDOM()",
-            "8"
+            "12"
         )
         val simpleDicts = mutableListOf<SimpleDict>()
         while (cursor.moveToNext()) {
@@ -121,6 +121,7 @@ class SimpleDictData (
             val translation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSLATION))
             simpleDicts.add(SimpleDict(origin, translation))
         }
+        simpleDicts.sortBy { it.origin }
         cursor.close()
         return simpleDicts
     }

@@ -110,4 +110,5 @@
     <string name="collect_success">已收藏</string>
     <string name="word_mark_learning">单词已标记为在学</string>
     <string name="word_mark_collect">单词已取消收藏</string>
+    <string name="suggest_search">推荐搜索</string>
 </resources>

@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.DictSearchSugWordAdapter
@@ -40,12 +41,9 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
     private lateinit var tvDaySentence : TextView
     private lateinit var tvGrammyCheck : TextView
     private lateinit var tvWordList : TextView
-    private lateinit var ivMoreButton : ImageView
-    private lateinit var ivBackButton : ImageView
-    private lateinit var tvTitle : TextView
     private lateinit var ivVoice : ImageView
+    private lateinit var ivSuggestSearchRefresh : ImageView
     private lateinit var rvSearchSuggestion : RecyclerView
-    private lateinit var ivDinosaur : ImageView
     private lateinit var vHolder: View
 
     override fun bindViews() {
@@ -54,24 +52,17 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
         tvDaySentence = binding.tvDaySentence
         tvGrammyCheck = binding.tvGrammyCheck
         tvWordList = binding.tvWordList
-        tvTitle = binding.includeTitleBarSecond.tvTitle
-        ivBackButton = binding.includeTitleBarSecond.ivBackButton
-        ivMoreButton = binding.includeTitleBarSecond.ivMoreButton
         ivVoice = binding.ivVoice
+        ivSuggestSearchRefresh = binding.ivSuggestSearchRefresh
         rvSearchSuggestion = binding.rvSearchSuggestion
         vHolder = binding.vHolder
-        ivDinosaur = binding.ivDinosaur
     }
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
-        tvTitle.text = getString(R.string.easy_dict)
-        ivMoreButton.visibility = View.GONE
-        ivDinosaur.setImageResource(resources.getIdentifier("dinosaur_${TimeUtils.getDayOfMonth() % 12}", "drawable", mContext.packageName))
         rvSearchSugWordAdapter = DictSearchSugWordAdapter(ArrayList())
         rvSearchSuggestion.adapter = rvSearchSugWordAdapter
-        rvSearchSuggestion.layoutManager =
-            LinearLayoutManager(requireActivity()).apply { orientation = LinearLayoutManager.HORIZONTAL }
+        rvSearchSuggestion.layoutManager = FlexboxLayoutManager(requireActivity())
         dictViewModel.dictSearchSugWord.observe(this){
             rvSearchSugWordAdapter.setData(it)
         }
@@ -81,7 +72,7 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
         ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
             val displayCutout = insets.displayCutout
             val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top + SizeUtils.dp2px(56f)
+            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             params.bottomMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
             when (requireActivity().screenRotation){
                 90 -> {
@@ -100,11 +91,11 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
                 mListener.onFragmentInteraction("toDetailFragment", dictViewModel.dictSearchSugWord.value!![position].origin)
             }
         })
+        ivSuggestSearchRefresh.setOnClickListener {
+            dictViewModel.getDictSearchSugWord()
+        }
         tvSearchBox.setOnClickListener {
             mListener.onFragmentInteraction("toDictSearchFragment")
-        }
-        ivBackButton.setOnClickListener{
-            mListener.onFragmentInteraction("finishActivity")
         }
         ivVoice.setOnClickListener {
             mListener.onFragmentInteraction("voiceSearch")

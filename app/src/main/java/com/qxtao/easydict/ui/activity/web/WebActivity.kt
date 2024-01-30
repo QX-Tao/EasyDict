@@ -375,14 +375,16 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     }
 
     override fun onDestroy1() {
-        webView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
-        webView.clearHistory()
-        webView.removeAllViews()
-        val parent = webView.parent
-        if (parent is ViewGroup) {
-            parent.removeView(webView)
+        if (this::webView.isInitialized){
+            webView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
+            webView.clearHistory()
+            webView.removeAllViews()
+            val parent = webView.parent
+            if (parent is ViewGroup) {
+                parent.removeView(webView)
+            }
+            webView.destroy()
         }
-        webView.destroy()
         super.onDestroy1()
     }
 
