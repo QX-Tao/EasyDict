@@ -83,7 +83,10 @@ class SimpleDictData (
             dictList.add(simpleDict)
         }
         cursor.close()
-        return dictList.ifEmpty { null }
+        val sortedDictList = originList.mapNotNull { origin ->
+            dictList.find { it.origin == origin }
+        }
+        return sortedDictList.ifEmpty { null }
     }
 
     fun getTranslationByOrigin(origin: String): String? {

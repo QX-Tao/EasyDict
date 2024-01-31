@@ -77,7 +77,7 @@ class WordListData (
 
     fun setIsCollected(word: String, tablePosition: Int, isCollected: Boolean){
         val values = ContentValues().apply {
-            put(COLUMN_IS_COLLECTED, if (isCollected) 1 else 0)
+            put(COLUMN_IS_COLLECTED, if (isCollected) System.currentTimeMillis() else 0)
         }
         val whereClause = "$COLUMN_WORD = ?"
         val whereArgs = arrayOf(word)
@@ -86,7 +86,7 @@ class WordListData (
 
     fun setIsLearned(word: String, tablePosition: Int, isLearned: Boolean){
         val values = ContentValues().apply {
-            put(COLUMN_IS_LEARNED, if (isLearned) 1 else 0)
+            put(COLUMN_IS_LEARNED, if (isLearned) System.currentTimeMillis() else 0)
         }
         val whereClause = "$COLUMN_WORD = ?"
         val whereArgs = arrayOf(word)
@@ -155,7 +155,7 @@ class WordListData (
         return withContext(Dispatchers.IO){
             val selected = selected()
             val list = mutableListOf<WordListItem>()
-            val cursor = db.rawQuery("SELECT * FROM $selected WHERE $COLUMN_IS_LEARNED = 1", null)
+            val cursor = db.rawQuery("SELECT * FROM $selected WHERE $COLUMN_IS_LEARNED != 0 ORDER BY $COLUMN_IS_LEARNED DESC", null)
             while (cursor.moveToNext()){
                 val origin = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_WORD))
                 val translation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSLATION))
@@ -169,7 +169,7 @@ class WordListData (
         return withContext(Dispatchers.IO){
             val selected = selected()
             val list = mutableListOf<WordListItem>()
-            val cursor = db.rawQuery("SELECT * FROM $selected WHERE $COLUMN_IS_COLLECTED = 1", null)
+            val cursor = db.rawQuery("SELECT * FROM $selected WHERE $COLUMN_IS_COLLECTED != 0 ORDER BY $COLUMN_IS_COLLECTED DESC", null)
             while (cursor.moveToNext()){
                 val origin = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_WORD))
                 val translation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSLATION))
@@ -183,7 +183,7 @@ class WordListData (
         return withContext(Dispatchers.IO){
             val selected = selected()
             val list = mutableListOf<WordListItem>()
-            val cursor = db.rawQuery("SELECT * FROM $selected WHERE $COLUMN_IS_LEARNED != 1", null)
+            val cursor = db.rawQuery("SELECT * FROM $selected WHERE $COLUMN_IS_LEARNED = 0", null)
             while (cursor.moveToNext()){
                 val origin = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_WORD))
                 val translation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSLATION))

@@ -128,7 +128,21 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                 ItemTouchHelper.RIGHT -> {
                     when (wordListViewModel.getClasPopupMenuListSelectedPosition()) {
                         0,1,2 -> {
-                            showShortToast(getString(R.string.collect_success))
+                            snackBar = Snackbar.make(viewHolder.itemView, getString(R.string.collect_success), Snackbar.LENGTH_LONG).setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
+                            val layout = snackBar.view as Snackbar.SnackbarLayout
+                            if (layout.getChildAt(0) != null && layout.getChildAt(0) is SnackbarContentLayout) {
+                                val contentLayout = layout.getChildAt(0) as SnackbarContentLayout
+                                layout.setPadding(SizeUtils.dp2px(12f), 0,
+                                    SizeUtils.dp2px(12f),
+                                    SizeUtils.dp2px(16f))
+                                layout.setBackgroundColor(Color.parseColor("#00000000"))
+                                contentLayout.setPadding(SizeUtils.dp2px(12f), 0, SizeUtils.dp2px(12f),0)
+                                contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r15)
+                                contentLayout.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CC000000"))
+                            }
+                            snackBar.setTextColor(Color.parseColor("#FFEFEFEF"))
+                                .setActionTextColor(Color.parseColor("#FFF9CD16"))
+                                .show()
                             wordListViewModel.collectWord(position)
                         }
                     }
