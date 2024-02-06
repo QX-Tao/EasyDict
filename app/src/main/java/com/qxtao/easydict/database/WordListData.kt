@@ -29,7 +29,7 @@ class WordListData (
         private const val COLUMN_SELECTED = "selected"
         private const val COLUMN_IS_CONFIRMED = "is_confirmed"
         private const val LINE_CONFIG_ID = 1
-        private val TABLE_LIST = listOf("cet4", "cet6", "ielts", "kaoyan")
+        private val TABLE_LIST = listOf("cet4", "cet6", "chuzhong", "gaokao", "ielts", "kaoyan", "tem4", "tem8", "toefl", "xiaoxue")
         private const val COLUMN_WORD = "word"
         private const val COLUMN_TRANSLATION = "translation"
         private const val COLUMN_IS_COLLECTED =  "is_collected"
@@ -61,7 +61,7 @@ class WordListData (
         }
     }
 
-    fun updateConfig(selected: String, isConfig: Boolean = true){
+    fun updateConfig(selected: String = "cet4", isConfig: Boolean = true){
         val values = ContentValues().apply {
             put(COLUMN_SELECTED, selected)
             put(COLUMN_IS_CONFIRMED, if (isConfig) 1 else 0)
@@ -97,9 +97,10 @@ class WordListData (
         return withContext(Dispatchers.IO){
             if (isConfirmed()) return@withContext true
             try {
+                clearAllTable()
                 for (item in TABLE_LIST){
                     val wordList = FileIOUtils.readFile2String(context.assets.open("txt/$item.txt")).
-                    split("\n")
+                    split("\r\n")
                     val list = SimpleDictData(context).getDictListByOriginList(wordList)!!
                     db.beginTransaction()
                     try {
@@ -109,7 +110,7 @@ class WordListData (
                         db.endTransaction()
                     }
                 }
-                updateConfig("cet4", true)
+                updateConfig()
                 true
             } catch (e: Exception){
                 false
@@ -121,12 +122,11 @@ class WordListData (
         return withContext(Dispatchers.IO){
             val isReadyConfigAllWord = async { configAllWord() }.await()
             if (!isReadyConfigAllWord){
-                clearAllTable()
                 getAllWordListItems()
             } else {
                 val selected = selected()
                 val list = mutableListOf<WordListItem>()
-                val cursor = db.rawQuery("SELECT * FROM $selected", null)
+                val cursor = db.rawQuery("SELECT * FROM $selected WHERE $COLUMN_IS_LEARNED = 0", null)
                 while (cursor.moveToNext()){
                     val origin = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_WORD))
                     val translation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSLATION))

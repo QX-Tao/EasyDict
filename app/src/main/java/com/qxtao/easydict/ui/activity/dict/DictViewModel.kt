@@ -10,7 +10,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
+import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.DictBlngClassificationAdapter
+import com.qxtao.easydict.adapter.dict.DictExternalDictTransAdapter
 import com.qxtao.easydict.adapter.dict.TYPE_BLNG_CLASSIFICATION_NORMAL
 import com.qxtao.easydict.adapter.dict.TYPE_BLNG_CLASSIFICATION_SELECT
 import com.qxtao.easydict.database.SearchHistoryData
@@ -40,6 +42,10 @@ class DictViewModel(
     val dictSearchHistory: LiveData<List<SearchHistoryData.SearchHistory>?> = _dictSearchHistory
     private val _dictSearchSuggestion = MutableLiveData<List<SimpleDictData.SimpleDict>?>()
     val dictSearchSuggestion: LiveData<List<SimpleDictData.SimpleDict>?> = _dictSearchSuggestion
+    private val _dictExternalDict = MutableLiveData<List<DictExternalDictTransAdapter.ExternalDictTransItem>?>()
+    val dictExternalDict: LiveData<List<DictExternalDictTransAdapter.ExternalDictTransItem>?> = _dictExternalDict
+    private val _dictExternalTrans = MutableLiveData<List<DictExternalDictTransAdapter.ExternalDictTransItem>?>()
+    val dictExternalTrans: LiveData<List<DictExternalDictTransAdapter.ExternalDictTransItem>?> = _dictExternalTrans
     private val _dictSearchSugWord = MutableLiveData<List<SimpleDictData.SimpleDict>?>()
     val dictSearchSugWord: LiveData<List<SimpleDictData.SimpleDict>?> = _dictSearchSugWord
     private val deleteQueue: Queue<Pair<SearchHistoryData.SearchHistory, Int>> = LinkedList() // 预删除的搜索记录
@@ -94,6 +100,8 @@ class DictViewModel(
         playPosition.value = mapOf(VOICE_AUTH_PART to -1, VOICE_BLNG_PART to -1, VOICE_EH_PART to -1, VOICE_NORMAL to -1)
         _dictSearchHistory.value = mutableListOf()
         _dictSearchSuggestion.value = mutableListOf()
+        _dictExternalDict.value = mutableListOf()
+        _dictExternalTrans.value = mutableListOf()
         dataLoadInfo.value = -1
         detailFragmentAppBarExpanded.value = APPBAR_LAYOUT_EXPANDED
         dataMoreBlngLoadInfo.value = -1
@@ -237,6 +245,8 @@ class DictViewModel(
         playPosition.value = mapOf(VOICE_AUTH_PART to -1, VOICE_BLNG_PART to -1, VOICE_EH_PART to -1, VOICE_NORMAL to -1)
         detailFragmentAppBarExpanded.value = APPBAR_LAYOUT_EXPANDED
         nsvOffset = mutableMapOf(JM_FRAGMENT to 0, CO_FRAGMENT to 0, EE_FRAGMENT to 0)
+        _dictExternalDict.value = mutableListOf()
+        _dictExternalTrans.value = mutableListOf()
         searchInfoResponse.value = null
         dictsResponse.value = null
         ehResponse.value = null
@@ -321,6 +331,165 @@ class DictViewModel(
             }
             blngSents.postValue(upd)
             blngSelectedItem.postValue("所有")
+
+            // 外部词典/翻译
+            if (ehResponse.value != null && heResponse.value == null){
+                if (ehResponse.value?.isTran == true){
+                    val externalDictTransItems = mutableListOf<DictExternalDictTransAdapter.ExternalDictTransItem>()
+                    externalDictTransItems.addAll(
+                        listOf(
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_biying, R.string.bing,
+                                "https://cn.bing.com/translator/?h_text=msn_ctxt&setlang=zh-cn"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_jinshan, R.string.jinshan,
+                                "https://m.iciba.com/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_youdao, R.string.youdao,
+                                "https://www.youdao.com/result?word=${searchText.value?.searchText}&lang=en"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_deepl, R.string.deepl,
+                                "https://www.deepl.com/zh/translator#en/zh/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_google, R.string.google,
+                                "https://translate.google.com/?hl=zh-CN&sl=auto&tl=zh-CN&text=${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_baidu, R.string.baidu,
+                                "https://fanyi.baidu.com/#en/zh/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_tencent, R.string.tencent,
+                                "https://fanyi.qq.com/"
+                            )
+                        )
+                    )
+                    _dictExternalTrans.postValue(externalDictTransItems)
+                } else {
+                    val externalDictTransItems = mutableListOf<DictExternalDictTransAdapter.ExternalDictTransItem>()
+                    externalDictTransItems.addAll(
+                        listOf(
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_momo, R.string.momo,
+                                "https://lookup.maimemo.com/?limit=10&offset=0&keyword=${searchText.value?.searchText}&paper_type=ALL"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_biying, R.string.bing,
+                                "https://cn.bing.com/dict/search?q=${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_kelinsi, R.string.collins,
+                                "https://www.collinsdictionary.com/dictionary/english/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_niujin, R.string.oxford,
+                                "https://www.oxfordlearnersdictionaries.com/definition/english/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_weishi, R.string.webster,
+                                "https://www.merriam-webster.com/dictionary/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_jianqiao_he, R.string.cambridge_he,
+                                "https://dictionary.cambridge.org/dictionary/english-chinese-simplified/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_jianqiao_ee, R.string.cambridge_ee,
+                                "https://dictionary.cambridge.org/dictionary/english/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_jinshan, R.string.jinshan,
+                                "https://m.iciba.com/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_youdao, R.string.youdao,
+                                "https://www.youdao.com/result?word=${searchText.value?.searchText}&lang=en"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_haici, R.string.haici,
+                                "https://m.dict.cn/msearch.php?q=${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_langwen, R.string.langwen,
+                                "https://www.ldoceonline.com/dictionary/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_ciyuan, R.string.ciyuan,
+                                "https://www.etymonline.com/search?q=${searchText.value?.searchText}"
+                            )
+                        )
+                    )
+                    _dictExternalDict.postValue(externalDictTransItems)
+                }
+            } else if (heResponse.value != null && ehResponse.value == null){
+                if (heResponse.value?.isTran == true){
+                    val externalDictTransItems = mutableListOf<DictExternalDictTransAdapter.ExternalDictTransItem>()
+                    externalDictTransItems.addAll(
+                        listOf(
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_biying, R.string.bing,
+                                "https://cn.bing.com/translator/?h_text=msn_ctxt&setlang=zh-cn"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_jinshan, R.string.jinshan,
+                                "https://m.iciba.com/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_youdao, R.string.youdao,
+                                "https://www.youdao.com/result?word=${searchText.value?.searchText}&lang=en"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_deepl, R.string.deepl,
+                                "https://www.deepl.com/zh/translator#zh/en/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_google, R.string.google,
+                                "https://translate.google.com/?hl=zh-CN&sl=auto&tl=en&text=${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_baidu, R.string.baidu,
+                                "https://fanyi.baidu.com/#zh/en/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_tencent, R.string.tencent,
+                                "https://fanyi.qq.com/"
+                            )
+                        )
+                    )
+                    _dictExternalTrans.postValue(externalDictTransItems)
+                } else {
+                    val externalDictTransItems = mutableListOf<DictExternalDictTransAdapter.ExternalDictTransItem>()
+                    externalDictTransItems.addAll(
+                        listOf(
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_biying, R.string.bing,
+                                "https://cn.bing.com/dict/search?q=${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_jinshan, R.string.jinshan,
+                                "https://m.iciba.com/${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_youdao, R.string.youdao,
+                                "https://www.youdao.com/result?word=${searchText.value?.searchText}&lang=en"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_haici, R.string.haici,
+                                "https://m.dict.cn/msearch.php?q=${searchText.value?.searchText}"
+                            ),
+                            DictExternalDictTransAdapter.ExternalDictTransItem(
+                                R.drawable.ic_dict_handian, R.string.handian,
+                                "https://www.zdic.net/hans/${searchText.value?.searchText}"
+                            )
+                        )
+                    )
+                    _dictExternalDict.postValue(externalDictTransItems)
+                }
+            }
         }
     }
 

@@ -17,6 +17,8 @@ const val ANTONYM_PART_MORE = "antonym_part_more"
 const val PHRASE_PART_MORE = "phrase_part_more"
 const val REL_WORD_PART_MORE = "rel_word_part_more"
 const val ETYM_PART_MORE = "etym_part_more"
+const val EXTERNAL_DICT_PART_MORE = "external_dict_part_more"
+const val EXTERNAL_TRANS_PART_MORE = "external_trans_part_more"
 
 const val APPBAR_LAYOUT_EXPANDED = 0
 const val APPBAR_LAYOUT_COLLAPSED = 1

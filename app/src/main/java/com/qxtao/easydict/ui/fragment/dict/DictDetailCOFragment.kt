@@ -11,6 +11,7 @@ import com.qxtao.easydict.ui.activity.dict.CO_FRAGMENT
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
+import com.qxtao.easydict.utils.common.SizeUtils
 
 
 class DictDetailCOFragment : BaseFragment<FragmentDictDetailCoBinding>(FragmentDictDetailCoBinding::inflate) {

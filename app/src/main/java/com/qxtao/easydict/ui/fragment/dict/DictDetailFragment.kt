@@ -36,13 +36,12 @@ import com.qxtao.easydict.ui.activity.dict.VOICE_NORMAL
 import com.qxtao.easydict.ui.activity.photoview.PhotoViewActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
+import com.qxtao.easydict.utils.common.SizeUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Timer
-import kotlin.concurrent.schedule
 import kotlin.math.abs
 
 
@@ -320,7 +319,6 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
             cm.setPrimaryClip(
                 ClipData.newPlainText(null, tvTransTo.text))
             showShortToast(getString(R.string.copied))
-
         }
         ivTransFromCopy.setOnClickListener {
             val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

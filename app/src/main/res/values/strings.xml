@@ -26,6 +26,7 @@
     <string name="enter_text_to_check">输入要检查的英文文本</string>
     <string name="search_in_dict">在词典中查询</string>
     <string name="copied">已将内容复制到剪贴板</string>
+    <string name="copied_to_trans">已将文本复制到剪贴板，您可能需要手动输入以进行翻译</string>
     <string name="retype">重新输入</string>
     <string name="loading_2">加载中...</string>
     <string name="checking">检查中...</string>
@@ -111,4 +112,25 @@
     <string name="word_mark_learning">单词已标记为在学</string>
     <string name="word_mark_collect">单词已取消收藏</string>
     <string name="suggest_search">推荐搜索</string>
+    <string name="learning_words">在学单词</string>
+    <string name="reload_list_desc">是否重新加载单词列表，这将会重置学习数据，确认继续吗</string>
+    <string name="dict">词典</string>
+    <string name="momo">墨墨</string>
+    <string name="bing">必应</string>
+    <string name="collins">科林斯</string>
+    <string name="webster">韦氏</string>
+    <string name="cambridge_he">剑桥-中英</string>
+    <string name="cambridge_ee">剑桥-全英</string>
+    <string name="oxford">牛津</string>
+    <string name="jinshan">金山</string>
+    <string name="youdao">有道</string>
+    <string name="haici">海词</string>
+    <string name="langwen">朗文</string>
+    <string name="ciyuan">词源</string>
+    <string name="translation">翻译</string>
+    <string name="handian">汉典</string>
+    <string name="google">谷歌</string>
+    <string name="deepl">DeepL</string>
+    <string name="tencent">腾讯</string>
+    <string name="baidu">百度</string>
 </resources>

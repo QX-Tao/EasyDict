@@ -1,6 +1,8 @@
 package com.qxtao.easydict.ui.activity.wordlist
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
@@ -248,7 +250,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
         ivMoreButton.setImageResource(R.drawable.ic_switch)
         ivMoreButton.tooltipText = getString(R.string.switch_list)
         tvListCategory.text = wordListViewModel.clasPopWindowList.find {
-            it.isMenuItemSelected }?.menuItemText ?: getString(R.string.all_words)
+            it.isMenuItemSelected }?.menuItemText ?: getString(R.string.learning_words)
         isInitView = true
         wordListViewModel.initData()
         rvListWord.layoutManager = LinearLayoutManager(this)
@@ -263,18 +265,26 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
             tvTitle.text = it
         }
         wordListViewModel.clasSelected.observe(this){
-            tvListCategory.text = it ?: getString(R.string.all_words)
+            tvListCategory.text = it ?: getString(R.string.learning_words)
         }
         wordListViewModel.dataLoadInfo.observe(this){
             when (it) {
-                0 -> lvLoading.visibility = View.VISIBLE
+                0 -> {
+                    ivMoreButton.visibility = View.GONE
+                    lvLoading.visibility = View.VISIBLE
+                }
                 1 -> {
+                    ivMoreButton.visibility = View.VISIBLE
                     llListEmpty.visibility = View.GONE
                     lvLoading.visibility = View.GONE
                 }
-                2 -> llLoadingFail.visibility = View.VISIBLE
+                2 -> {
+                    ivMoreButton.visibility = View.GONE
+                    llLoadingFail.visibility = View.VISIBLE
+                }
                 3 -> {
                     lvLoading.visibility = View.GONE
+                    ivMoreButton.visibility = View.VISIBLE
                     llListEmpty.visibility = View.VISIBLE
                 }
             }
@@ -358,11 +368,23 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                         wordListViewModel.deleteWordRecord()
                         if (this@WordListActivity::snackBar.isInitialized) if (snackBar.isShown) snackBar.dismiss()
                         wordListViewModel.setWordSelected(position)
-                        wordListViewModel.setClasSelected(0)
+                        wordListViewModel.setClasSelected(1)
                         it.first.dissmiss()
                     }
                 })
             }
+        }
+        ivMoreButton.setOnLongClickListener {
+            AlertDialog.Builder(this).setTitle(R.string.hint)
+                .setMessage(R.string.reload_list_desc)
+                .setPositiveButton(R.string.confirm) { _, _ ->
+                    wordListViewModel.resetConfig()
+                    startActivity(Intent(mContext, WordListActivity::class.java))
+                    finish()
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+            true
         }
         llLoadingFail.setOnClickListener {
             wordListViewModel.initData()

@@ -20,9 +20,12 @@ import java.util.Queue
 
 
 class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
-    private val wordMap = mapOf(0 to "cet4", 1 to "cet6", 2 to "ielts", 3 to "kaoyan")
-    private val reverseWordMap = mapOf("cet4" to 0, "cet6" to 1, "ielts" to 2, "kaoyan" to 3)
-    private val wordNameMap = mapOf("cet4" to "四级词汇", "cet6" to "六级词汇", "ielts" to "雅思词汇", "kaoyan" to "考研词汇")
+    private val wordMap = mapOf(0 to "cet4", 1 to "cet6", 2 to "kaoyan", 3 to "ielts",
+        4 to "toefl", 5 to "xiaoxue", 6 to "chuzhong", 7 to "gaokao", 8 to "tem4", 9 to "tem8")
+    private val reverseWordMap = mapOf("cet4" to 0, "cet6" to 1, "kaoyan" to 2, "ielts" to 3,
+        "toefl" to 4, "xiaoxue" to 5, "chuzhong" to 6, "gaokao" to 7, "tem4" to 8, "tem8" to 9)
+    private val wordNameMap = mapOf("cet4" to "四级大纲", "cet6" to "六级大纲", "kaoyan" to "考研词汇", "ielts" to "雅思词汇",
+        "toefl" to "托福词汇", "xiaoxue" to "小学词汇", "chuzhong" to "初中大纲", "gaokao" to "高考大纲", "tem4" to "专四大纲", "tem8" to "专八大纲")
     private val clasNameMap = mapOf(0 to "全部单词", 1 to "在学单词", 2 to "已学单词", 3 to "收藏单词")
     private val voiceSoundMap = mapOf(0 to NetConstant.voiceUs, 1 to NetConstant.voiceUk)
     private val _wordListItems = MutableLiveData<List<WordListItem>?>()
@@ -39,16 +42,22 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
     var clasSelected = MutableLiveData<String?>()
     private var playPosition = -1
     var clasPopWindowList = mutableListOf(
-        PopupMenuItem(0, "全部单词", true),
-        PopupMenuItem(1, "在学单词", false),
+        PopupMenuItem(0, "全部单词", false),
+        PopupMenuItem(1, "在学单词", true),
         PopupMenuItem(2, "已学单词", false),
         PopupMenuItem(3, "收藏单词", false)
     )
     var wordPopWindowList = mutableListOf(
-        PopupMenuItem(0, "四级词汇", true),
-        PopupMenuItem(1, "六级词汇", false),
-        PopupMenuItem(2, "雅思词汇", false),
-        PopupMenuItem(3, "考研词汇", false)
+        PopupMenuItem(0, "四级大纲", true),
+        PopupMenuItem(1, "六级大纲", false),
+        PopupMenuItem(2, "考研词汇", false),
+        PopupMenuItem(3, "雅思词汇", false),
+        PopupMenuItem(4, "托福词汇", false),
+        PopupMenuItem(5, "小学词汇", false),
+        PopupMenuItem(6, "初中大纲", false),
+        PopupMenuItem(7, "高考大纲", false),
+        PopupMenuItem(8, "专四大纲", false),
+        PopupMenuItem(9, "专八大纲", false)
     )
 
     companion object{
@@ -84,6 +93,10 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
         wordListData.updateConfig(wordMap[position]!!)
         dataLoadInfo.value = -1
         initData()
+    }
+
+    fun resetConfig(){
+        wordListData.updateConfig(isConfig = false)
     }
 
     fun setClasSelected(position: Int){

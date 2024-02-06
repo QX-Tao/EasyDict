@@ -37,6 +37,8 @@
     <color name="colorBgWhite8">#BBEFEFEF</color>
     <color name="colorBgWhite9">#66FFFFFF</color>
     <color name="colorBgWhite10">#FFFFFFFF</color>
+    <color name="colorBgWhite11">#66DDDDDD</color>
+    <color name="colorBgWhite12">#CACACA</color>
     <color name="colorBgLightBlack1">#FF2C3039</color>
     <color name="colorBgLightBlack2">#FF333944</color>
     <color name="colorBgLightBlack3">#FF262B33</color>
@@ -49,6 +51,7 @@
     <color name="colorBgLightYellow5">#FFDC79</color>
     <color name="colorBgRed1">#FFFF7440</color>
     <color name="colorBgBlue1">#FF87C0F9</color>
+    <color name="colorBgBlue2">#0f9ed5</color>
     <color name="colorBgGreen1">#01adab</color>
     <color name="colorBgGreen2">#6ca967</color>
     <color name="colorBgGreen3">#68CAC3</color>

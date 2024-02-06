@@ -1,5 +1,8 @@
 package com.qxtao.easydict.ui.fragment.dict
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,6 +20,7 @@ import com.qxtao.easydict.adapter.dict.DictBlngSentsAdapter
 import com.qxtao.easydict.adapter.dict.DictEhHeaderExplainAdapter
 import com.qxtao.easydict.adapter.dict.DictEhHeaderInflectionAdapter
 import com.qxtao.easydict.adapter.dict.DictEtymAdapter
+import com.qxtao.easydict.adapter.dict.DictExternalDictTransAdapter
 import com.qxtao.easydict.adapter.dict.DictHeHeaderExplainAdapter
 import com.qxtao.easydict.adapter.dict.DictPhraseAdapter
 import com.qxtao.easydict.adapter.dict.DictRelWordAdapter
@@ -33,6 +37,8 @@ import com.qxtao.easydict.ui.activity.dict.BLNG_SENTS_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.dict.ETYM_PART_MORE
+import com.qxtao.easydict.ui.activity.dict.EXTERNAL_DICT_PART_MORE
+import com.qxtao.easydict.ui.activity.dict.EXTERNAL_TRANS_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.Etym
 import com.qxtao.easydict.ui.activity.dict.JM_FRAGMENT
 import com.qxtao.easydict.ui.activity.dict.PHRASE_PART_MORE
@@ -50,6 +56,8 @@ import com.qxtao.easydict.ui.activity.dict.WEB_TRANS_PART_MORE
 import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
+import com.qxtao.easydict.utils.common.SizeUtils
+import com.qxtao.easydict.utils.factory.screenWidth
 
 
 class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentDictDetailJmBinding::inflate) {
@@ -71,6 +79,8 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
     private lateinit var rvRelWordAdapter: DictRelWordAdapter
     private lateinit var rvTypoAdapter: DictTypoAdapter
     private lateinit var rvEtymAdapter: DictEtymAdapter
+    private lateinit var rvExternalDictAdapter: DictExternalDictTransAdapter
+    private lateinit var rvExternalTransAdapter: DictExternalDictTransAdapter
 
     // define widget
     private lateinit var nsvContent: NestedScrollView
@@ -136,6 +146,14 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
     // 第十五部分：重新输入
     private lateinit var clSearchNotResult: ConstraintLayout
     private lateinit var tvRetype: TextView
+    // 第十六部分：外部词典
+    private lateinit var clExternalDictPart: ConstraintLayout
+    private lateinit var rvExternalDictPartMean: RecyclerView
+    private lateinit var tvExternalDictPartMore: TextView
+    // 第十七部分：外部翻译
+    private lateinit var clExternalTransPart: ConstraintLayout
+    private lateinit var rvExternalTransPartMean: RecyclerView
+    private lateinit var tvExternalTransPartMore: TextView
 
     override fun bindViews() {
         nsvContent = binding.nsvContent
@@ -201,6 +219,14 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         // 第十五部分：重新输入
         clSearchNotResult = binding.clRetypePart
         tvRetype = binding.tvRetype
+        // 第十六部分：外部词典
+        clExternalDictPart = binding.clExternalDictPart
+        tvExternalDictPartMore = binding.tvExternalDictPartMore
+        rvExternalDictPartMean = binding.rvExternalDictPartMean
+        // 第十七部分：外部翻译
+        clExternalTransPart = binding.clExternalTransPart
+        tvExternalTransPartMore = binding.tvExternalTransPartMore
+        rvExternalTransPartMean = binding.rvExternalTransPartMean
     }
 
     override fun initViews() {
@@ -448,6 +474,32 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
             clSearchNotResult.visibility = if (it) View.VISIBLE else View.GONE
         }
 
+        // 第十六部分：外部词典
+        rvExternalDictAdapter = DictExternalDictTransAdapter(ArrayList())
+        rvExternalDictPartMean.adapter = rvExternalDictAdapter
+        rvExternalDictPartMean.layoutManager = FlexboxLayoutManager(requireActivity())
+        dictViewModel.dictExternalDict.observe(this){
+            if ((it?.size ?: 0) > 0){
+                clExternalDictPart.visibility = View.VISIBLE
+                rvExternalDictAdapter.setData(it?.take((requireActivity().screenWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
+            } else {
+                clExternalDictPart.visibility = View.GONE
+            }
+        }
+
+        // 第十七部分：外部翻译
+        rvExternalTransAdapter = DictExternalDictTransAdapter(ArrayList())
+        rvExternalTransPartMean.adapter = rvExternalTransAdapter
+        rvExternalTransPartMean.layoutManager = FlexboxLayoutManager(requireActivity())
+        dictViewModel.dictExternalTrans.observe(this){
+            if ((it?.size ?: 0) > 0){
+                clExternalTransPart.visibility = View.VISIBLE
+                rvExternalTransAdapter.setData(it?.take((requireActivity().screenWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
+            } else {
+                clExternalTransPart.visibility = View.GONE
+            }
+        }
+
         // 音频播放状态
         dictViewModel.playPosition.observe(this) {
             it[VOICE_AUTH_PART]?.let { it1 ->
@@ -557,6 +609,13 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                 }
             }
         }
+        rvExternalTransAdapter.setOnItemClickListener(object : DictExternalDictTransAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                cm.setPrimaryClip(ClipData.newPlainText(null, dictViewModel.searchText.value?.searchText))
+                showShortToast(getString(R.string.copied_to_trans))
+            }
+        })
         tvAuthSentsPartMore.setOnClickListener{
             mListener.onFragmentInteraction("toExtraFragment", AUTH_SENTS_PART_MORE )
         }
@@ -586,6 +645,12 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         }
         tvSpecialPartMore.setOnClickListener {
             mListener.onFragmentInteraction("toExtraFragment", SPECIAL_PART_MORE )
+        }
+        tvExternalDictPartMore.setOnClickListener {
+            mListener.onFragmentInteraction("toExtraFragment", EXTERNAL_DICT_PART_MORE )
+        }
+        tvExternalTransPartMore.setOnClickListener {
+            mListener.onFragmentInteraction("toExtraFragment", EXTERNAL_TRANS_PART_MORE )
         }
     }
 }

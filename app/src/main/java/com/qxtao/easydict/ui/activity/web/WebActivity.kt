@@ -2,6 +2,7 @@ package com.qxtao.easydict.ui.activity.web
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -13,7 +14,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -38,10 +38,9 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.ActivityWebBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.view.LoadingView
-import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.common.NetworkUtils
+import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.factory.isAppearanceLight
-import com.qxtao.easydict.utils.factory.isLandscape
 import com.qxtao.easydict.utils.factory.screenRotation
 import me.jingbin.progress.WebProgress
 
@@ -96,6 +95,28 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             intent.putExtra("extra_showOpenInBrowserButton", showOpenInBrowserButton)
             intent.putExtra("extra_useCache", useCache)
             activity.startActivity(intent)
+        }
+        fun start(
+            context: Context,
+            url: String,
+            title: String? = null,
+            webBgColor: Int? = null,
+            isUseTitleBarSpace: Boolean = true,
+            allowOtherUrls: Boolean = false,
+            useWebTitle: Boolean = false,
+            showOpenInBrowserButton: Boolean = false,
+            useCache: Boolean =  true
+        ){
+            val intent = Intent(context, WebActivity::class.java)
+            intent.putExtra("extra_url", url)
+            intent.putExtra("extra_title", title)
+            intent.putExtra("extra_webBgColor", webBgColor)
+            intent.putExtra("extra_isUseTitleBarSpace", isUseTitleBarSpace)
+            intent.putExtra("extra_allowOtherUrls", allowOtherUrls)
+            intent.putExtra("extra_useWebTitle", useWebTitle)
+            intent.putExtra("extra_showOpenInBrowserButton", showOpenInBrowserButton)
+            intent.putExtra("extra_useCache", useCache)
+            context.startActivity(intent)
         }
     }
 
@@ -193,6 +214,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             val displayCutout = insets.displayCutout
             val params = view.layoutParams as ConstraintLayout.LayoutParams
             params.topMargin = if (isUseTitleBarSpace == false) insets.getInsets(WindowInsetsCompat.Type.systemBars()).top + SizeUtils.dp2px(56f) else 0
+            params.bottomMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
             when (screenRotation){
                 90 -> {
                     params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left

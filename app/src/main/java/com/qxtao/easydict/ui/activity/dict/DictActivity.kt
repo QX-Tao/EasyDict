@@ -484,7 +484,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                 }.await() == true
             val ready = try {
                 if (EncryptUtils.encryptMD5FileToString(getDatabasePath("simple_dict.db").absolutePath).lowercase()
-                    == "e6f087687022fc7babf9c6ceb31033f8") true else unzipFile
+                    == "8b81915ef6f53264b5c1b4b49cbf6f99") true else unzipFile
             } catch (e: Exception) { unzipFile }
             if (ready) return@withContext true else unzipData()
         }

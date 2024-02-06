@@ -11,6 +11,7 @@ import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.dict.EE_FRAGMENT
 import com.qxtao.easydict.ui.base.BaseFragment
+import com.qxtao.easydict.utils.common.SizeUtils
 
 
 class DictDetailEEFragment : BaseFragment<FragmentDictDetailEeBinding>(FragmentDictDetailEeBinding::inflate) {

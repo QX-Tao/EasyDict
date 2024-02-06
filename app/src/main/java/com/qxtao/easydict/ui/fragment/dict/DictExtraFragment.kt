@@ -1,5 +1,8 @@
 package com.qxtao.easydict.ui.fragment.dict
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -14,11 +17,13 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.DictAuthSentsAdapter
 import com.qxtao.easydict.adapter.dict.DictBlngClassificationAdapter
 import com.qxtao.easydict.adapter.dict.DictBlngSentsAdapter
 import com.qxtao.easydict.adapter.dict.DictEtymAdapter
+import com.qxtao.easydict.adapter.dict.DictExternalDictTransAdapter
 import com.qxtao.easydict.adapter.dict.DictPhraseAdapter
 import com.qxtao.easydict.adapter.dict.DictRelWordAdapter
 import com.qxtao.easydict.adapter.dict.DictSpecialOuterAdapter
@@ -33,6 +38,8 @@ import com.qxtao.easydict.ui.activity.dict.BLNG_SENTS_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.dict.ETYM_PART_MORE
+import com.qxtao.easydict.ui.activity.dict.EXTERNAL_DICT_PART_MORE
+import com.qxtao.easydict.ui.activity.dict.EXTERNAL_TRANS_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.Etym
 import com.qxtao.easydict.ui.activity.dict.PHRASE_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.REL_WORD_PART_MORE
@@ -66,6 +73,8 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     private lateinit var rvEtymAdapter: DictEtymAdapter
     private lateinit var rvDictSpecialOuterAdapter: DictSpecialOuterAdapter
     private lateinit var rvDictWebTransOuterAdapter: DictWebTransOuterAdapter
+    private lateinit var rvExternalDictAdapter: DictExternalDictTransAdapter
+    private lateinit var rvExternalTransAdapter: DictExternalDictTransAdapter
     // define widget
     private lateinit var vHolder: View
     private lateinit var ivMoreButton : ImageView
@@ -185,7 +194,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                         dictViewModel.startPlaySound(VOICE_AUTH_PART, position, item.speech!!, SEARCH_LE_EN)
                     }
                 })
-                llLoadingFail.setOnClickListener { dictViewModel.onlineSearchBlng() }
+                llLoadingFail.setOnClickListener { dictViewModel.onlineSearchSent() }
             }
             ANTONYM_PART_MORE -> {
                 tvTitle.text = getString(R.string.antonym)
@@ -316,6 +325,27 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 rvRecycleView.adapter = rvDictSpecialOuterAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
                 rvDictSpecialOuterAdapter.setData(dictViewModel.specialResponse.value?.entries)
+            }
+            EXTERNAL_DICT_PART_MORE -> {
+                tvTitle.text = getString(R.string.dict)
+                rvExternalDictAdapter = DictExternalDictTransAdapter(ArrayList())
+                rvRecycleView.adapter = rvExternalDictAdapter
+                rvRecycleView.layoutManager = FlexboxLayoutManager(requireActivity())
+                rvExternalDictAdapter.setData(dictViewModel.dictExternalDict.value)
+            }
+            EXTERNAL_TRANS_PART_MORE -> {
+                tvTitle.text = getString(R.string.translation)
+                rvExternalTransAdapter = DictExternalDictTransAdapter(ArrayList())
+                rvRecycleView.adapter = rvExternalTransAdapter
+                rvRecycleView.layoutManager = FlexboxLayoutManager(requireActivity())
+                rvExternalTransAdapter.setData(dictViewModel.dictExternalTrans.value)
+                rvExternalTransAdapter.setOnItemClickListener(object : DictExternalDictTransAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        cm.setPrimaryClip(ClipData.newPlainText(null, dictViewModel.searchText.value?.searchText))
+                        showShortToast(getString(R.string.copied_to_trans))
+                    }
+                })
             }
         }
     }
