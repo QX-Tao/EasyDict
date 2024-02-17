@@ -89,6 +89,23 @@ class SearchHistoryData (
         writableDatabase.update(DICT_TABLE_NAME, contentValues, whereClause, whereArgs)
     }
 
+    fun getTranslationByOrigin(origin: String): String? {
+        val cursor = db.query(
+            DICT_TABLE_NAME,
+            arrayOf(COLUMN_TRANSLATION),
+            "$COLUMN_ORIGIN = ?",
+            arrayOf(origin),
+            null,
+            null,
+            null
+        )
+        var translation: String? = null
+        if (cursor.moveToFirst()) {
+            translation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSLATION))
+        }
+        cursor.close()
+        return translation
+    }
 
     override fun onCreate(db: SQLiteDatabase?) { }
 

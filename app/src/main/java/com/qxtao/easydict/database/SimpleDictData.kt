@@ -56,8 +56,8 @@ class SimpleDictData (
         val cursor = db.query(
             TABLE_NAME,
             arrayOf(COLUMN_ORIGIN, COLUMN_TRANSLATION),
-            "$COLUMN_ORIGIN LIKE ? OR $COLUMN_TRANSLATION LIKE ?",
-            arrayOf("$query%", "%$query%"),
+            "$COLUMN_ORIGIN LIKE ?",
+            arrayOf("$query%"),
             null,
             null,
             null

@@ -15,6 +15,9 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentTransaction
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentDictSearchBinding
+import com.qxtao.easydict.ui.activity.dict.DICT_RV_HISTORY
+import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION
+import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION_LM
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
@@ -51,16 +54,14 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
-        dictViewModel.getDictSearchHistory()
         ivSearch.visibility = if (dictViewModel.searchText.value?.editSearchText.isNullOrEmpty()) View.GONE else View.VISIBLE
         ivClear.visibility = if (dictViewModel.searchText.value?.editSearchText.isNullOrEmpty()) View.GONE else View.VISIBLE
-        dictViewModel.setHasShowRvInfo(dictViewModel.searchText.value?.editSearchText.isNullOrEmpty(), !dictViewModel.searchText.value?.editSearchText.isNullOrEmpty())
         dictViewModel.searchText.observe(this){
             etSearchBox.setText(it.editSearchText)
             etSearchBox.setSelection(if (it.editSearchText.length >= it.editCursor) it.editCursor else it.editSearchText.length)
         }
         dictViewModel.hasShowRvInfo.observe(this){
-            cvEditUnfold.visibility = if (!it.first && !it.second &&
+            cvEditUnfold.visibility = if (it == DICT_RV_SUGGESTION_LM &&
                 dictViewModel.dataSuggestionLoadInfo.value == 1) View.VISIBLE else View.GONE
         }
     }
@@ -94,14 +95,12 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
             if (!etSearchBox.text.isNullOrEmpty()){
                 ivSearch.visibility = View.VISIBLE
                 ivClear.visibility = View.VISIBLE
-                dictViewModel.setHasShowRvInfo(first = false)
                 dictViewModel.searchInWordData(it.toString())
             } else {
                 ivSearch.visibility = View.GONE
                 ivClear.visibility = View.GONE
-                dictViewModel.setHasShowRvInfo(first = true, second = false)
+                dictViewModel.setHasShowRvInfo(DICT_RV_HISTORY)
                 mListener.onFragmentInteraction("toHasFragment")
-                dictViewModel.setDictSearchSuggestionEmpty()
             }
         }
         etSearchBox.setOnEditorActionListener { _, i, keyEvent ->
@@ -132,6 +131,8 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
     fun setSearchBackground(colorResId: Int){
         clRoot.setBackgroundColor(colorResId)
     }
+
+    fun getSearchBoxText(): String = etSearchBox.text.toString()
 
     fun getEditTextFocus(){
         val currentFragment = childFragmentManager.findFragmentById(R.id.dict_search_content_fragment)

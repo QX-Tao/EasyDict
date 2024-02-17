@@ -34,3 +34,9 @@ const val VOICE_NORMAL = 9
 const val SEARCH_LE_EN = "en"
 const val SEARCH_LE_ZH = "zh-CN"
 
+const val DICT_DETAIL_MODE_DEFINITION = 0
+const val DICT_DETAIL_MODE_NORMAL = 1
+const val DICT_RV_HISTORY = 2
+const val DICT_RV_SUGGESTION = 3
+const val DICT_RV_SUGGESTION_LM = 4
+

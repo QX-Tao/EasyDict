@@ -11,6 +11,8 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.doAfterTextChanged
 import com.qxtao.easydict.databinding.FragmentDictSearchEditBinding
+import com.qxtao.easydict.ui.activity.dict.DICT_RV_HISTORY
+import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
@@ -109,10 +111,7 @@ class DictSearchEditFragment : BaseFragment<FragmentDictSearchEditBinding>(Fragm
     }
 
     override fun onPause() {
-        if (this::dictViewModel.isInitialized){
-            dictViewModel.setSearchText(etEditUnfold.text.toString(), etEditUnfold.selectionStart)
-            dictViewModel.setHasShowRvInfo(first = etEditUnfold.text.isEmpty())
-        }
+        if (this::dictViewModel.isInitialized) dictViewModel.setSearchText(etEditUnfold.text.toString(), etEditUnfold.selectionStart)
         super.onPause()
     }
 

@@ -6,6 +6,7 @@ import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -34,6 +35,7 @@ import com.qxtao.easydict.ui.activity.dict.ANTONYM_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.AUTH_SENTS_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.Antonym
 import com.qxtao.easydict.ui.activity.dict.BLNG_SENTS_PART_MORE
+import com.qxtao.easydict.ui.activity.dict.DICT_DETAIL_MODE_NORMAL
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.dict.ETYM_PART_MORE
@@ -57,7 +59,7 @@ import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
 import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.screenWidth
+import com.qxtao.easydict.utils.factory.appWidth
 
 
 class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentDictDetailJmBinding::inflate) {
@@ -146,6 +148,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
     // 第十五部分：重新输入
     private lateinit var clSearchNotResult: ConstraintLayout
     private lateinit var tvRetype: TextView
+    private lateinit var cvRetype: CardView
     // 第十六部分：外部词典
     private lateinit var clExternalDictPart: ConstraintLayout
     private lateinit var rvExternalDictPartMean: RecyclerView
@@ -219,6 +222,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         // 第十五部分：重新输入
         clSearchNotResult = binding.clRetypePart
         tvRetype = binding.tvRetype
+        cvRetype = binding.cvRetype
         // 第十六部分：外部词典
         clExternalDictPart = binding.clExternalDictPart
         tvExternalDictPartMore = binding.tvExternalDictPartMore
@@ -472,6 +476,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         // 第十五部分：重新输入
         dictViewModel.hasSearchResult.observe(this){
             clSearchNotResult.visibility = if (it) View.VISIBLE else View.GONE
+            cvRetype.visibility = if (dictViewModel.dictDetailMode == DICT_DETAIL_MODE_NORMAL) View.VISIBLE else View.GONE
         }
 
         // 第十六部分：外部词典
@@ -481,7 +486,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         dictViewModel.dictExternalDict.observe(this){
             if ((it?.size ?: 0) > 0){
                 clExternalDictPart.visibility = View.VISIBLE
-                rvExternalDictAdapter.setData(it?.take((requireActivity().screenWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
+                rvExternalDictAdapter.setData(it?.take((requireActivity().appWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
             } else {
                 clExternalDictPart.visibility = View.GONE
             }
@@ -494,7 +499,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         dictViewModel.dictExternalTrans.observe(this){
             if ((it?.size ?: 0) > 0){
                 clExternalTransPart.visibility = View.VISIBLE
-                rvExternalTransAdapter.setData(it?.take((requireActivity().screenWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
+                rvExternalTransAdapter.setData(it?.take((requireActivity().appWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
             } else {
                 clExternalTransPart.visibility = View.GONE
             }

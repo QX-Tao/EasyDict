@@ -10,8 +10,10 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="64dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="80dp"
+        android:minWidth="64dp"
         android:drawablePadding="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"

@@ -27,6 +27,9 @@ import com.qxtao.easydict.adapter.dict.DictWordLineAdapter
 import com.qxtao.easydict.database.SearchHistoryData
 import com.qxtao.easydict.database.SimpleDictData
 import com.qxtao.easydict.databinding.FragmentDictHasBinding
+import com.qxtao.easydict.ui.activity.dict.DICT_RV_HISTORY
+import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION
+import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION_LM
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
@@ -83,8 +86,8 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
                         .show()
                     snackBar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                            super.onDismissed(transientBottomBar, event)
                             dictViewModel.deleteSearchRecord()
+                            super.onDismissed(transientBottomBar, event)
                         }
                     })
                 }
@@ -185,9 +188,31 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
         dictViewModel.dictSearchSuggestion.observe(this){
             rvSearchSuggestionAdapter.setData(it)
         }
+        dictViewModel.setHasShowRvInfo(if (dictViewModel.searchText.value?.editSearchText.isNullOrEmpty()) DICT_RV_HISTORY else DICT_RV_SUGGESTION)
+        rvSearchHistory.visibility = if (dictViewModel.searchText.value?.editSearchText.isNullOrEmpty()) View.GONE else View.VISIBLE
         dictViewModel.hasShowRvInfo.observe(this){
-            rvSearchHistory.visibility = if (it.first) View.VISIBLE else View.GONE
-            rvSearchSuggestion.visibility = if (it.second) View.VISIBLE else View.GONE
+            when(it){
+                DICT_RV_HISTORY -> {
+                        rvSearchHistory.visibility = View.VISIBLE
+                        rvSearchSuggestion.visibility = View.GONE
+                }
+                DICT_RV_SUGGESTION -> {
+                    if ((parentFragment as DictSearchFragment).getSearchBoxText().isEmpty()){
+                        dictViewModel.setHasShowRvInfo(DICT_RV_HISTORY)
+                    } else {
+                        rvSearchHistory.visibility = View.GONE
+                        rvSearchSuggestion.visibility = View.VISIBLE
+                    }
+                }
+                DICT_RV_SUGGESTION_LM -> {
+                    if ((parentFragment as DictSearchFragment).getSearchBoxText().isEmpty()){
+                        dictViewModel.setHasShowRvInfo(DICT_RV_HISTORY)
+                    } else {
+                        rvSearchHistory.visibility = View.GONE
+                        rvSearchSuggestion.visibility = View.GONE
+                    }
+                }
+            }
         }
         itemTouchHelper.attachToRecyclerView(rvSearchHistory)
     }
@@ -233,6 +258,11 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
         super.onDestroy()
         if (this::snackBar.isInitialized) if (snackBar.isShown) snackBar.dismiss()
         if (this::dictViewModel.isInitialized) dictViewModel.deleteSearchRecord()
+    }
+
+    override fun onResume() {
+        dictViewModel.getDictSearchHistory()
+        super.onResume()
     }
 
 

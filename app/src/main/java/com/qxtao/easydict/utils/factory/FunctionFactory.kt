@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Build
+import android.util.DisplayMetrics
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
@@ -61,6 +62,26 @@ val Context.screenHeight: Int
             false -> wm.defaultDisplay.getSize(point)
         }
         return point.y
+    }
+
+/**
+ * 获取应用宽度
+ */
+val Activity.appWidth: Int
+    get() {
+        val outMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(outMetrics)
+        return outMetrics.widthPixels
+    }
+
+/**
+ * 获取应用高度
+ */
+val Activity.appHeight: Int
+    get() {
+        val outMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(outMetrics)
+        return outMetrics.heightPixels
     }
 
 /**

@@ -301,6 +301,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                 replace(R.id.dict_definition_fragment, DictDetailFragment::class.java, null)
                 addToBackStack(null)
             }
+            dictViewModel.dictDetailMode = DICT_DETAIL_MODE_DEFINITION
         } else {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
@@ -431,7 +432,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     // 重写函数dispatchTouchEvent，实现点击搜索框外时，收起软键盘
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         // 排除部分控件
-        if (dictViewModel.hasShowRvInfo.value?.first == false && dictViewModel.hasShowRvInfo.value?.second == false){
+        if (dictViewModel.hasShowRvInfo.value == DICT_RV_SUGGESTION_LM){
             val ivUnfold = findViewById<ImageView>(R.id.iv_unfold)
             // 判断ev是否落在view上
             if (isTouchPointInView(ivUnfold, ev.x.toInt(), ev.y.toInt()))

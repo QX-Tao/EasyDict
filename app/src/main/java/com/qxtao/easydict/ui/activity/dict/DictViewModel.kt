@@ -1,6 +1,7 @@
 package com.qxtao.easydict.ui.activity.dict
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,7 +54,7 @@ class DictViewModel(
     var dataMoreBlngLoadInfo = MutableLiveData<Int>() // 初始化-1  加载中0 已加载1 加载失败2
     var dataMoreAuthLoadInfo = MutableLiveData<Int>() // 初始化-1  加载中0 已加载1 加载失败2
     var dataSuggestionLoadInfo = MutableLiveData<Int>() // 初始化-1  加载中0 已加载1
-    var hasShowRvInfo = MutableLiveData<Pair<Boolean, Boolean>>() //history-first  suggesting-second
+    var hasShowRvInfo = MutableLiveData<Int>() //history or suggesting
     var hasShowDetailFragment = Triple(true, false, false) //JM-first  CO-second  EE-third
     var searchText = MutableLiveData<SearchText>()
     var detailFragmentAppBarExpanded = MutableLiveData<Int>() // appBarLayout状态
@@ -61,6 +62,7 @@ class DictViewModel(
     val playPosition = MutableLiveData<Map<Int, Int>>() // -1不播放
     private var _mediaPlayer: MediaPlayer?= null
     var hasSearchResult = MutableLiveData<Boolean>() // 初始化-1 无结果0 有结果1
+    var dictDetailMode = DICT_DETAIL_MODE_NORMAL
 
     // 词典搜索信息
     var searchInfoResponse = MutableLiveData<SearchInfoResponse?>()
@@ -107,7 +109,7 @@ class DictViewModel(
         dataMoreBlngLoadInfo.value = -1
         dataMoreAuthLoadInfo.value = -1
         dataSuggestionLoadInfo.value = -1
-        hasShowRvInfo.value = Pair(true, false)
+        hasShowRvInfo.value = DICT_RV_HISTORY
         searchText.value = SearchText(null, "",  0)
         getDictSearchSugWord()
     }
@@ -150,9 +152,11 @@ class DictViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             dataSuggestionLoadInfo.postValue(0)
             val list = simpleDictData.searchDicts(str)
-            setHasShowRvInfo(second = list?.isNotEmpty() == true)
-            _dictSearchSuggestion.postValue(list)
-            dataSuggestionLoadInfo.postValue(1)
+            withContext(Dispatchers.Main){
+                _dictSearchSuggestion.value = list
+                dataSuggestionLoadInfo.value = 1
+                hasShowRvInfo.value = if (list?.isNotEmpty() == true) DICT_RV_SUGGESTION else DICT_RV_SUGGESTION_LM
+            }
         }
     }
 
@@ -163,10 +167,8 @@ class DictViewModel(
     }
 
     // hasFragment的列表显示控制
-    fun setHasShowRvInfo(first: Boolean = hasShowRvInfo.value?.first ?: true, second: Boolean = hasShowRvInfo.value?.second ?: false) {
-        viewModelScope.launch(Dispatchers.IO) {
-            hasShowRvInfo.postValue(Pair(first, second))
-        }
+    fun setHasShowRvInfo(mode : Int = DICT_RV_HISTORY){
+        hasShowRvInfo.value = mode
     }
 
     // 添加记录到表
@@ -204,9 +206,9 @@ class DictViewModel(
                 }
             }
             if (ehResponse.value == null && heResponse.value == null){
-                translation = simpleDictData.getTranslationByOrigin(origin) ?: ""
+                translation = simpleDictData.getTranslationByOrigin(origin) ?: searchHistoryData.getTranslationByOrigin(origin) ?: ""
             }
-            searchHistoryData.setSearchRecord( origin, translation)
+            searchHistoryData.setSearchRecord(origin, translation)
             getDictSearchHistory()
         }
     }
@@ -218,7 +220,6 @@ class DictViewModel(
         val currentList = _dictSearchHistory.value!!.toMutableList()
         currentList.removeAt(position)
         _dictSearchHistory.value = currentList
-        if (deleteQueue.size > 1) deleteQueue.poll()?.let { deleteSearchRecord(it.first) }
     }
 
     // 撤销删除记录
@@ -283,7 +284,7 @@ class DictViewModel(
         // 每次搜索前，将之前的信息删除
         clearResponseData()
         setSearchHistoryItem(str)
-        return simpleDictData.getTranslationByOrigin(str)
+        return simpleDictData.getTranslationByOrigin(str) ?: searchHistoryData.getTranslationByOrigin(str)
     }
 
     // 设置词典搜索详情数据
