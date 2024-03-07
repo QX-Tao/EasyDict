@@ -18,6 +18,7 @@ import com.qxtao.easydict.databinding.FragmentDictSearchBinding
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_HISTORY
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION_LM
+import com.qxtao.easydict.ui.activity.dict.DICT_SEARCH_FRAGMENT_TAG
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
@@ -61,8 +62,9 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
             etSearchBox.setSelection(if (it.editSearchText.length >= it.editCursor) it.editCursor else it.editSearchText.length)
         }
         dictViewModel.hasShowRvInfo.observe(this){
+            val currentFragment = childFragmentManager.findFragmentById(R.id.dict_search_content_fragment)
             cvEditUnfold.visibility = if (it == DICT_RV_SUGGESTION_LM &&
-                dictViewModel.dataSuggestionLoadInfo.value == 1) View.VISIBLE else View.GONE
+                dictViewModel.dataSuggestionLoadInfo.value == 1 && currentFragment is DictHasFragment) View.VISIBLE else View.GONE
         }
     }
 

@@ -74,6 +74,8 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     private lateinit var ivTransToCopy: ImageView
     private lateinit var ivTransFromVoice: ImageView
     private lateinit var ivTransToVoice: ImageView
+    private lateinit var ivTransCollect: ImageView
+    private lateinit var ivWordCollect: ImageView
     private lateinit var tvOfflineWord: TextView
     private lateinit var tvOfflineTranslation: TextView
     private lateinit var tvReload: TextView
@@ -110,6 +112,8 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
         clOnlineResult = binding.clOnlineResult
         tvReload = binding.tvReload
         clVoice = binding.clVoice
+        ivTransCollect = binding.ivTransCollect
+        ivWordCollect = binding.ivWordCollect
 
     }
 
@@ -235,6 +239,15 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                 ivTransToVoice.setImageResource(if (it1 == 4) voicePlayResId else voiceResId)
             }
         }
+        dictViewModel.isSearchTextFavorite.observe(this) {
+            if (it){
+                ivTransCollect.setImageResource(R.drawable.ic_collected)
+                ivWordCollect.setImageResource(R.drawable.ic_collected)
+            } else {
+                ivTransCollect.setImageResource(R.drawable.ic_collect1)
+                ivWordCollect.setImageResource(R.drawable.ic_collect1)
+            }
+        }
         binding.appBarLayout.setExpanded(dictViewModel.detailFragmentAppBarExpanded.value == APPBAR_LAYOUT_EXPANDED, false)
         isInitView = false
     }
@@ -324,6 +337,36 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
             val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             cm.setPrimaryClip(ClipData.newPlainText(null, tvTransFrom.text))
             showShortToast(getString(R.string.copied))
+        }
+        ivWordCollect.setOnClickListener {
+            if (dictViewModel.isSearchTextFavorite.value == true){
+                dictViewModel.removeSearchTextFromWordBook()
+                showShortToast(getString(R.string.remove_from_word_book))
+            } else {
+                val res = dictViewModel.addSearchTextToWordBook()
+                if (res.first){
+                    showShortToast(String.format(getString(R.string.add_to_word_book), res.second[res.third!!]))
+                } else {
+                    if (res.second.size > 1 && res.third == null){
+                        mListener.onFragmentInteraction("showSelectWordBookDialog")
+                    } else showShortToast(getString(R.string.operation_failure))
+                }
+            }
+        }
+        ivTransCollect.setOnClickListener {
+            if (dictViewModel.isSearchTextFavorite.value == true){
+                dictViewModel.removeSearchTextFromWordBook()
+                showShortToast(getString(R.string.remove_from_word_book))
+            } else {
+                val res = dictViewModel.addSearchTextToWordBook()
+                if (res.first){
+                    showShortToast(String.format(getString(R.string.add_to_word_book), res.second[res.third!!]))
+                } else {
+                    if (res.second.size > 1 && res.third == null){
+                        mListener.onFragmentInteraction("showSelectWordBookDialog")
+                    } else showShortToast(getString(R.string.operation_failure))
+                }
+            }
         }
     }
 

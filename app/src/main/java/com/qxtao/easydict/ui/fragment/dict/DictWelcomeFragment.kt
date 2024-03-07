@@ -22,6 +22,7 @@ import com.qxtao.easydict.ui.activity.daysentence.DaySentenceActivity
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.grammarcheck.GrammarCheckActivity
+import com.qxtao.easydict.ui.activity.wordbook.WordBookActivity
 import com.qxtao.easydict.ui.activity.wordlist.WordListActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.utils.common.SizeUtils
@@ -40,7 +41,7 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
     private lateinit var tvSearchBox : TextView
     private lateinit var tvDaySentence : TextView
     private lateinit var tvGrammyCheck : TextView
-    private lateinit var tvWordList : TextView
+    private lateinit var tvWordBook : TextView
     private lateinit var ivVoice : ImageView
     private lateinit var ivSuggestSearchRefresh : ImageView
     private lateinit var rvSearchSuggestion : RecyclerView
@@ -51,7 +52,7 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
         tvSearchBox = binding.tvSearchBox
         tvDaySentence = binding.tvDaySentence
         tvGrammyCheck = binding.tvGrammyCheck
-        tvWordList = binding.tvWordList
+        tvWordBook = binding.tvWordBook
         ivVoice = binding.ivVoice
         ivSuggestSearchRefresh = binding.ivSuggestSearchRefresh
         rvSearchSuggestion = binding.rvSearchSuggestion
@@ -106,8 +107,8 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
         tvGrammyCheck.setOnClickListener {
             startActivity(Intent(mContext, GrammarCheckActivity::class.java))
         }
-        tvWordList.setOnClickListener {
-            startActivity(Intent(mContext, WordListActivity::class.java))
+        tvWordBook.setOnClickListener {
+            startActivity(Intent(mContext, WordBookActivity::class.java))
         }
     }
 

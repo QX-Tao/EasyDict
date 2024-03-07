@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:text="@string/add_word_book"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"
+        android:textSize="19sp"
+        android:layout_gravity="center"
+        android:textColor="@color/firstTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:cardBackgroundColor="@color/colorBgWhite5"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:singleLine="true"
+            style="@style/EditTextStyle"
+            android:textCursorDrawable="@drawable/sp_edittext_cursor"
+            android:textColorHint="@color/secondInsTextColor"
+            android:textColor="@color/firstInsTextColor"
+            android:drawablePadding="12dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:hint="@string/please_input"
+            android:maxLines="1"
+            tools:ignore="VisualLintTextFieldSize"
+            app:drawableStartCompat="@drawable/ic_edit2" />
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_r36"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_height="36dp"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/themeMainColor"
+            android:text="@string/cancel"/>
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_height="36dp"
+            android:layout_width="wrap_content"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_r36"
+            android:textSize="14sp"
+            android:textColor="@color/themeMainColor"
+            android:text="@string/confirm"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -98,6 +98,7 @@
     <string name="def_str">--</string>
     <string name="configure_simple_dict_error_desc">配置基础词典失败，请尝试重装应用</string>
     <string name="word_list">单词列表</string>
+    <string name="word_list_desc">单词列表 (背单词)</string>
     <string name="info">详情</string>
     <string name="no_words_in_this_category">此分类下暂时没有单词</string>
     <string name="all_words">全部单词</string>
@@ -133,4 +134,27 @@
     <string name="deepl">DeepL</string>
     <string name="tencent">腾讯</string>
     <string name="baidu">百度</string>
+    <string name="history">历史记录</string>
+    <string name="word_book">单词本</string>
+    <string name="my_word_book">我的单词本</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="add_to_word_book">已添加至%1$s</string>
+    <string name="operation_failure">操作失败</string>
+    <string name="remove_from_word_book">已从我的单词本中移出</string>
+    <string name="edit_word_book">编辑单词本</string>
+    <string name="add_word_book">添加单词本</string>
+    <string name="word_book_already_exist">单词本已存在</string>
+    <string name="please_input">请输入</string>
+    <string name="add_word_book_success_eee">已创建单词本%1$s</string>
+    <string name="select_word_book">选择单词本</string>
+    <string name="rename">重命名</string>
+    <string name="rename_word_book_success_eee">已重命名为%1$s</string>
+    <string name="confirm_delete_word_book_desc">这将会删除整个单词本，单词本中的单词也将一并删除，且无法撤销，确认删除吗？</string>
+    <string name="select_all">全选</string>
+    <string name="please_select_item">请选择项目</string>
+    <string name="unselect_all">全不选</string>
+    <string name="select_item_eee">已选择%1$s项</string>
+    <string name="move_word_book">已移至分类%1$s</string>
+    <string name="confirm_delete_word_desc">这将会删除已选单词，且无法撤销，确认删除吗？</string>
+    <string name="move_to_category">移至分类</string>
 </resources>

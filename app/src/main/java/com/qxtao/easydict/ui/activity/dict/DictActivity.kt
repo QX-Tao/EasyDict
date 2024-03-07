@@ -29,9 +29,13 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
+import com.qxtao.easydict.adapter.dict.DictSelectWordBookAdapter
 import com.qxtao.easydict.database.SearchHistoryData
 import com.qxtao.easydict.database.SimpleDictData
+import com.qxtao.easydict.database.WordBookData
 import com.qxtao.easydict.databinding.ActivityDictBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.base.BaseFragment
@@ -66,6 +70,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     private lateinit var dictViewModel: DictViewModel
     private lateinit var searchHistoryData: SearchHistoryData
     private lateinit var simpleDictData: SimpleDictData
+    private lateinit var wordBookData: WordBookData
     private lateinit var dispatcher: OnBackPressedDispatcher
     private lateinit var callback: OnBackPressedCallback
     private val recognitionHelper: RecognitionHelper by lazy { RecognitionHelper(this) }
@@ -97,9 +102,10 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                     if (withTimeoutOrNull(8000) { res.await() } == true) {
                         simpleDictData = SimpleDictData(mContext)
                         searchHistoryData = SearchHistoryData(mContext)
+                        wordBookData = WordBookData(mContext)
                         withContext(Dispatchers.Main){
                             dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                                searchHistoryData))[DictViewModel::class.java]
+                                searchHistoryData, wordBookData))[DictViewModel::class.java]
                             toWelcomeFragment()
                         }
                         isReady = true
@@ -114,15 +120,17 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             } else {
                 simpleDictData = SimpleDictData(mContext)
                 searchHistoryData = SearchHistoryData(mContext)
+                wordBookData = WordBookData(mContext)
                 dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                    searchHistoryData))[DictViewModel::class.java]
+                    searchHistoryData, wordBookData))[DictViewModel::class.java]
                 toDefinitionFragment(searchStr)
             }
         } else {
             simpleDictData = SimpleDictData(mContext)
             searchHistoryData = SearchHistoryData(mContext)
+            wordBookData = WordBookData(mContext)
             dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                searchHistoryData))[DictViewModel::class.java]
+                searchHistoryData, wordBookData))[DictViewModel::class.java]
         }
     }
 
@@ -169,6 +177,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                 "editTextGetFocus" -> { etRequestFocus(data[1] as EditText) }
                 "editTextClearFocus" -> { etUnRequestFocus(data[1] as EditText) }
                 "changeSearchFragmentBackgroundColor" -> { changeSearchFragmentBackgroundColor() }
+                "showSelectWordBookDialog" -> { showSelectWordBookDialog() }
             }
         }
     }
@@ -378,6 +387,63 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             val colorId = ResourcesCompat.getColor(resources, R.color.colorBgWhite2, null)
             dictSearchFragment.setSearchBackground(colorId)
         }
+    }
+
+    private fun showAddWordBookDialog(){
+        val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_word_book_input, null)
+        val tvCancel = dialogView.findViewById<TextView>(R.id.tv_cancel)
+        val tvConfirm =  dialogView.findViewById<TextView>(R.id.tv_confirm)
+        val etInput = dialogView.findViewById<EditText>(R.id.et_input)
+        val dialog = AlertDialog.Builder(mContext)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        tvCancel.setOnClickListener { dialog.dismiss() }
+        tvConfirm.setOnClickListener {
+            val wordBookName = etInput.text.toString()
+            if (wordBookName.isNotBlank()){
+                val res = dictViewModel.addWordBook(wordBookName)
+                if (res.first) {
+                    dictViewModel.addSearchTextToWordBook(res.second)
+                    showShortToast(String.format(getString(R.string.add_to_word_book), res.second))
+                    dialog.dismiss()
+                } else showShortToast(res.second)
+            } else {
+                etInput.error = getString(R.string.invalid_input)
+            }
+        }
+        etRequestFocus(etInput)
+        dialog.show()
+    }
+
+    private fun showSelectWordBookDialog(){
+        val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_word_book_select, null)
+        val rvSelectWordBook = dialogView.findViewById<RecyclerView>(R.id.rv_select_word_book)
+        val tvAddWordBook =  dialogView.findViewById<TextView>(R.id.tv_add_word_book)
+        val dialog = AlertDialog.Builder(mContext)
+            .setView(dialogView)
+            .create()
+        tvAddWordBook.setOnClickListener {
+            showAddWordBookDialog()
+            dialog.dismiss()
+        }
+        rvSelectWordBook.layoutManager = LinearLayoutManager(mContext)
+        rvSelectWordBook.adapter = DictSelectWordBookAdapter(dictViewModel.getWordBookList()).apply {
+            setOnItemClickListener(object : DictSelectWordBookAdapter.OnItemClickListener{
+                override fun onItemClick(position: Int) {
+                    val res = dictViewModel.addSearchTextToWordBook(position)
+                    dialog.dismiss()
+                    if (res.first){
+                        showShortToast(String.format(getString(R.string.add_to_word_book), res.second[res.third!!]))
+                    } else {
+                        if (res.second.size > 1 && res.third == null){
+                            showSelectWordBookDialog()
+                        } else showShortToast(getString(R.string.operation_failure))
+                    }
+                }
+            })
+        }
+        dialog.show()
     }
 
     private fun etRequestFocus(editText: EditText){

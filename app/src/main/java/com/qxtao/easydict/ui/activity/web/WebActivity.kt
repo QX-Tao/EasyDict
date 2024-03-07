@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -43,6 +44,7 @@ import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.factory.isAppearanceLight
 import com.qxtao.easydict.utils.factory.screenRotation
 import me.jingbin.progress.WebProgress
+import java.util.Locale
 
 
 class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate){
@@ -332,6 +334,18 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
                         webView.loadUrl("about:blank")
                         llLoadingFail.visibility = View.VISIBLE
                     }
+                }
+            }
+
+            override fun shouldInterceptRequest(
+                view: WebView,
+                request: WebResourceRequest
+            ): WebResourceResponse? {
+                val url = request.url.toString().lowercase()
+                return if (url.contains("google.com") || url.contains("googleads.g")) {
+                    WebResourceResponse(null, null, null)
+                } else {
+                    super.shouldInterceptRequest(view, request)
                 }
             }
         }

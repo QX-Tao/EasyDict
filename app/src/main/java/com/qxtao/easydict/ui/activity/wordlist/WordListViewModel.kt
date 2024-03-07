@@ -132,12 +132,14 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
         val currentList = _wordListItems.value!!.toMutableList()
         currentList.removeAt(listPosition)
         _wordListItems.value = currentList
+        dataLoadInfo.value = if (currentList.isEmpty()) 3 else 1
     }
     fun undoDeleteWord() {
         val (deletedItem, listPosition, _, _) = deleteQueue.poll() ?: return
         val currentList = _wordListItems.value!!.toMutableList()
         currentList.add(listPosition, deletedItem)
         _wordListItems.value = currentList
+        dataLoadInfo.value = if (currentList.isEmpty()) 3 else 1
     }
     fun deleteWordRecord(){
         val deleteTuple = deleteQueue.poll() ?: return

@@ -18,6 +18,7 @@ import com.qxtao.easydict.adapter.dict.TYPE_BLNG_CLASSIFICATION_NORMAL
 import com.qxtao.easydict.adapter.dict.TYPE_BLNG_CLASSIFICATION_SELECT
 import com.qxtao.easydict.database.SearchHistoryData
 import com.qxtao.easydict.database.SimpleDictData
+import com.qxtao.easydict.database.WordBookData
 import com.qxtao.easydict.utils.common.HttpHelper
 import com.qxtao.easydict.utils.constant.NetConstant
 import com.xuexiang.xhttp2.XHttp
@@ -37,7 +38,8 @@ import java.util.Queue
 
 class DictViewModel(
     private val simpleDictData: SimpleDictData,
-    private val searchHistoryData: SearchHistoryData
+    private val searchHistoryData: SearchHistoryData,
+    private val wordBookData: WordBookData
 ) : ViewModel() {
     private val _dictSearchHistory = MutableLiveData<List<SearchHistoryData.SearchHistory>?>()
     val dictSearchHistory: LiveData<List<SearchHistoryData.SearchHistory>?> = _dictSearchHistory
@@ -62,6 +64,7 @@ class DictViewModel(
     val playPosition = MutableLiveData<Map<Int, Int>>() // -1不播放
     private var _mediaPlayer: MediaPlayer?= null
     var hasSearchResult = MutableLiveData<Boolean>() // 初始化-1 无结果0 有结果1
+    var isSearchTextFavorite = MutableLiveData<Boolean>() // 搜索文本是否已收藏
     var dictDetailMode = DICT_DETAIL_MODE_NORMAL
 
     // 词典搜索信息
@@ -93,8 +96,8 @@ class DictViewModel(
     var blngSelectedItem = MutableLiveData<String>()
 
     companion object{
-        fun Factory(simpleDictData: SimpleDictData, searchHistoryData: SearchHistoryData): ViewModelProvider.Factory = viewModelFactory {
-            initializer { DictViewModel(simpleDictData, searchHistoryData) }
+        fun Factory(simpleDictData: SimpleDictData, searchHistoryData: SearchHistoryData, wordBookData: WordBookData): ViewModelProvider.Factory = viewModelFactory {
+            initializer { DictViewModel(simpleDictData, searchHistoryData, wordBookData) }
         }
     }
 
@@ -109,6 +112,7 @@ class DictViewModel(
         dataMoreBlngLoadInfo.value = -1
         dataMoreAuthLoadInfo.value = -1
         dataSuggestionLoadInfo.value = -1
+        isSearchTextFavorite.value = false
         hasShowRvInfo.value = DICT_RV_HISTORY
         searchText.value = SearchText(null, "",  0)
         getDictSearchSugWord()
@@ -135,6 +139,37 @@ class DictViewModel(
                 _dictSearchHistory.value = list
             }
         }
+    }
+
+    // 搜索文本是否已收藏
+    private fun isSearchTextFavorite(searchText: String): Boolean
+        = wordBookData.isWordInWordBooks(searchText)
+    // 收藏搜索文本
+    fun addSearchTextToWordBook(sIndex: Int? = null): Triple<Boolean, List<String>, Int?>{
+        val wordBookList = wordBookData.getWordBookList()
+        return if (wordBookList.size == 1) {
+            addSearchTextToWordBook(wordBookList[0])
+            Triple(true, wordBookList, 0)
+        } else {
+            if (sIndex == null){
+                Triple(false, wordBookList, null)
+            } else {
+                addSearchTextToWordBook(wordBookList[sIndex])
+                Triple(true, wordBookList, sIndex)
+            }
+        }
+    }
+    fun addSearchTextToWordBook(bookName: String){
+        val word = searchText.value?.searchText!!
+        val translation = getSearchTranslation(word)
+        wordBookData.addWordToBook(word, translation, bookName)
+        isSearchTextFavorite.value = isSearchTextFavorite(word)
+    }
+    // 取消收藏搜索文本
+    fun removeSearchTextFromWordBook(){
+        val word = searchText.value?.searchText!!
+        wordBookData.deleteWordFromBook(word)
+        isSearchTextFavorite.value = isSearchTextFavorite(word)
     }
 
     // 获取推荐单词
@@ -174,43 +209,48 @@ class DictViewModel(
     // 添加记录到表
     private fun setSearchHistoryItem(origin: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            var translation = ""
-            if (ehResponse.value != null && heResponse.value == null){
-                if (ehResponse.value?.isTran == true){
-                    ehResponse.value?.trs?.let {
-                        translation = it[0].tran ?: ""
-                    }
-                } else {
-                    ehResponse.value?.trs?.let {
-                        val l = mutableListOf<String>()
-                        for (i in it.indices) {
-                            l.add(((it[i].pos ?: "") + " " + it[i].tran).trim())
-                        }
-                        translation = l.joinToString(" ")
-                    }
-                }
-            }
-            if (heResponse.value != null && ehResponse.value == null){
-                if (heResponse.value?.isTran == true){
-                    heResponse.value?.trans?.let {
-                        translation = it[0].w ?: ""
-                    }
-                } else {
-                    heResponse.value?.trans?.let {
-                        val l = mutableListOf<String>()
-                        for (i in it.indices) {
-                            l.add(((it[i].type ?: "") + " " + it[i].w).trim())
-                        }
-                        translation = l.joinToString(" ")
-                    }
-                }
-            }
-            if (ehResponse.value == null && heResponse.value == null){
-                translation = simpleDictData.getTranslationByOrigin(origin) ?: searchHistoryData.getTranslationByOrigin(origin) ?: ""
-            }
+            val translation = getSearchTranslation(origin)
             searchHistoryData.setSearchRecord(origin, translation)
             getDictSearchHistory()
         }
+    }
+
+    private fun getSearchTranslation(origin: String): String{
+        var translation = ""
+        if (ehResponse.value != null && heResponse.value == null){
+            if (ehResponse.value?.isTran == true){
+                ehResponse.value?.trs?.let {
+                    translation = it[0].tran ?: ""
+                }
+            } else {
+                ehResponse.value?.trs?.let {
+                    val l = mutableListOf<String>()
+                    for (i in it.indices) {
+                        l.add(((it[i].pos ?: "") + " " + it[i].tran).trim())
+                    }
+                    translation = l.joinToString(" ")
+                }
+            }
+        }
+        if (heResponse.value != null && ehResponse.value == null){
+            if (heResponse.value?.isTran == true){
+                heResponse.value?.trans?.let {
+                    translation = it[0].w ?: ""
+                }
+            } else {
+                heResponse.value?.trans?.let {
+                    val l = mutableListOf<String>()
+                    for (i in it.indices) {
+                        l.add(((it[i].type ?: "") + " " + it[i].w).trim())
+                    }
+                    translation = l.joinToString(" ")
+                }
+            }
+        }
+        if (ehResponse.value == null && heResponse.value == null){
+            translation = simpleDictData.getTranslationByOrigin(origin) ?: searchHistoryData.getTranslationByOrigin(origin) ?: ""
+        }
+        return translation
     }
 
     // 预删除记录
@@ -275,6 +315,7 @@ class DictViewModel(
         dataMoreAuthLoadInfo.value = -1
         dataMoreBlngLoadInfo.value = -1
         hasSearchResult.value = true
+        isSearchTextFavorite.value = false
     }
 
     // 离线查询
@@ -597,11 +638,16 @@ class DictViewModel(
                 })
         }
     }
+
+    fun addWordBook(bookName: String) = wordBookData.addWordBook(bookName)
+    fun getWordBookList() = wordBookData.getWordBookList()
+
     private inner class OnlineSearch(s: String){
         private val str = s.trim()
         fun search(){
             if (dataLoadInfo.value == 1 && str == searchText.value?.searchText) {
                 setSearchText(searchText = str)
+                isSearchTextFavorite.value = isSearchTextFavorite(str)
                 return // 数据已经加载 直接返回即可
             }
             dataLoadInfo.value = 0
@@ -617,6 +663,7 @@ class DictViewModel(
                 val request1 = async { onlineSearch() }
                 val request2 =  async { onlineSearchMore() }
                 dataLoadInfo.postValue(if (request1.await() && request2.await()) 1 else 2)
+                isSearchTextFavorite.postValue(isSearchTextFavorite(str))
             }
         }
         private suspend fun onlineSearch(): Boolean {

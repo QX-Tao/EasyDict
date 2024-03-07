@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBgWhite1"
+    tools:context=".ui.fragment.wordbook.WordBookDetailFragment">
+
+    <View
+        android:id="@+id/v_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_book_word"
+        app:layout_constraintTop_toTopOf="@+id/v_holder"
+        app:layout_constraintBottom_toBottomOf="@+id/v_holder"
+        app:layout_constraintStart_toStartOf="@+id/v_holder"
+        app:layout_constraintEnd_toEndOf="@+id/v_holder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_list_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_words_in_this_category"
+                android:textColor="@color/secondTextColor"
+                android:textSize="13sp"
+                app:drawableTopCompat="@drawable/ic_category_no_word" />
+
+        </LinearLayout>
+
+        <com.qxtao.easydict.ui.view.LoadingView
+            android:id="@+id/lv_loading"
+            android:background="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:ballColor="@color/themeMainColor"
+            app:internal="60"
+            app:duration="200"
+            app:max_radius="20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_loading_fail"
+            android:background="@color/colorBgWhite1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:gravity="center"
+                android:padding="20dp"
+                android:drawablePadding="15dp"
+                android:textSize="17sp"
+                android:textColor="@color/secondTextColor"
+                android:text="@string/failed_to_load_click_the_screen_to_try_again"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:drawableTopCompat="@drawable/ic_loading_fail" />
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="0dp"
+            app:cardElevation="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:cardBackgroundColor="@color/colorBgWhite1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/include_title_bar_second"
+                layout="@layout/include_title_bar_second"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_move"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/cv_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="20dp"
+            app:cardCornerRadius="24dp"
+            app:cardBackgroundColor="@color/themeMainColor"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+
+            <ImageView
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?android:selectableItemBackground"
+                android:id="@+id/iv_move"
+                android:tooltipText="@string/move_to_category"
+                android:padding="12dp"
+                android:src="@drawable/ic_move"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_delete"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="24dp"
+            app:cardBackgroundColor="@color/themeMainColor"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+
+            <ImageView
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?android:selectableItemBackground"
+                android:id="@+id/iv_delete"
+                android:tooltipText="@string/delete"
+                android:padding="12dp"
+                android:src="@drawable/ic_delete"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
