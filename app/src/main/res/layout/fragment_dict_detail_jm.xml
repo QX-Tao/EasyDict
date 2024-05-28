@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:background="@color/colorBgWhite2"
+        android:background="?attr/colorSurfaceContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,7 +20,7 @@
             android:visibility="gone"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:id="@+id/ll_eh_header_part"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             <TextView
                 android:layout_marginTop="15dp"
                 android:id="@+id/tv_eh_header_exam_type"
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -54,7 +54,7 @@
             android:visibility="gone"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:id="@+id/ll_he_header_part"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -73,14 +73,14 @@
             android:visibility="gone"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:id="@+id/cl_blng_sents_part"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -107,7 +107,7 @@
                 android:id="@+id/tv_blng_sents_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -133,13 +133,13 @@
             android:id="@+id/cl_auth_sents_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -166,7 +166,7 @@
                 android:id="@+id/tv_auth_sents_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -184,13 +184,13 @@
             android:id="@+id/cl_web_trans_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -200,7 +200,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -217,7 +217,7 @@
                 android:id="@+id/tv_web_trans_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -235,13 +235,13 @@
             android:id="@+id/cl_special_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -251,7 +251,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -268,7 +268,7 @@
                 android:id="@+id/tv_special_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -286,13 +286,13 @@
             android:id="@+id/cl_thesaurus_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -302,7 +302,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -319,7 +319,7 @@
                 android:id="@+id/tv_thesaurus_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -337,13 +337,13 @@
             android:id="@+id/cl_synonym_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -353,7 +353,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -370,7 +370,7 @@
                 android:id="@+id/tv_synonym_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -388,13 +388,13 @@
             android:id="@+id/cl_antonym_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -404,7 +404,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -421,7 +421,7 @@
                 android:id="@+id/tv_antonym_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -439,13 +439,13 @@
             android:id="@+id/cl_phrase_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -455,7 +455,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -472,7 +472,7 @@
                 android:id="@+id/tv_phrase_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -490,13 +490,13 @@
             android:id="@+id/cl_rel_word_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -506,7 +506,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -523,7 +523,7 @@
                 android:id="@+id/tv_rel_word_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <TextView
                 android:id="@+id/tv_rel_word_part_word"
@@ -532,7 +532,7 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/root_from_eee"
                 android:textSize="16sp"
-                android:textColor="@color/secondTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_rel_word_part_title"/>
@@ -545,7 +545,7 @@
                 android:layout_marginStart="10dp"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:textColor="@color/theme_color_gol"
+                android:textColor="?attr/colorPrimary"
                 app:layout_constraintStart_toEndOf="@id/tv_rel_word_part_word"
                 app:layout_constraintBottom_toBottomOf="@id/tv_rel_word_part_word"/>
 
@@ -565,13 +565,13 @@
             android:id="@+id/cl_etym_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -581,7 +581,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -598,7 +598,7 @@
                 android:id="@+id/tv_etym_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -616,13 +616,13 @@
             android:id="@+id/cl_baike_digest_part"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -632,7 +632,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -649,7 +649,7 @@
                 android:id="@+id/tv_baike_digest_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <TextView
                 android:id="@+id/tv_baike_digest_part_word"
@@ -657,7 +657,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:textSize="18sp"
-                android:textColor="@color/theme_color_gol"
+                android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_title"/>
@@ -669,11 +669,12 @@
                 android:layout_marginTop="10dp"
                 android:maxHeight="120dp"
                 android:textIsSelectable="true"
+                android:textColorHighlight="?attr/colorSecondaryContainer"
                 app:foldLines="6"
                 app:foldedSuffix="@string/empty_string"
                 app:expandedSuffix="@string/empty_string"
                 android:textSize="15sp"
-                android:textColor="@color/secondTextColor"
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_word"/>
 
@@ -684,7 +685,7 @@
                 android:layout_marginTop="8dp"
                 android:textSize="12sp"
                 android:text="@string/source_"
-                android:textColor="@color/thirdInsTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_desc"/>
 
@@ -695,7 +696,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="5dp"
                 android:textSize="12sp"
-                android:textColor="@color/thirdInsTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 app:layout_constraintStart_toEndOf="@+id/tv_source"
                 app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_desc"/>
 
@@ -706,14 +707,14 @@
             android:visibility="gone"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:id="@+id/ll_typos_part"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:textColor="@color/thirdInsTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:text="@string/are_you_looking_for"
                 android:textSize="13sp"
                 android:layout_width="wrap_content"
@@ -733,7 +734,7 @@
             android:visibility="gone"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -746,7 +747,7 @@
                 android:id="@+id/tv_not_result_desc"
                 android:textSize="16sp"
                 android:text="@string/not_result_desc"
-                android:textColor="@color/secondTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
 
@@ -755,7 +756,7 @@
                 android:layout_marginTop="15dp"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/themeMainColor"
+                app:cardBackgroundColor="?attr/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_not_result_desc"
@@ -775,7 +776,7 @@
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:text="@string/retype"
-                    android:textColor="@color/secondTextColor"
+                    android:textColor="?attr/colorOnSurface"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"/>
 
@@ -788,7 +789,7 @@
             android:visibility="gone"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -796,7 +797,7 @@
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -806,7 +807,7 @@
                 android:layout_width="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -823,7 +824,7 @@
                 android:id="@+id/tv_external_dict_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"
@@ -840,7 +841,7 @@
             android:visibility="gone"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -848,7 +849,7 @@
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -858,7 +859,7 @@
                 android:layout_width="wrap_content"/>
 
             <TextView
-                android:textColor="@color/thirdTextColor"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="15sp"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
@@ -875,7 +876,7 @@
                 android:id="@+id/tv_external_trans_part_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:drawableEndCompat="@drawable/ic_right3" />
+                app:drawableEndCompat="@drawable/ic_right" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:nestedScrollingEnabled="false"

@@ -32,7 +32,7 @@
                 android:id="@+id/tv_item_explain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -42,8 +42,8 @@
                 android:layout_width="match_parent">
 
                 <TextView
-                    android:textColor="@color/theme_color_gol"
-                    android:background="@color/colorBgLightYellow3"
+                    android:textColor="?attr/colorPrimary"
+                    android:background="?attr/colorSurfaceContainer"
                     android:textStyle="bold"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
@@ -61,7 +61,7 @@
                     android:layout_marginStart="8dp"
                     android:textSize="16sp"
                     android:lineSpacingExtra="3dp"
-                    android:textColor="@color/thirdInsTextColor" />
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
             </LinearLayout>
 
@@ -72,8 +72,8 @@
                 android:layout_width="match_parent">
 
                 <TextView
-                    android:textColor="@color/theme_color_gol"
-                    android:background="@color/colorBgLightYellow3"
+                    android:textColor="?attr/colorPrimary"
+                    android:background="?attr/colorSurfaceContainer"
                     android:textStyle="bold"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
@@ -91,7 +91,7 @@
                     android:layout_marginStart="8dp"
                     android:textSize="16sp"
                     android:lineSpacingExtra="3dp"
-                    android:textColor="@color/thirdInsTextColor" />
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
             </LinearLayout>
 

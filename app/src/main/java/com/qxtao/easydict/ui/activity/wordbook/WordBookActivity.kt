@@ -1,7 +1,6 @@
 package com.qxtao.easydict.ui.activity.wordbook
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,7 +20,6 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.DictSelectWordBookAdapter
 import com.qxtao.easydict.database.WordBookData
 import com.qxtao.easydict.databinding.ActivityWordBookBinding
-import com.qxtao.easydict.ui.activity.wordlist.WordListActivity
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.fragment.wordbook.WordBookClassificationFragment
@@ -60,7 +58,6 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
         dispatcher.addCallback(this, callback)
     }
 
-    override fun bindViews() {}
     override fun initViews() {}
     override fun addListener() {}
 
@@ -70,7 +67,6 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
             when(data[0]){
                 "finishActivity" -> { finish() }
                 "onBackPressed" -> dispatcher.onBackPressed()
-                "toWordListActivity" -> toWordListActivity()
                 "toDetailFragment" -> toDetailFragment(data[1] as String)
                 "showAddWordBookDialog" -> showAddWordBookDialog()
                 "showRenameWordBookDialog" -> showRenameWordBookDialog(data[1] as Int)
@@ -100,10 +96,6 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
         }
     }
 
-    private fun toWordListActivity(){
-        startActivity(Intent(mContext, WordListActivity::class.java))
-    }
-
 
     private fun showAddWordBookDialog(){
         val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_word_book_input, null)
@@ -112,7 +104,7 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
         val etInput = dialogView.findViewById<EditText>(R.id.et_input)
         val dialog = AlertDialog.Builder(mContext)
             .setView(dialogView)
-            .setCancelable(false)
+            .setCancelable(true)
             .create()
         tvCancel.setOnClickListener { dialog.dismiss() }
         tvConfirm.setOnClickListener {
@@ -139,7 +131,7 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
         val etInput = dialogView.findViewById<EditText>(R.id.et_input)
         val dialog = AlertDialog.Builder(mContext)
             .setView(dialogView)
-            .setCancelable(false)
+            .setCancelable(true)
             .create()
         tvCancel.setOnClickListener { dialog.dismiss() }
         tvConfirm.setOnClickListener {
@@ -172,7 +164,7 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
         val etInput = dialogView.findViewById<EditText>(R.id.et_input)
         val dialog = AlertDialog.Builder(mContext)
             .setView(dialogView)
-            .setCancelable(false)
+            .setCancelable(true)
             .create()
         val oldName = wordBookViewModel.wordBookList.value?.get(position) ?: return
         tvTitle.text = getString(R.string.rename)
@@ -269,5 +261,4 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
                 }
             }, 200)
     }
-
 }

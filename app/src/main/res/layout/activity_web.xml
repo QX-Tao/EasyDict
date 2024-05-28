@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cl_wv_root"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBgWhite10"
     tools:context=".ui.activity.web.WebActivity">
 
     <View
@@ -22,12 +21,36 @@
         android:layout_width="0dp"
         android:layout_height="0dp" >
 
-        <WebView
-            android:id="@+id/webView"
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.MaterialComponents.Toolbar"
+            android:id="@+id/mt_title"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationContentDescription="@string/back"
+            app:title="@string/browser"
+            app:titleTextColor="?attr/colorOnSurface"
+            app:subtitleTextColor="?attr/colorOnSurfaceVariant"
+            app:menu="@menu/web_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <me.jingbin.progress.WebProgress
+            android:id="@+id/wp_progress"
+            app:layout_constraintBottom_toBottomOf="@+id/mt_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:visibility="gone" />
+
+        <WebView
+            android:id="@+id/webView"
+            app:layout_constraintTop_toBottomOf="@+id/mt_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@color/trans"
             android:layout_width="match_parent"
             android:layout_height="0dp"/>
@@ -36,22 +59,24 @@
             android:id="@+id/lv_loading"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:ballColor="@color/themeMainColor"
+            android:background="?attr/colorSurface"
+            app:ballColor="?attr/colorSecondary"
             app:internal="60"
             app:duration="200"
             app:max_radius="20"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mt_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/ll_loading_fail"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="?attr/colorSurface"
+            app:layout_constraintTop_toBottomOf="@+id/mt_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
@@ -68,49 +93,14 @@
                 android:padding="20dp"
                 android:drawablePadding="15dp"
                 android:textSize="17sp"
-                android:textColor="@color/secondTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:text="@string/failed_to_load_click_the_screen_to_try_again"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:drawableTopCompat="@drawable/ic_loading_fail2" />
+                app:drawableTopCompat="@drawable/ic_loading_fail" />
 
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:fitsSystemWindows="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/cl_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.cardview.widget.CardView
-            app:cardCornerRadius="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardBackgroundColor="@color/trans"
-            app:cardElevation="0dp"
-            android:id="@+id/cv_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include
-                android:id="@+id/include_title_bar_second"
-                layout="@layout/include_title_bar_second"/>
-
-        </androidx.cardview.widget.CardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <me.jingbin.progress.WebProgress
-        android:id="@+id/wp_progress"
-        app:layout_constraintTop_toTopOf="@id/v_holder"
-        app:layout_constraintStart_toStartOf="@id/v_holder"
-        app:layout_constraintEnd_toEndOf="@id/v_holder"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

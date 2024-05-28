@@ -571,10 +571,8 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                 WebActivity.start(
                     requireActivity(),
                     rvDictAuthSentsAdapter.getItem(position).url!!,
-                    isUseTitleBarSpace = false,
                     allowOtherUrls = true,
-                    useWebTitle = true,
-                    showOpenInBrowserButton = true
+                    useWebTitle = true
                 )
             }
         })
@@ -588,10 +586,8 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                     }
                     WebActivity.start(
                         requireActivity(), url,
-                        isUseTitleBarSpace = false,
                         allowOtherUrls = true,
-                        useWebTitle = true,
-                        showOpenInBrowserButton = true
+                        useWebTitle = true
                     )
                 }
                 getString(R.string.wikipedia), getString(R.string.wikipedia_en) -> {
@@ -602,10 +598,8 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                     }
                     WebActivity.start(
                         requireActivity(), url,
-                        isUseTitleBarSpace = false,
                         allowOtherUrls = true,
-                        useWebTitle = true,
-                        showOpenInBrowserButton = true
+                        useWebTitle = true
                     )
                 }
                 else -> {

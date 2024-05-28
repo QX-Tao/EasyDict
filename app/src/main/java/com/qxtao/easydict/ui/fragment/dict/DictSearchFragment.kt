@@ -13,16 +13,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentDictSearchBinding
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_HISTORY
-import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION_LM
-import com.qxtao.easydict.ui.activity.dict.DICT_SEARCH_FRAGMENT_TAG
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
-import com.qxtao.easydict.utils.factory.isLandscape
 import com.qxtao.easydict.utils.factory.screenRotation
 
 
@@ -33,7 +31,7 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
     // define widget
     private lateinit var vHolder: View
     private lateinit var clRoot: ConstraintLayout
-    private lateinit var clSearchBox: ConstraintLayout
+    private lateinit var mcvSearchBox: MaterialCardView
     private lateinit var ivBack : ImageView
     private lateinit var ivClear : ImageView
     private lateinit var ivSearch : ImageView
@@ -49,7 +47,7 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
         ivUnfoldEdit = binding.ivUnfold
         cvEditUnfold = binding.cvEditUnfold
         etSearchBox = binding.etSearchBox
-        clSearchBox = binding.clSearchBox
+        mcvSearchBox = binding.mcvSearchBox
         clRoot = binding.clRoot
     }
 
@@ -90,8 +88,7 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
         }
         ivUnfoldEdit.setOnClickListener {
             dictViewModel.setSearchText(etSearchBox.text.toString(), etSearchBox.selectionStart)
-            mListener.onFragmentInteraction("toHasFragment")
-            mListener.onFragmentInteraction("toDictSearchEditFragment", clSearchBox)
+            mListener.onFragmentInteraction("toDictSearchEditFragment", mcvSearchBox)
         }
         etSearchBox.doAfterTextChanged {
             if (!etSearchBox.text.isNullOrEmpty()){
@@ -102,7 +99,8 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
                 ivSearch.visibility = View.GONE
                 ivClear.visibility = View.GONE
                 dictViewModel.setHasShowRvInfo(DICT_RV_HISTORY)
-                mListener.onFragmentInteraction("toHasFragment")
+                val currentFragment = childFragmentManager.findFragmentById(R.id.dict_search_content_fragment)
+                if (currentFragment !is DictHasFragment && etSearchBox.isFocused) mListener.onFragmentInteraction("toHasFragment")
             }
         }
         etSearchBox.setOnEditorActionListener { _, i, keyEvent ->
@@ -118,8 +116,8 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
             return@setOnEditorActionListener false
         }
         ivClear.setOnClickListener {
-            dictViewModel.setSearchText(getString(R.string.empty_string),  0)
             mListener.onFragmentInteraction("editTextGetFocus", etSearchBox)
+            dictViewModel.setSearchText(getString(R.string.empty_string),  0)
         }
         ivSearch.setOnClickListener {
             if (etSearchBox.text.isNullOrBlank()){
@@ -128,10 +126,6 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
             }
             mListener.onFragmentInteraction("toDetailFragment", etSearchBox.text.toString())
         }
-    }
-
-    fun setSearchBackground(colorResId: Int){
-        clRoot.setBackgroundColor(colorResId)
     }
 
     fun getSearchBoxText(): String = etSearchBox.text.toString()

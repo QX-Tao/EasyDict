@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -31,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.color.DynamicColors
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.DictSelectWordBookAdapter
 import com.qxtao.easydict.database.SearchHistoryData
@@ -165,7 +168,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     override fun onFragmentInteraction(vararg data: Any?) {
         if (data.isNotEmpty()) {
             when (data[0]) {
-                "toDictSearchFragment" -> { toSearchFragment() }
+                "toDictSearchFragment" -> { toSearchFragment(DICT_SEARCH_HAS_FRAGMENT) }
                 "toExtraFragment"-> { toExtraFragment(data[1] as String) }
                 "toHasFragment" -> { toSearchFragment(DICT_SEARCH_HAS_FRAGMENT) }
                 "toWelcomeFragment" -> { toWelcomeFragment() }
@@ -176,7 +179,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                 "voiceSearch" -> { checkAndVoiceSearchWithPermissionCheck() }
                 "editTextGetFocus" -> { etRequestFocus(data[1] as EditText) }
                 "editTextClearFocus" -> { etUnRequestFocus(data[1] as EditText) }
-                "changeSearchFragmentBackgroundColor" -> { changeSearchFragmentBackgroundColor() }
                 "showSelectWordBookDialog" -> { showSelectWordBookDialog() }
             }
         }
@@ -227,7 +229,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         val etInput = dialogView.findViewById<EditText>(R.id.et_input)
         val dialog = AlertDialog.Builder(mContext)
             .setView(dialogView)
-            .setCancelable(false)
+            .setCancelable(true)
             .create()
         tvCancel.setOnClickListener {
             recognitionHelper.releaseRecognition()
@@ -238,23 +240,14 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             tvInput.visibility = View.GONE
             recognitionHelper.startRecognition()
         }
-        val confirmListener = View.OnClickListener {
-            recognitionHelper.releaseRecognition()
-            dialog.dismiss()
+        tvConfirm.setOnClickListener {
             if (etInput.text.isNullOrBlank()) {
                 showShortToast(getString(R.string.invalid_input))
-                return@OnClickListener
+                return@setOnClickListener
             }
+            recognitionHelper.releaseRecognition()
+            dialog.dismiss()
             toSearchFragment(DICT_SEARCH_DETAIL_FRAGMENT, etInput.text.toString())
-        }
-        etInput.doAfterTextChanged {
-            if (etInput.text.isNullOrBlank()){
-                tvConfirm.setOnClickListener(null)
-                tvConfirm.setTextColor(ContextCompat.getColor(mContext, R.color.secondInsTextColor))
-            } else {
-                tvConfirm.setOnClickListener(confirmListener)
-                tvConfirm.setTextColor(ContextCompat.getColor(mContext, R.color.themeMainColor))
-            }
         }
         etInput.postDelayed({ etInput.requestFocus() },200)
         dialog.show()
@@ -323,7 +316,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         }
     }
 
-    private fun toSearchFragment(childFragment: String = DICT_SEARCH_HAS_FRAGMENT, searchStr: String? = null){
+    private fun toSearchFragment(childFragment: String, searchStr: String? = null){
         val currentFragment = supportFragmentManager.findFragmentById(R.id.dict_fragment)
         val dictSearchFragment = supportFragmentManager.findFragmentByTag(DICT_SEARCH_FRAGMENT_TAG) ?: DictSearchFragment()
         when (currentFragment){
@@ -377,18 +370,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         }
     }
 
-    private fun changeSearchFragmentBackgroundColor(){
-        val dictSearchFragment = supportFragmentManager.findFragmentByTag(DICT_SEARCH_FRAGMENT_TAG) as? DictSearchFragment ?: return
-        val currentFragment = dictSearchFragment.childFragmentManager.findFragmentById(R.id.dict_search_content_fragment)
-        if (currentFragment is DictDetailFragment){
-            val colorId = ResourcesCompat.getColor(resources, R.color.colorBgWhite1, null)
-            dictSearchFragment.setSearchBackground(colorId)
-        } else if (currentFragment is DictHasFragment){
-            val colorId = ResourcesCompat.getColor(resources, R.color.colorBgWhite2, null)
-            dictSearchFragment.setSearchBackground(colorId)
-        }
-    }
-
     private fun showAddWordBookDialog(){
         val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_word_book_input, null)
         val tvCancel = dialogView.findViewById<TextView>(R.id.tv_cancel)
@@ -396,7 +377,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         val etInput = dialogView.findViewById<EditText>(R.id.et_input)
         val dialog = AlertDialog.Builder(mContext)
             .setView(dialogView)
-            .setCancelable(false)
+            .setCancelable(true)
             .create()
         tvCancel.setOnClickListener { dialog.dismiss() }
         tvConfirm.setOnClickListener {

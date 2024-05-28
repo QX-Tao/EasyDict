@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,20 +12,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.TYPE_BLNG_CLASSIFICATION_NORMAL
 import com.qxtao.easydict.adapter.dict.TYPE_BLNG_CLASSIFICATION_SELECT
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class DictBlngClassificationAdapter(dictBlngClassificationItems: MutableList<DictBlngClassificationItem>) :
+class DictBlngClassificationAdapter(private val dictBlngClassificationItems: MutableList<DictBlngClassificationItem>) :
     RecyclerView.Adapter<DictBlngClassificationAdapter.ViewHolder>() {
-    private val dictBlngClassificationItems: MutableList<DictBlngClassificationItem>
     private var itemClickListener: OnItemClickListener? = null
-
-    init {
-        this.dictBlngClassificationItems = dictBlngClassificationItems
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
@@ -34,13 +32,15 @@ class DictBlngClassificationAdapter(dictBlngClassificationItems: MutableList<Dic
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item: DictBlngClassificationItem = dictBlngClassificationItems[position]
         holder.text.text = item.text
-        holder.text.setTextColor(ContextCompat.getColor(holder.text.context, R.color.secondTextColor))
+        holder.text.setTextColor(ColorUtils.colorOnSurface(holder.itemView.context))
         when (item.type){
             TYPE_BLNG_CLASSIFICATION_SELECT -> {
-                holder.text.setBackgroundColor(ContextCompat.getColor(holder.text.context, R.color.themeMainColor))
+                holder.text.setBackgroundColor(ColorUtils.colorPrimary(holder.itemView.context))
+                holder.text.setTextColor(ColorUtils.colorOnPrimary(holder.itemView.context))
             }
             TYPE_BLNG_CLASSIFICATION_NORMAL -> {
-                holder.text.setBackgroundColor(ContextCompat.getColor(holder.text.context, R.color.colorBgLightBlack4))
+                holder.text.setBackgroundColor(ColorUtils.colorSurfaceContainer(holder.itemView.context))
+                holder.text.setTextColor(ColorUtils.colorOnSurface(holder.itemView.context))
             }
         }
         holder.text.setOnClickListener {

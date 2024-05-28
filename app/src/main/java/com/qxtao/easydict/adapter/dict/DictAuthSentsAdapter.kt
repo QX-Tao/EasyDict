@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_COMPACT
@@ -16,6 +18,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.AuthSentence
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,16 +26,11 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictAuthSentsAdapter(mItemSentenceList: ArrayList<AuthSentence>) :
+class DictAuthSentsAdapter(private val mItemSentenceList: ArrayList<AuthSentence>) :
     RecyclerView.Adapter<DictAuthSentsAdapter.ViewHolder>() {
-    private val mItemSentenceList: ArrayList<AuthSentence>
     private var playButtonClickListener: OnPlayButtonClickListener? = null
     private var sourceUrlClickListener: OnSourceUrlClickListener? = null
     private var playPosition: Int = -1
-
-    init {
-        this.mItemSentenceList = mItemSentenceList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -54,7 +52,7 @@ class DictAuthSentsAdapter(mItemSentenceList: ArrayList<AuthSentence>) :
         for (span in foreignText.getSpans(0, foreignText.length, Any::class.java)){
             if (span is StyleSpan && span.style == Typeface.BOLD){
                 foreignSpannable.removeSpan(span)
-                foreignSpannable.setSpan(ForegroundColorSpan(holder.itemView.context.getColor(R.color.theme_color_gol)),
+                foreignSpannable.setSpan(ForegroundColorSpan(ColorUtils.colorPrimary(holder.itemView.context)),
                     foreignText.getSpanStart(span), foreignText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
@@ -66,7 +64,7 @@ class DictAuthSentsAdapter(mItemSentenceList: ArrayList<AuthSentence>) :
         for (span in sourceText.getSpans(0, sourceText.length, Any::class.java)){
             if (span is StyleSpan && span.style == Typeface.BOLD){
                 foreignSpannable.removeSpan(span)
-                sourceSpannable.setSpan(ForegroundColorSpan(holder.itemView.context.getColor(R.color.theme_color_gol)),
+                sourceSpannable.setSpan(ForegroundColorSpan(ColorUtils.colorPrimary(holder.itemView.context)),
                     sourceText.getSpanStart(span), sourceText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }

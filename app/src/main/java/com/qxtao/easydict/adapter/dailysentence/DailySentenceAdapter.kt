@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dailysentence
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,24 +15,21 @@ import coil.load
 import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.view.LoadingView
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class DailySentenceAdapter(dailySentenceItems: ArrayList<DailySentenceItem>) :
+class DailySentenceAdapter(private val dailySentenceItems: ArrayList<DailySentenceItem>) :
     RecyclerView.Adapter<DailySentenceAdapter.MViewHolder>() {
-    private val dailySentenceItems: ArrayList<DailySentenceItem>
     private var playButtonClickListener: OnPlayButtonClickListener? = null
     private var loadingFailClickListener: OnLoadingFailClickListener? = null
     private var photoViewButtonClickListener: OnPhotoViewButtonClickListener? = null
     private var itemLongClickListener: OnItemLongClickListener? = null
     private var playPosition: Int = -1
     private var isLoadingFail: Boolean = false
-    init {
-        this.dailySentenceItems = dailySentenceItems
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_day_sentence, parent, false)
@@ -49,7 +48,7 @@ class DailySentenceAdapter(dailySentenceItems: ArrayList<DailySentenceItem>) :
                 holder.textSentenceEn.text = item.enSentence
                 holder.textSentenceCh.text = item.cnSentence
                 holder.imageBackground.load(item.imageUrl){ crossfade(true) }
-                holder.mcvItemContent.setCardBackgroundColor(holder.itemView.context.getColor(R.color.colorBgLightBlack2))
+                holder.mcvItemContent.setCardBackgroundColor(ColorUtils.paletteNeutral20(holder.itemView.context))
 
                 val imageResId = if (position == playPosition) {
                     R.drawable.ic_sound_on

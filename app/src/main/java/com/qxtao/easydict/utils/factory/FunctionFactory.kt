@@ -23,18 +23,8 @@ val Context.isSystemInDarkMode
 /**
  * 系统深色模式是否没开启
  */
-inline val Context.isNotSystemInDarkMode
+val Context.isNotSystemInDarkMode
     get() = isSystemInDarkMode.not()
-
-/**
- * dp 转换为 pxInt
- */
-fun Number.dp(context: Context) = dpFloat(context).toInt()
-
-/**
- * dp 转换为 pxFloat
- */
-fun Number.dpFloat(context: Context) = toFloat() * context.resources.displayMetrics.density
 
 /**
  * 获取屏幕宽度

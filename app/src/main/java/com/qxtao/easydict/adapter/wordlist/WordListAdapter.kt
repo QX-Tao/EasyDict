@@ -15,14 +15,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class WordListAdapter(wordListItems: ArrayList<WordListItem>) : RecyclerView.Adapter<WordListAdapter.ViewHolder>() {
-    private val wordListItems: ArrayList<WordListItem>
+class WordListAdapter(private val wordListItems: ArrayList<WordListItem>) : RecyclerView.Adapter<WordListAdapter.ViewHolder>() {
     private var textMeanClickListener: OnTextMeanClickListener? = null
     private var textWordClickListener: OnTextWordClickListener? = null
-
-    init {
-        this.wordListItems = wordListItems
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =

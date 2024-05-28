@@ -18,13 +18,8 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictEEDictOuterAdapter(mItemList: ArrayList<EETranslation>) :
+class DictEEDictOuterAdapter(private val mItemList: ArrayList<EETranslation>) :
     RecyclerView.Adapter<DictEEDictOuterAdapter.ViewHolder>() {
-    private val mItemList: ArrayList<EETranslation>
-
-    init {
-        this.mItemList = mItemList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

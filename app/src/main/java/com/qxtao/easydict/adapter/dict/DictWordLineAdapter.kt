@@ -16,15 +16,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class DictWordLineAdapter<T>(mItemData: ArrayList<T>) :
+class DictWordLineAdapter<T>(private val mItemData: ArrayList<T>) :
     RecyclerView.Adapter<DictWordLineAdapter<T>.ViewHolder>() {
 
-    private val mItemData: ArrayList<T>
     private var itemClickListener: OnItemClickListener? = null
-
-    init {
-        this.mItemData = mItemData
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)

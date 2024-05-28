@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorBgWhite1"
+    android:background="?attr/colorSurface"
     android:layout_marginTop="7dp"
     android:layout_marginBottom="12dp"
     android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:id="@+id/tv_super_header_word"
         android:layout_marginBottom="7dp"
         android:textSize="16sp"
-        android:textColor="@color/secondTextColor"
+        android:textColor="?attr/colorOnSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -27,7 +27,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:textColor="@color/theme_color_gol"
+            android:textColor="?attr/colorPrimary"
             android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
             android:layout_height="24dp"/>
@@ -36,7 +36,7 @@
             android:id="@+id/tv_phonetic"
             android:textSize="15sp"
             android:gravity="center"
-            android:textColor="@color/thirdTextColor"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
             android:layout_height="24dp"/>
@@ -46,8 +46,8 @@
             android:isIndicator="true"
             app:scaleFactor="0.7"
             app:keepOriginColor="true"
-            app:starDrawable="@drawable/ic_star2"
-            app:starColor="@color/theme_color_gol"
+            app:starDrawable="@drawable/ic_star"
+            app:starColor="?attr/colorPrimary"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:layout_marginEnd="10dp"
@@ -58,28 +58,30 @@
             android:id="@+id/tv_word_form"
             android:textSize="15sp"
             android:gravity="center"
-            android:textColor="@color/thirdTextColor"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_width="wrap_content"
             android:layout_height="24dp"/>
 
     </com.google.android.flexbox.FlexboxLayout>
 
     <TextView
+        android:textColorHighlight="?attr/colorSecondaryContainer"
         android:textIsSelectable="true"
         android:id="@+id/tv_item_tran"
         android:layout_marginBottom="7dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/secondTextColor"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="16sp" />
 
     <TextView
+        android:textColorHighlight="?attr/colorSecondaryContainer"
         android:textIsSelectable="true"
         android:id="@+id/tv_item_exam"
         android:layout_marginBottom="7dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/secondInsTextColor"
+        android:textColor="?attr/colorSurfaceVariant"
         android:textSize="14sp" />
 
     <androidx.recyclerview.widget.RecyclerView

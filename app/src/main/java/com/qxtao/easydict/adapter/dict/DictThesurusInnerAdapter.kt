@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.ThesaurusEntry
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,13 +27,8 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictThesurusInnerAdapter(mItemThesaurusList: ArrayList<ThesaurusEntry>) :
+class DictThesurusInnerAdapter(private val mItemThesaurusList: ArrayList<ThesaurusEntry>) :
     RecyclerView.Adapter<DictThesurusInnerAdapter.ViewHolder>() {
-    private val mItemThesaurusList: ArrayList<ThesaurusEntry>
-
-    init {
-        this.mItemThesaurusList = mItemThesaurusList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -62,7 +60,7 @@ class DictThesurusInnerAdapter(mItemThesaurusList: ArrayList<ThesaurusEntry>) :
                                 }
                                 override fun updateDrawState(ds: TextPaint) {
                                     ds.isUnderlineText = false
-                                    ds.color = holder.itemView.context.getColor(R.color.theme_color_ori)
+                                    ds.color = ColorUtils.colorTertiary(holder.itemView.context)
                                 }
                             }
                             it.setSpan(clickableSpan, synoText.getSpanStart(spa), synoText.getSpanEnd(spa), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -91,7 +89,7 @@ class DictThesurusInnerAdapter(mItemThesaurusList: ArrayList<ThesaurusEntry>) :
                                 }
                                 override fun updateDrawState(ds: TextPaint) {
                                     ds.isUnderlineText = false
-                                    ds.color = holder.itemView.context.getColor(R.color.theme_color_ori)
+                                    ds.color = ColorUtils.colorTertiary(holder.itemView.context)
                                 }
                             }
                             it.setSpan(clickableSpan, antoText.getSpanStart(spa), antoText.getSpanEnd(spa), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

@@ -52,7 +52,6 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     private lateinit var dictViewModel: DictViewModel
     private var isInitView = false
     // define widget
-    private lateinit var mcvSearchDetailTablayout: MaterialCardView
     private lateinit var searchDetailTablayout: TabLayout
     private lateinit var searchDetailViewpager: ViewPager2
     private lateinit var tvTransFromRoman: ExpandableTextView
@@ -84,7 +83,6 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     private lateinit var clVoice: ConstraintLayout
 
     override fun bindViews() {
-        mcvSearchDetailTablayout = binding.mcvSearchDetailTablayout
         searchDetailTablayout = binding.searchDetailTablayout
         searchDetailViewpager = binding.searchDetailViewpager
         tvTransFromRoman = binding.tvTransFromRoman
@@ -119,7 +117,6 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
 
     override fun initViews() {
         isInitView = true
-        mListener.onFragmentInteraction("changeSearchFragmentBackgroundColor")
         dictViewModel = (activity as DictActivity).getDictViewModel()
         (parentFragment as? DictSearchFragment)?.exitEditTextFocus()
         dictViewModel.dataLoadInfo.observe(this) {
@@ -396,8 +393,8 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                 if (third) fragmentList.add(DictDetailEEFragment())
             }
             if (fragmentList.size == 1 && fragmentList[0] is DictDetailJMFragment){
-                mcvSearchDetailTablayout.visibility = View.GONE
-            } else mcvSearchDetailTablayout.visibility = View.VISIBLE
+                searchDetailTablayout.visibility = View.GONE
+            } else searchDetailTablayout.visibility = View.VISIBLE
         }
         override fun getItemCount(): Int = fragmentList.size
         override fun createFragment(position: Int): Fragment = fragmentList[position]

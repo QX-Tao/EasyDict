@@ -18,15 +18,11 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictThesurusOuterAdapter(mItemThesaurusList: ArrayList<Thesaurus>,
-                               private val take: Int? = null
+class DictThesurusOuterAdapter(
+    private val mItemThesaurusList: ArrayList<Thesaurus>,
+    private val take: Int? = null
 ) :
     RecyclerView.Adapter<DictThesurusOuterAdapter.ViewHolder>() {
-    private val mItemThesaurusList: ArrayList<Thesaurus>
-
-    init {
-        this.mItemThesaurusList = mItemThesaurusList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

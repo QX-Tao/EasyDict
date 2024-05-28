@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/mcv_day_sentence_item_content"
-        app:cardBackgroundColor="@color/colorBgLightBlack1"
+        app:strokeColor="@color/trans"
+        app:cardBackgroundColor="?attr/paletteNeutral10"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp">
 
@@ -105,7 +106,7 @@
                 android:id="@+id/lv_loading"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:ballColor="@color/themeMainColor"
+                app:ballColor="?attr/colorSecondary"
                 app:internal="60"
                 app:duration="200"
                 app:max_radius="20"

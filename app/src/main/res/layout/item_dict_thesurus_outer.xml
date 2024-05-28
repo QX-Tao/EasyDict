@@ -8,7 +8,7 @@ android:layout_marginBottom="7dp">
 
 <TextView
     android:id="@+id/tv_item_inf"
-    android:textColor="@color/secondTextColor"
+    android:textColor="?attr/colorOnSurface"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toTopOf="@id/rv_item_thesurus"
     android:textSize="15sp"

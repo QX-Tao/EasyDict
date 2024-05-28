@@ -2,13 +2,14 @@ package com.qxtao.easydict.ui.activity.web
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.content.res.TypedArray
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -21,30 +22,25 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import androidx.webkit.WebViewFeature.isFeatureSupported
+import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.ActivityWebBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.view.LoadingView
+import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.NetworkUtils
-import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.isAppearanceLight
-import com.qxtao.easydict.utils.factory.screenRotation
+import com.qxtao.easydict.utils.common.ShareUtils
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_VIEW
 import me.jingbin.progress.WebProgress
-import java.util.Locale
+import rikka.core.util.ClipboardUtils
 
 
 class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate){
@@ -55,23 +51,15 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     private var isRestoreWebView = false
     private val initUrl by lazy { intent?.getStringExtra("extra_url") }
     private val title by lazy { intent?.getStringExtra("extra_title") }
-    private val webBgColor by lazy { intent?.getIntExtra("extra_webBgColor", this.getColor(R.color.colorBgWhite10)) }
-    private val foreColor by lazy { getForeColorForBackground(webBgColor!!) }
-    private val isUseTitleBarSpace by lazy { intent?.getBooleanExtra("extra_isUseTitleBarSpace", true) }
     private val allowOtherUrls by lazy { intent?.getBooleanExtra("extra_allowOtherUrls", false) }
     private val useWebTitle by lazy { intent?.getBooleanExtra("extra_useWebTitle", false) }
-    private val showOpenInBrowserButton by lazy { intent?.getBooleanExtra("extra_showOpenInBrowserButton", false) }
     private val useCache by lazy { intent?.getBooleanExtra("extra_useCache", true) }
     // define widget
-    private lateinit var ivMoreButton : ImageView
-    private lateinit var ivBackButton : ImageView
-    private lateinit var tvTitle : TextView
     private lateinit var webView: WebView
     private lateinit var llLoadingFail: LinearLayout
     private lateinit var lvLoading: LoadingView
     private lateinit var tvLoadingFail: TextView
-    private lateinit var clWvRoot: ConstraintLayout
-    private lateinit var cvTitle: CardView
+    private lateinit var mtTitle: MaterialToolbar
     private lateinit var wpProgress: WebProgress
     private lateinit var vHolder: View
 
@@ -80,21 +68,15 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             activity: Activity,
             url: String,
             title: String? = null,
-            webBgColor: Int? = null,
-            isUseTitleBarSpace: Boolean = true,
             allowOtherUrls: Boolean = false,
             useWebTitle: Boolean = false,
-            showOpenInBrowserButton: Boolean = false,
             useCache: Boolean =  true
         ){
             val intent = Intent(activity, WebActivity::class.java)
             intent.putExtra("extra_url", url)
             intent.putExtra("extra_title", title)
-            intent.putExtra("extra_webBgColor", webBgColor)
-            intent.putExtra("extra_isUseTitleBarSpace", isUseTitleBarSpace)
             intent.putExtra("extra_allowOtherUrls", allowOtherUrls)
             intent.putExtra("extra_useWebTitle", useWebTitle)
-            intent.putExtra("extra_showOpenInBrowserButton", showOpenInBrowserButton)
             intent.putExtra("extra_useCache", useCache)
             activity.startActivity(intent)
         }
@@ -102,21 +84,15 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             context: Context,
             url: String,
             title: String? = null,
-            webBgColor: Int? = null,
-            isUseTitleBarSpace: Boolean = true,
             allowOtherUrls: Boolean = false,
             useWebTitle: Boolean = false,
-            showOpenInBrowserButton: Boolean = false,
             useCache: Boolean =  true
         ){
             val intent = Intent(context, WebActivity::class.java)
             intent.putExtra("extra_url", url)
             intent.putExtra("extra_title", title)
-            intent.putExtra("extra_webBgColor", webBgColor)
-            intent.putExtra("extra_isUseTitleBarSpace", isUseTitleBarSpace)
             intent.putExtra("extra_allowOtherUrls", allowOtherUrls)
             intent.putExtra("extra_useWebTitle", useWebTitle)
-            intent.putExtra("extra_showOpenInBrowserButton", showOpenInBrowserButton)
             intent.putExtra("extra_useCache", useCache)
             context.startActivity(intent)
         }
@@ -133,7 +109,12 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     }
 
     override fun onCreate() {
-        isAppearanceLight = foreColor == Color.BLACK
+        if (!ShareUtils.getBoolean(this, IS_USE_WEB_VIEW, true)) {
+            if (initUrl.isNullOrEmpty()) finish()
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(initUrl))
+            mContext.startActivity(intent)
+            finish()
+        }
         webViewModel = ViewModelProvider(this)[WebViewModel::class.java]
         dispatcher = onBackPressedDispatcher
         callback = object : OnBackPressedCallback(true) {
@@ -174,73 +155,41 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
 
     override fun bindViews() {
         vHolder = binding.vHolder
-        tvTitle = binding.includeTitleBarSecond.tvTitle
-        ivBackButton = binding.includeTitleBarSecond.ivBackButton
-        ivMoreButton = binding.includeTitleBarSecond.ivMoreButton
         webView = binding.webView
         llLoadingFail = binding.llLoadingFail
         lvLoading = binding.lvLoading
         tvLoadingFail = binding.tvLoadingFail
-        clWvRoot = binding.clWvRoot
-        cvTitle = binding.cvTitle
+        mtTitle = binding.mtTitle
         wpProgress = binding.wpProgress
     }
 
     override fun initViews() {
-        ivBackButton.setColorFilter(foreColor)
-        tvTitle.setTextColor(foreColor)
-        wpProgress.setColor(getColor(R.color.themeMainColor))
-        ivMoreButton.setColorFilter(foreColor)
-        ivMoreButton.setImageResource(R.drawable.ic_browser)
-        ivMoreButton.tooltipText = getString(R.string.open_in_browser)
-        ivMoreButton.visibility = if (showOpenInBrowserButton == true) View.VISIBLE else View.GONE
-        if (isUseTitleBarSpace == false) {
-            cvTitle.cardElevation = SizeUtils.dp2px(4f).toFloat()
-            cvTitle.setCardBackgroundColor(webBgColor!!)
-        }
-        tvLoadingFail.setTextColor(foreColor)
-        tvLoadingFail.setCompoundDrawables(null, ContextCompat.getDrawable(mContext, R.drawable.ic_loading_fail2)!!
-            .also {
-                it.colorFilter = PorterDuffColorFilter(foreColor, PorterDuff.Mode.SRC_IN)
-                it.setBounds(0,0,it.minimumWidth,it.minimumHeight)
-            },null,null)
-        clWvRoot.setBackgroundColor(webBgColor!!)
-        lvLoading.setBackgroundColor(webBgColor!!)
-        llLoadingFail.setBackgroundColor(webBgColor!!)
+        wpProgress.setColor(ColorUtils.colorPrimary(mContext))
         initWebView()
         loadUrl()
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = if (isUseTitleBarSpace == false) insets.getInsets(WindowInsetsCompat.Type.systemBars()).top + SizeUtils.dp2px(56f) else 0
-            params.bottomMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            when (screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
+        mtTitle.setNavigationOnClickListener { dispatcher.onBackPressed() }
+        mtTitle.setOnMenuItemClickListener { 
+            when(it.itemId){
+                R.id.refresh -> { webView.reload() }
+                R.id.copy_url -> {
+                    val clipboard = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText(null, webViewModel.currentUrl)
+                    clipboard.setPrimaryClip(clip)
+                    showShortToast(getString(R.string.copied))
                 }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
+                R.id.open_in_browser -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webViewModel.currentUrl))
+                    mContext.startActivity(intent)
                 }
+                R.id.clear_cache -> {
+                    webView.clearCache(true)
+                    showShortToast(getString(R.string.clear_cache_success))
+                }
+                R.id.exit -> { finish() }
             }
-            insets
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(wpProgress){ view, insets ->
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = if (isUseTitleBarSpace == true) insets.getInsets(WindowInsetsCompat.Type.systemBars()).top else 0
-            insets
-        }
-        ivBackButton.setOnClickListener { dispatcher.onBackPressed() }
-        ivMoreButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webViewModel.currentUrl))
-            mContext.startActivity(intent)
-        }
-        ivBackButton.setOnLongClickListener {
-            finish()
             true
         }
         llLoadingFail.setOnClickListener {
@@ -388,7 +337,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     }
 
     private fun setTitle(){
-        tvTitle.text =
+        mtTitle.title =
             if (useWebTitle == false && title.isNullOrEmpty()) getString(R.string.empty_string)
             else if (useWebTitle == true && title.isNullOrEmpty())
                 if (webView.title == "about:blank") getString(R.string.web_page_cannot_be_opened)
@@ -396,18 +345,9 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             else title.toString()
     }
     private fun setTitle(title: String){
-        tvTitle.text =
+        mtTitle.title =
             if (useWebTitle == false || title.isBlank()) getString(R.string.empty_string)
             else title
-    }
-
-    private fun getForeColorForBackground(backgroundColor: Int): Int {
-        val red = Color.red(backgroundColor)
-        val green = Color.green(backgroundColor)
-        val blue = Color.blue(backgroundColor)
-        val brightness = (red * 299 + green * 587 + blue * 114) / 1000.0
-        // 180，则使用白色作为文字颜色；否则使用黑色
-        return if (brightness <= 180) Color.WHITE else Color.BLACK
     }
 
     override fun onDestroy1() {

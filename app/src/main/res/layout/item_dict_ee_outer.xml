@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorBgWhite1"
+    android:background="?attr/colorSurface"
     android:layout_marginTop="7dp"
     android:layout_marginBottom="7dp"
     android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:id="@+id/tv_item_pos"
         android:layout_marginBottom="8dp"
         android:textSize="15sp"
-        android:textColor="@color/secondTextColor"
+        android:textColor="?attr/colorOnSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

@@ -2,6 +2,7 @@ package com.qxtao.easydict.ui.fragment.dict
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
+import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -11,7 +12,6 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,9 +33,8 @@ import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION_LM
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
+import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.isLandscape
-import com.qxtao.easydict.utils.factory.screenRotation
 
 
 class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBinding::inflate) {
@@ -75,14 +74,14 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
                             SizeUtils.dp2px(12f), 0,
                             SizeUtils.dp2px(12f),
                             SizeUtils.dp2px(16f))
-                        layout.setBackgroundColor(Color.parseColor("#00000000"))
+                        layout.setBackgroundColor(Color.TRANSPARENT)
                         contentLayout.setPadding(SizeUtils.dp2px(12f), 0, SizeUtils.dp2px(12f),0)
                         contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r15)
-                        contentLayout.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CC000000"))
+                        contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurface(mContext))
                     }
                     snackBar.setAction(getString(R.string.undo_delete)) { dictViewModel.undoDeleteWord() }
-                        .setTextColor(Color.parseColor("#FFEFEFEF"))
-                        .setActionTextColor(Color.parseColor("#FFF9CD16"))
+                        .setTextColor(ColorUtils.colorOnSurface(mContext))
+                        .setActionTextColor(ColorUtils.colorPrimary(mContext))
                         .show()
                     snackBar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -127,20 +126,20 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
                     background.setBounds(
                         maxOf((itemView.right + dX - SizeUtils.dp2px(30f)).toInt(), itemView.left),
                         itemView.top, itemView.right, itemView.bottom)
-                    background.paint.color = ContextCompat.getColor(mContext, R.color.colorBgRed1)
+                    background.paint.color = ColorUtils.colorError(mContext)
                     background.draw(c)
                 }
 
                 // 绘制滑动图标说明
                 val textPaint = Paint().apply {
-                    color = ContextCompat.getColor(mContext, R.color.secondTextColor)
+                    color = ColorUtils.colorOnError(mContext)
                     textSize = SizeUtils.sp2px(13f).toFloat()
                 }
                 val iconMargin = SizeUtils.dp2px(20f)
                 if (dX < 0){
                     // 往左滑，红色背景，删除
                     val deleteText = getString(R.string.delete)
-                    val deleteIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_ash4)!!
+                    val deleteIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_ash)!!
                     val textBounds2 = Rect()
                     textPaint.getTextBounds(deleteText, 0, deleteText.length, textBounds2)
                     val textX2 = itemView.right - iconMargin - textBounds2.width()
@@ -173,7 +172,6 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
     }
 
     override fun initViews() {
-        mListener.onFragmentInteraction("changeSearchFragmentBackgroundColor")
         dictViewModel = (activity as DictActivity).getDictViewModel()
         (parentFragment as DictSearchFragment).getEditTextFocus()
         rvSearchHistoryAdapter = DictWordLineAdapter(ArrayList())
@@ -215,6 +213,7 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
             }
         }
         itemTouchHelper.attachToRecyclerView(rvSearchHistory)
+        dictViewModel.getDictSearchHistory()
     }
 
     override fun addListener() {
@@ -259,11 +258,5 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
         if (this::snackBar.isInitialized) if (snackBar.isShown) snackBar.dismiss()
         if (this::dictViewModel.isInitialized) dictViewModel.deleteSearchRecord()
     }
-
-    override fun onResume() {
-        dictViewModel.getDictSearchHistory()
-        super.onResume()
-    }
-
 
 }

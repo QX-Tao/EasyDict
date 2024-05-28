@@ -4,25 +4,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
-import com.qxtao.easydict.ui.activity.dict.DictActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class DictSelectWordBookAdapter(bookNameList: List<String>) : RecyclerView.Adapter<DictSelectWordBookAdapter.ViewHolder>() {
-    private val bookNameList: List<String>
+class DictSelectWordBookAdapter(private val bookNameList: List<String>) : RecyclerView.Adapter<DictSelectWordBookAdapter.ViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
-
-    init {
-        this.bookNameList = bookNameList
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =

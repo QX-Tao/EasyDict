@@ -1,33 +1,34 @@
 package com.qxtao.easydict.ui.fragment.dict
 
 import android.content.Intent
+import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.DictSearchSugWordAdapter
-import com.qxtao.easydict.database.WordListData
 import com.qxtao.easydict.databinding.FragmentDictWelcomeBinding
 import com.qxtao.easydict.ui.activity.daysentence.DaySentenceActivity
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.grammarcheck.GrammarCheckActivity
+import com.qxtao.easydict.ui.activity.settings.SettingsActivity
 import com.qxtao.easydict.ui.activity.wordbook.WordBookActivity
 import com.qxtao.easydict.ui.activity.wordlist.WordListActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.common.TimeUtils
-import com.qxtao.easydict.utils.factory.isLandscape
 import com.qxtao.easydict.utils.factory.screenRotation
 
 
@@ -42,10 +43,13 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
     private lateinit var tvDaySentence : TextView
     private lateinit var tvGrammyCheck : TextView
     private lateinit var tvWordBook : TextView
+    private lateinit var tvReciteWord : TextView
     private lateinit var ivVoice : ImageView
+    private lateinit var ivSettings : ImageView
     private lateinit var ivSuggestSearchRefresh : ImageView
     private lateinit var rvSearchSuggestion : RecyclerView
     private lateinit var vHolder: View
+    private lateinit var nsvContent: NestedScrollView
 
     override fun bindViews() {
         mcvSearchBox = binding.mcvSearchBox
@@ -53,10 +57,13 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
         tvDaySentence = binding.tvDaySentence
         tvGrammyCheck = binding.tvGrammyCheck
         tvWordBook = binding.tvWordBook
+        tvReciteWord = binding.tvReciteWord
         ivVoice = binding.ivVoice
+        ivSettings = binding.ivSettings
         ivSuggestSearchRefresh = binding.ivSuggestSearchRefresh
         rvSearchSuggestion = binding.rvSearchSuggestion
         vHolder = binding.vHolder
+        nsvContent = binding.nsvContent
     }
 
     override fun initViews() {
@@ -71,10 +78,10 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
 
     override fun addListener() {
         ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
+            nsvContent.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
             val displayCutout = insets.displayCutout
             val params = view.layoutParams as ConstraintLayout.LayoutParams
             params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            params.bottomMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
             when (requireActivity().screenRotation){
                 90 -> {
                     params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
@@ -87,11 +94,20 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
             }
             insets
         }
+        ViewCompat.setOnApplyWindowInsetsListener(ivSettings){ view, insets ->
+            val params = view.layoutParams as LinearLayout.LayoutParams
+            params.bottomMargin = if(requireActivity().screenRotation == 90 || requireActivity().screenRotation == 270)
+                SizeUtils.dp2px(16f) else SizeUtils.dp2px(132f)
+            insets
+        }
         rvSearchSugWordAdapter.setOnItemClickListener(object : DictSearchSugWordAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
                 mListener.onFragmentInteraction("toDetailFragment", dictViewModel.dictSearchSugWord.value!![position].origin)
             }
         })
+        ivSettings.setOnClickListener {
+            startActivity(Intent(mContext, SettingsActivity::class.java))
+        }
         ivSuggestSearchRefresh.setOnClickListener {
             dictViewModel.getDictSearchSugWord()
         }
@@ -109,6 +125,9 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
         }
         tvWordBook.setOnClickListener {
             startActivity(Intent(mContext, WordBookActivity::class.java))
+        }
+        tvReciteWord.setOnClickListener {
+            startActivity(Intent(mContext, WordListActivity::class.java))
         }
     }
 

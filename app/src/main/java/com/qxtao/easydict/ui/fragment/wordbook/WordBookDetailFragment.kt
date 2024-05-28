@@ -1,6 +1,7 @@
 package com.qxtao.easydict.ui.fragment.wordbook
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -14,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.wordbook.WordBookDetailAdapter
 import com.qxtao.easydict.databinding.FragmentWordBookDetailBinding
@@ -31,18 +34,14 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
     private lateinit var adapter: WordBookDetailAdapter
     private lateinit var wordBookViewModel: WordBookViewModel
     // define widget
-    private lateinit var ivMoreButton : ImageView
-    private lateinit var ivBackButton : ImageView
-    private lateinit var tvTitle : TextView
     private lateinit var vHolder: View
     private lateinit var lvLoading : LoadingView
     private lateinit var llLoadingFail : LinearLayout
     private lateinit var llListEmpty : LinearLayout
     private lateinit var rvBookWord: RecyclerView
-    private lateinit var cvDelete: CardView
-    private lateinit var cvMove: CardView
-    private lateinit var ivDelete: ImageView
-    private lateinit var ivMove: ImageView
+    private lateinit var fabDelete: FloatingActionButton
+    private lateinit var fabMove: FloatingActionButton
+    private lateinit var mtTitle: MaterialToolbar
 
     fun newInstance(bookName: String): WordBookDetailFragment {
         val args = Bundle()
@@ -57,47 +56,37 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
     }
 
     override fun bindViews() {
-        tvTitle = binding.includeTitleBarSecond.tvTitle
-        ivBackButton = binding.includeTitleBarSecond.ivBackButton
-        ivMoreButton = binding.includeTitleBarSecond.ivMoreButton
+        mtTitle = binding.mtTitle
         vHolder = binding.vHolder
         lvLoading = binding.lvLoading
         llLoadingFail = binding.llLoadingFail
         llListEmpty = binding.llListEmpty
         rvBookWord = binding.rvBookWord
-        cvDelete = binding.cvDelete
-        cvMove = binding.cvMove
-        ivDelete = binding.ivDelete
-        ivMove = binding.ivMove
+        fabDelete = binding.fabDelete
+        fabMove = binding.fabMove
     }
 
     override fun initViews() {
         wordBookViewModel = (activity as WordBookActivity).getWordBookViewModel()
         wordBookViewModel.getWordList(getBookName() ?: getString(R.string.empty_string))
-        tvTitle.text = getBookName()
-        ivMoreButton.setImageResource(R.drawable.ic_edit)
-        ivMoreButton.tooltipText = getString(R.string.edit_word_book)
+        mtTitle.title = getBookName()
         rvBookWord.layoutManager = LinearLayoutManager(requireActivity())
         adapter = WordBookDetailAdapter(ArrayList())
         rvBookWord.adapter = adapter
         wordBookViewModel.dataLoadInfo.observe(this){
             when (it) {
                 0 -> {
-                    ivMoreButton.visibility = View.GONE
                     lvLoading.visibility = View.VISIBLE
                 }
                 1 -> {
-                    ivMoreButton.visibility = View.VISIBLE
                     llListEmpty.visibility = View.GONE
                     lvLoading.visibility = View.GONE
                 }
                 2 -> {
-                    ivMoreButton.visibility = View.GONE
                     llLoadingFail.visibility = View.VISIBLE
                 }
                 3 -> {
                     lvLoading.visibility = View.GONE
-                    ivMoreButton.visibility = View.GONE
                     llListEmpty.visibility = View.VISIBLE
                 }
             }
@@ -105,17 +94,15 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
         wordBookViewModel.detailMode.observe(this){
             when(it){
                 0 -> {
-                    tvTitle.text = getBookName()
-                    ivMoreButton.setImageResource(R.drawable.ic_edit)
-                    ivMoreButton.tooltipText = getString(R.string.edit_word_book)
-                    cvDelete.visibility = View.GONE
-                    cvMove.visibility = View.GONE
+                    mtTitle.title = getBookName()
+                    displayMenuItem(R.id.edit_word_book)
+                    fabDelete.visibility = View.GONE
+                    fabMove.visibility = View.GONE
                     adapter.exitMultiSelectMode()
                 }
                 1 -> {
-                    ivMoreButton.setImageResource(R.drawable.ic_select_all)
-                    ivMoreButton.tooltipText = getString(R.string.select_all)
-                    tvTitle.text = getString(R.string.please_select_item)
+                    displayMenuItem(R.id.select_all)
+                    mtTitle.title = getString(R.string.please_select_item)
                 }
             }
         }
@@ -126,51 +113,52 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
 
     override fun addListener() {
         ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
+            rvBookWord.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
             val displayCutout = insets.displayCutout
             val params = view.layoutParams as ConstraintLayout.LayoutParams
-            rvBookWord.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top + SizeUtils.dp2px(56f)
+            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             when (requireActivity().screenRotation){
                 90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(
-                        WindowInsetsCompat.Type.systemBars()).left
+                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
                     params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
                 }
                 270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(
-                        WindowInsetsCompat.Type.systemBars()).right
+                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
                     params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
                 }
             }
             insets
         }
-        ivBackButton.setOnClickListener {
+        mtTitle.setNavigationOnClickListener{
             if (wordBookViewModel.detailMode.value == BOOK_WORD_MODE_CONTROL){
                 adapter.exitMultiSelectMode()
             }
             mListener.onFragmentInteraction("onBackPressed")
         }
-        ivMoreButton.setOnClickListener {
-            if (wordBookViewModel.detailMode.value == BOOK_WORD_MODE_NORMAL) {
-                wordBookViewModel.detailMode.value = BOOK_WORD_MODE_CONTROL
-                adapter.joinMultiSelectMode()
-                return@setOnClickListener
+        mtTitle.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.edit_word_book -> {
+                    if (wordBookViewModel.detailMode.value == BOOK_WORD_MODE_NORMAL) {
+                        wordBookViewModel.detailMode.value = BOOK_WORD_MODE_CONTROL
+                        adapter.joinMultiSelectMode()
+                    }
+                }
+                R.id.select_all, R.id.unselect_all -> {
+                    displayMenuItem(if (it.itemId == R.id.select_all) R.id.unselect_all else R.id.select_all)
+                    adapter.selectOrUnselectAll()
+                    mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
+                    fabDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
+                    fabMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
+                }
             }
-            if (wordBookViewModel.detailMode.value == BOOK_WORD_MODE_CONTROL){
-                adapter.selectOrUnselectAll()
-                tvTitle.text = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
-                ivMoreButton.tooltipText = if (adapter.isSelectedAll()) getString(R.string.unselect_all) else getString(R.string.select_all)
-                cvDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
-                cvMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
-                return@setOnClickListener
-            }
+            true
         }
         adapter.setOnItemClickListener(object : WordBookDetailAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
-                tvTitle.text = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
-                ivMoreButton.tooltipText = if (adapter.isSelectedAll()) getString(R.string.unselect_all) else getString(R.string.select_all)
-                cvDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
-                cvMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
+                mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
+                displayMenuItem(if (adapter.isSelectedAll()) R.id.unselect_all else R.id.select_all)
+                fabDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
+                fabMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
             }
         })
         adapter.setOnItemLongClickListener(object : WordBookDetailAdapter.OnItemLongClickListener{
@@ -179,16 +167,16 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
                     wordBookViewModel.detailMode.value = BOOK_WORD_MODE_CONTROL
                     adapter.joinMultiSelectMode()
                 }
-                tvTitle.text = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
-                ivMoreButton.tooltipText = if (adapter.isSelectedAll()) getString(R.string.unselect_all) else getString(R.string.select_all)
-                cvDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
-                cvMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
+                mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
+                displayMenuItem(if (adapter.isSelectedAll()) R.id.unselect_all else R.id.select_all)
+                fabDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
+                fabMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
             }
         })
-        ivMove.setOnClickListener {
+        fabMove.setOnClickListener {
             mListener.onFragmentInteraction("showMoveWordBookDialog", adapter.getSelectedItems(), getBookName())
         }
-        ivDelete.setOnClickListener {
+        fabDelete.setOnClickListener {
             mListener.onFragmentInteraction("showDeleteWordsDialog", adapter.getSelectedItems(), getBookName())
         }
     }
@@ -213,5 +201,11 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
             }
         }
         return null
+    }
+
+    private fun displayMenuItem(menuItemId: Int){
+        val menuItemList = listOf(R.id.add_word_book, R.id.edit_word_book, R.id.select_all, R.id.unselect_all)
+        menuItemList.forEach { mtTitle.menu.findItem(it).isVisible = false }
+        mtTitle.menu.findItem(menuItemId).isVisible = true
     }
 }

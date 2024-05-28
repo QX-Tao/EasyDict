@@ -16,13 +16,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class WordBookClassificationAdapter(bookNameList: ArrayList<String>) : RecyclerView.Adapter<WordBookClassificationAdapter.ViewHolder>() {
-    private val bookNameList: ArrayList<String>
+class WordBookClassificationAdapter(private val bookNameList: ArrayList<String>) : RecyclerView.Adapter<WordBookClassificationAdapter.ViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
-
-    init {
-        this.bookNameList = bookNameList
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =

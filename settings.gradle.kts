@@ -1,6 +1,12 @@
 pluginManagement {
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -14,6 +20,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Easy Dict"
+rootProject.name = "EasyDict"
 include(":app")
  

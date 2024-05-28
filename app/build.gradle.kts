@@ -1,26 +1,61 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.materialthemebuilder)
+}
+
+materialThemeBuilder {
+    themes {
+        for ((name, color) in listOf(
+            "Amber" to "FFC107",
+            "Blue" to "2196F3",
+            "BlueGrey" to "607D8F",
+            "Brown" to "795548",
+            "Cyan" to "00BCD4",
+            "DeepOrange" to "FF5722",
+            "DeepPurple" to "673AB7",
+            "Green" to "4FAF50",
+            "Indigo" to "3F51B5",
+            "LightBlue" to "03A9F4",
+            "LightGreen" to "8BC3A4",
+            "Lime" to "CDDC39",
+            "Orange" to "FF9800",
+            "Pink" to "E91E63",
+            "Purple" to "9C27B0",
+            "Red" to "F44336",
+            "Sakura" to "FF9CA8",
+            "Teal" to "009688",
+            "Yellow" to "FFEB3B"
+        )) {
+            create("Material$name") {
+                lightThemeFormat = "ThemeOverlay.Light.%s"
+                darkThemeFormat = "ThemeOverlay.Dark.%s"
+                primaryColor = "#$color"
+            }
+        }
+    }
+    generatePalette = true
 }
 
 android {
-    namespace = "com.qxtao.easydict"
-    compileSdk = 34
+    namespace = properties["project.app.packageName"].toString()
+    compileSdk = properties["project.android.compileSdk"].toString().toInt()
 
     defaultConfig {
-        applicationId = "com.qxtao.easydict"
-        minSdk = 30
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = properties["project.app.packageName"].toString()
+        minSdk = properties["project.android.minSdk"].toString().toInt()
+        targetSdk = properties["project.android.targetSdk"].toString().toInt()
+        versionName = properties["project.app.versionName"].toString()
+        versionCode = properties["project.app.versionCode"].toString().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -32,6 +67,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
     }
@@ -46,35 +82,42 @@ android {
 }
 
 dependencies {
-
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.github.xuexiangjys:XHttp2:2.0.4")
-    implementation("com.github.chrisbanes:PhotoView:2.3.0")
-    implementation("io.reactivex.rxjava2:rxjava:2.2.17")
-    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
-    implementation("me.grantland:autofittextview:0.2.1")
-    implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("net.zetetic:sqlcipher-android:4.5.5@aar")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
-    implementation("androidx.webkit:webkit:1.10.0")
-    implementation("androidx.sqlite:sqlite-ktx:2.4.0")
-    implementation("com.github.youlookwhat:WebProgress:1.2.0")
-    implementation("com.github.wdsqjq:AndRatingBar:1.0.6")
-    implementation("io.coil-kt:coil:2.4.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.github.permissions-dispatcher:permissionsdispatcher:4.9.2")
-    kapt("com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.webkit)
+    implementation(libs.androidx.sqlite.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.material)
+    implementation(libs.okhttp)
+    implementation(libs.gson)
+    implementation(libs.xhttp2)
+    implementation(libs.photoview)
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
+    implementation(libs.autofittextview)
+    implementation(libs.flexbox)
+    implementation(libs.sqlcipher.android)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.webprogress)
+    implementation(libs.andratingbar)
+    implementation(libs.coil)
+    implementation(libs.permissionsdispatcher)
+    implementation(libs.roundview)
+    implementation(libs.rikkax.core)
+    implementation(libs.rikkax.material)
+    implementation(libs.rikkax.material.preference)
+    kapt(libs.permissionsdispatcher.processor)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+}
+configurations.all {
+    exclude("androidx.appcompat", "appcompat")
 }

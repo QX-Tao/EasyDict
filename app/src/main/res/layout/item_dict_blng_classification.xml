@@ -15,12 +15,10 @@
 
         <TextView
             android:id="@+id/tv_blng_classification"
-            android:textColor="@color/white"
             android:textSize="13sp"
             android:text="@string/def_str"
             android:clickable="true"
             android:focusable="true"
-            android:background="@color/colorBgLightYellow1"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             android:gravity="center"

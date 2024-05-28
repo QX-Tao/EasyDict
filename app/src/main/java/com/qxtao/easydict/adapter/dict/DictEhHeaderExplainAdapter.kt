@@ -23,14 +23,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class DictEhHeaderExplainAdapter(trsItems: ArrayList<Trs>) :
+class DictEhHeaderExplainAdapter(private val trsItems: ArrayList<Trs>) :
     RecyclerView.Adapter<DictEhHeaderExplainAdapter.ViewHolder>() {
-    private val trsItems: ArrayList<Trs>
-
-
-    init {
-        this.trsItems = trsItems
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

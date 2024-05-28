@@ -2,6 +2,8 @@ package com.qxtao.easydict.database
 
 import android.content.ContentValues
 import android.content.Context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.zetetic.database.sqlcipher.SQLiteDatabase
 import net.zetetic.database.sqlcipher.SQLiteOpenHelper
 
@@ -60,6 +62,17 @@ class SearchHistoryData (
         val whereClause = "$COLUMN_ORIGIN = ?"
         val whereArgs = arrayOf(origin)
         db.delete(DICT_TABLE_NAME, whereClause, whereArgs)
+    }
+
+    suspend fun deleteAllSearchRecords(): Boolean {
+        return withContext(Dispatchers.IO){
+            try {
+                db.delete(DICT_TABLE_NAME, null, null)
+                true
+            } catch (e: Exception){
+                false
+            }
+        }
     }
 
     fun setSearchRecord(origin: String, translation: String) {

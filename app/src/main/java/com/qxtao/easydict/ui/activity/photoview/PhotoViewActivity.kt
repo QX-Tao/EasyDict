@@ -17,9 +17,12 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.ActivityPhotoViewBinding
 import com.qxtao.easydict.ui.activity.photoview.preview.AlphaCallback
@@ -45,7 +48,7 @@ class PhotoViewActivity : BaseActivity<ActivityPhotoViewBinding>(ActivityPhotoVi
     private lateinit var textView: TextView
     private lateinit var ivShareButton: ImageView
     private lateinit var ivDownloadButton: ImageView
-    private lateinit var ivBackButton: ImageView
+    private lateinit var mtTitle: MaterialToolbar
     private lateinit var clControl: ConstraintLayout
     private var isStatusHide = false
     private lateinit var dispatcher: OnBackPressedDispatcher
@@ -188,7 +191,7 @@ class PhotoViewActivity : BaseActivity<ActivityPhotoViewBinding>(ActivityPhotoVi
     override fun bindViews() {
         viewPager = binding.viewPager
         textView = binding.text
-        ivBackButton = binding.ivBackButton
+        mtTitle = binding.mtTitle
         ivShareButton = binding.ivShareButton
         ivDownloadButton = binding.ivDownloadButton
         clControl = binding.clControl
@@ -200,7 +203,7 @@ class PhotoViewActivity : BaseActivity<ActivityPhotoViewBinding>(ActivityPhotoVi
     }
 
     override fun addListener() {
-        ivBackButton.setOnClickListener { dispatcher.onBackPressed() }
+        mtTitle.setNavigationOnClickListener { dispatcher.onBackPressed() }
         ivDownloadButton.setOnClickListener {
             val imgUrl = viewPager.currentItem.let { data?.get(it) }.toString()
             val savePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + "/EasyDict/"
@@ -289,7 +292,7 @@ class PhotoViewActivity : BaseActivity<ActivityPhotoViewBinding>(ActivityPhotoVi
                 }
             })
         }
-        fun shareImage(imgUrl: String, fileName: String, savePath: String, ){
+        fun shareImage(imgUrl: String, fileName: String, savePath: String){
             cacheImage(imgUrl, fileName, savePath, object : ImageCacheCallback{
                 override fun onCached(path: String) {
                     val shareIntent = Intent(Intent.ACTION_SEND)

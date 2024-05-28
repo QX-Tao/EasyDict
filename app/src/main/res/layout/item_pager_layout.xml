@@ -46,7 +46,7 @@
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_loading_fail2_white"/>
+            android:src="@drawable/ic_loading_fail_white"/>
 
         <TextView
             android:textSize="16sp"

@@ -1,91 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccent">#FFFFC000</color>
-    <color name="mainColor">#FFFFFFFF</color>
-    <color name="themeMainColor">#FFFFC000</color>
-    <color name="themeMainVariantColor">#FFC4B800</color>
-    <color name="themeMainLightColor">#FFFFE699</color>
-    <color name="themeSecondColor">#FFFFD100</color>
-    <color name="themeSecondVariantColor">#FFEADB00</color>
-    <color name="themeSecondLightColor">#FFFFF0C4</color>
-    <color name="themeThirdColor">#FFCC9933</color>
-    <color name="themeThirdVariantColor">#FFE6C400</color>
-    <color name="firstTextColor">#FF202124</color>
-    <color name="secondTextColor">#FF3C4043</color>
-    <color name="thirdTextColor">#FF5F6368</color>
-    <color name="forthTextColor">#FF81878E</color>
-    <color name="titleColor">#FF000000</color>
-    <color name="rippleColor">#14000000</color>
-    <color name="lineColor">#FF303030</color>
-    <color name="divColor">#FFF2F3F8</color>
-    <color name="dotColor">#FF969696</color>
-    <color name="firstInsTextColor">#FF303030</color>
-    <color name="secondInsTextColor">#88303030</color>
-    <color name="thirdInsTextColor">#55303030</color>
-    <color name="forthInsTextColor">#55EFEFEF</color>
-    <color name="firstStatusColor">#FF959595</color>
-    <color name="secondStatusColor">#FFEAEAEA</color>
-
-    <!--  background  -->
-    <color name="colorBgWhite1">#FFFFFFFF</color>
-    <color name="colorBgWhite2">#FFEFEFEF</color>
-    <color name="colorBgWhite3">#FFD0D0D0</color>
-    <color name="colorBgWhite4">#FFFFFFFF</color>
-    <color name="colorBgWhite5">#FFEFEFEF</color>
-    <color name="colorBgWhite6">#FFDFDFDF</color>
-    <color name="colorBgWhite7">#FFF9F9F9</color>
-    <color name="colorBgWhite8">#BBEFEFEF</color>
-    <color name="colorBgWhite9">#66FFFFFF</color>
-    <color name="colorBgWhite10">#FFFFFFFF</color>
-    <color name="colorBgWhite11">#66DDDDDD</color>
-    <color name="colorBgWhite12">#CACACA</color>
-    <color name="colorBgLightBlack1">#FF2C3039</color>
-    <color name="colorBgLightBlack2">#FF333944</color>
-    <color name="colorBgLightBlack3">#FF262B33</color>
-    <color name="colorBgLightBlack4">#11000000</color>
-    <color name="colorBgLightBlack5">#FF1E1F22</color>
-    <color name="colorBgLightYellow1">#FFF2B90D</color>
-    <color name="colorBgLightYellow2">#FFFFFCF2</color>
-    <color name="colorBgLightYellow3">#FFFFF2CC</color>
-    <color name="colorBgLightYellow4">#FFF9CD16</color>
-    <color name="colorBgLightYellow5">#FFDC79</color>
-    <color name="colorBgRed1">#FFFF7440</color>
-    <color name="colorBgBlue1">#FF87C0F9</color>
-    <color name="colorBgBlue2">#0f9ed5</color>
-    <color name="colorBgGreen1">#01adab</color>
-    <color name="colorBgGreen2">#6ca967</color>
-    <color name="colorBgGreen3">#68CAC3</color>
-
-    <!--  official  -->
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="gray_200">#FF202020</color>
 
     <!--  common  -->
-    <color name="theme_color_blp">#fb7299</color>
-    <color name="theme_color_gol">#ffbb33</color>
-    <color name="theme_color_cag">#0f9d58</color>
-    <color name="theme_color_ftb">#2196f3</color>
-    <color name="theme_color_ghp">#aa66cc</color>
-    <color name="theme_color_mar">#db4437</color>
-    <color name="theme_color_ori">#c9742f</color>
-    <color name="theme_color_tpo">#ff8833</color>
-    <color name="theme_color_tlg">#009688</color>
-    <color name="theme_color_ryb">#4169e1</color>
-    <color name="theme_color_gap">#673ab7</color>
-    <color name="theme_color_lgn">#4caf50</color>
-    <color name="theme_color_jis">#ff5252</color>
-    <color name="theme_color_gts">#e4e4e4</color>
-    <color name="theme_color_yld">#ffc107</color>
+    <color name="colorIcon">#000000</color>
+    <color name="colorIconInverse">#FFFFFF</color>
+    <color name="colorLine">#FF333333</color>
+    <color name="colorRipple">#14000000</color>
 
     <!--  normal  -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#FF808080</color>
-    <color name="trans">#00FFFFFF</color>
-
+    <color name="trans">#00000000</color>
 
 </resources>

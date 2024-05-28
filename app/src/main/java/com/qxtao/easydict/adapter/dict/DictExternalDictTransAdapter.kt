@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -17,14 +18,9 @@ import kotlinx.coroutines.withContext
 import per.wsj.library.AndRatingBar
 
 @SuppressLint("NotifyDataSetChanged")
-class DictExternalDictTransAdapter(mItemList: ArrayList<ExternalDictTransItem>) :
+class DictExternalDictTransAdapter(private val mItemList: ArrayList<ExternalDictTransItem>) :
     RecyclerView.Adapter<DictExternalDictTransAdapter.ViewHolder>() {
-    private val mItemList: ArrayList<ExternalDictTransItem>
     private var itemClickListener: OnItemClickListener? = null
-
-    init {
-        this.mItemList = mItemList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -38,15 +34,13 @@ class DictExternalDictTransAdapter(mItemList: ArrayList<ExternalDictTransItem>) 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvName.text = holder.itemView.context.getString(mItemList[position].nameId)
         val drawable = ResourcesCompat.getDrawable(holder.itemView.context.resources, mItemList[position].resId, null)
-        holder.tvName.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null)
-        holder.tvName.setOnClickListener {
+        holder.ivIcon.setImageDrawable(drawable)
+        holder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(position)
             WebActivity.start(
                 holder.itemView.context, mItemList[position].url,
-                isUseTitleBarSpace = false,
                 allowOtherUrls = true,
-                useWebTitle = true,
-                showOpenInBrowserButton = true
+                useWebTitle = true
             )
         }
     }
@@ -78,6 +72,7 @@ class DictExternalDictTransAdapter(mItemList: ArrayList<ExternalDictTransItem>) 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tv_name)
+        val ivIcon: ImageView = itemView.findViewById(R.id.iv_icon)
     }
     
     data class ExternalDictTransItem(

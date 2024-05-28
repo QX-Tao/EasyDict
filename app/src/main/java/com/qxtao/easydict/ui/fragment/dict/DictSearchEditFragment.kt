@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.doAfterTextChanged
+import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.databinding.FragmentDictSearchEditBinding
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_HISTORY
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION
@@ -24,7 +25,6 @@ class DictSearchEditFragment : BaseFragment<FragmentDictSearchEditBinding>(Fragm
     private lateinit var dictViewModel: DictViewModel
     private lateinit var performEdit: PerformEdit
     // define widget
-    private lateinit var clEditUnfold: ConstraintLayout
     private lateinit var etEditUnfold: EditText
     private lateinit var ivEditFold: ImageView
     private lateinit var ivRedo: ImageView
@@ -38,7 +38,6 @@ class DictSearchEditFragment : BaseFragment<FragmentDictSearchEditBinding>(Fragm
     }
 
     override fun bindViews() {
-        clEditUnfold = binding.clEditUnfold
         etEditUnfold = binding.etEditUnfold
         ivEditFold = binding.ivFold
         ivRedo = binding.ivRedo

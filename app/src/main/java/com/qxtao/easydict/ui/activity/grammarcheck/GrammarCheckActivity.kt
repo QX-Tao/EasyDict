@@ -3,6 +3,8 @@ package com.qxtao.easydict.ui.activity.grammarcheck
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.TypedArray
 import android.graphics.Color
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -17,6 +19,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.grammarcheck.GrammarCheckAdapter
@@ -24,6 +27,7 @@ import com.qxtao.easydict.databinding.ActivityGrammarCheckBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.view.LimitEditText
 import com.qxtao.easydict.ui.view.PerformEdit
+import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.factory.isAppearanceLight
 import com.qxtao.easydict.utils.factory.isLandscape
@@ -38,9 +42,7 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
     private var clipData: ClipData? = null
 
     // define widget
-    private lateinit var ivBackButton : ImageView
-    private lateinit var ivMoreButton : ImageView
-    private lateinit var tvTitle : TextView
+    private lateinit var mtTitle: MaterialToolbar
     private lateinit var tvCheck: TextView
     private lateinit var cvCheck: CardView
     private lateinit var ivRedo: ImageView
@@ -49,6 +51,7 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
     private lateinit var cvGrammarCheck: CardView
     private lateinit var nsvCheckResult: NestedScrollView
     private lateinit var clLoading: ConstraintLayout
+    private lateinit var clGrammarCheck: ConstraintLayout
     private lateinit var mcvRetype: MaterialCardView
     private lateinit var tvRetype: TextView
     private lateinit var tvRightText: TextView
@@ -65,9 +68,7 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
     }
 
     override fun bindViews() {
-        tvTitle = binding.includeTitleBarSecond.tvTitle
-        ivBackButton = binding.includeTitleBarSecond.ivBackButton
-        ivMoreButton = binding.includeTitleBarSecond.ivMoreButton
+        mtTitle = binding.mtTitle
         tvCheck = binding.tvCheck
         cvCheck = binding.cvCheck
         ivRedo = binding.ivRedo
@@ -85,11 +86,10 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
         cvPaste = binding.cvPaste
         ivPaste = binding.ivPaste
         vHolder = binding.vHolder
+        clGrammarCheck = binding.clGrammarCheck
     }
 
     override fun initViews() {
-        tvTitle.text = getString(R.string.grammy_check)
-        ivMoreButton.visibility = View.GONE
         performEdit = PerformEdit(etGrammarCheck)
         grammarCheckAdapter = GrammarCheckAdapter(ArrayList())
         rvCheckResult.adapter = grammarCheckAdapter
@@ -142,10 +142,11 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
 
     override fun addListener() {
         ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
+            nsvCheckResult.setPadding(SizeUtils.dp2px(16f), SizeUtils.dp2px(16f), SizeUtils.dp2px(16f),
+                SizeUtils.dp2px(16f) + insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
             val displayCutout = insets.displayCutout
             val params = view.layoutParams as ConstraintLayout.LayoutParams
-            nsvCheckResult.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top + SizeUtils.dp2px(56f)
+            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             when (screenRotation){
                 90 -> {
                     params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
@@ -158,11 +159,15 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
             }
             insets
         }
-        ivBackButton.setOnClickListener { finish() }
+        mtTitle.setNavigationOnClickListener { finish() }
         ivRedo.setOnClickListener { performEdit.redo() }
         ivUndo.setOnClickListener { performEdit.undo() }
         etGrammarCheck.doAfterTextChanged {
-            cvCheck.setCardBackgroundColor(if(etGrammarCheck.text.isNullOrBlank()) getColor(R.color.thirdInsTextColor) else getColor(R.color.themeMainColor))
+            if(etGrammarCheck.text.isNullOrBlank()) {
+                cvCheck.setCardBackgroundColor(ColorUtils.colorSecondary(mContext))
+            } else {
+                cvCheck.setCardBackgroundColor(ColorUtils.colorPrimary(mContext))
+            }
             grammarCheckViewModel.setPasteData(etGrammarCheck.text.isNullOrEmpty())
             ivRedo.isSelected = performEdit.isHasRedos()
             ivUndo.isSelected = performEdit.isHasUndos()

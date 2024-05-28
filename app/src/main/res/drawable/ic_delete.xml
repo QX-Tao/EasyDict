@@ -1,12 +1,12 @@
 <vector android:height="32dp" android:viewportHeight="200"
     android:viewportWidth="200" android:width="32dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="@color/secondTextColor"
+    <path android:fillColor="?attr/colorOnSurface"
         android:pathData="M33.33,58.33 L33.33,183.33 166.67,183.33 166.67,58.33 33.33,58.33ZM33.33,41.67 L166.67,41.67C175.87,41.67 183.33,49.13 183.33,58.33L183.33,183.33C183.33,192.54 175.87,200 166.67,200L33.33,200C24.13,200 16.67,192.54 16.67,183.33L16.67,58.33C16.67,49.13 24.13,41.67 33.33,41.67Z"
-        android:strokeColor="@color/secondTextColor" android:strokeWidth="2"/>
-    <path android:fillColor="@color/secondTextColor"
+        android:strokeColor="?attr/colorOnSurface" android:strokeWidth="2"/>
+    <path android:fillColor="?attr/colorOnSurface"
         android:pathData="M58.33,16.67 L58.33,41.67 141.67,41.67 141.67,16.67 58.33,16.67ZM58.33,0 L141.67,0C150.87,0 158.33,7.46 158.33,16.67L158.33,41.67C158.33,50.87 150.87,58.33 141.67,58.33L58.33,58.33C49.13,58.33 41.67,50.87 41.67,41.67L41.67,16.67C41.67,7.46 49.13,0 58.33,0Z"
-        android:strokeColor="@color/secondTextColor" android:strokeWidth="2"/>
-    <path android:fillColor="@color/secondTextColor"
+        android:strokeColor="?attr/colorOnSurface" android:strokeWidth="2"/>
+    <path android:fillColor="?attr/colorOnSurface"
         android:pathData="M58.33,83.33C62.94,83.33 66.67,87.06 66.67,91.67L66.67,150C66.67,154.6 62.93,158.33 58.33,158.33 53.73,158.33 50,154.6 50,150L50,91.67C50,87.06 53.73,83.33 58.33,83.33ZM100,83.33C104.6,83.33 108.33,87.06 108.33,91.67L108.33,150C108.33,154.6 104.6,158.33 100,158.33 95.4,158.33 91.67,154.6 91.67,150L91.67,91.67C91.67,87.06 95.4,83.33 100,83.33ZM141.67,83.33C146.27,83.33 150,87.06 150,91.67L150,150C150,154.6 146.27,158.33 141.66,158.33 137.06,158.33 133.33,154.6 133.33,150L133.33,91.67C133.33,87.06 137.06,83.33 141.67,83.33ZM8.33,41.67 L191.67,41.67C196.27,41.67 200,45.4 200,50 200,54.6 196.27,58.33 191.67,58.33L8.33,58.33C3.73,58.33 0,54.6 0,50 0,45.4 3.73,41.67 8.33,41.67Z"
-        android:strokeColor="@color/secondTextColor" android:strokeWidth="2"/>
+        android:strokeColor="?attr/colorOnSurface" android:strokeWidth="2"/>
 </vector>

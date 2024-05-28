@@ -10,16 +10,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.qxtao.easydict.ui.view.AlignTextView
+    <TextView
         android:id="@+id/tv_text"
         android:textSize="15sp"
         android:layout_marginEnd="20dp"
         android:layout_width="0dp"
-        android:minWidth="62dp"
         android:layout_weight="1"
-        app:alignOnlyOneLine="true"
         android:layout_height="wrap_content"
-        android:textColor="@color/secondTextColor"
+        android:textColor="?attr/colorOnSurface"
         android:text="@string/def_str" />
 
     <ImageView

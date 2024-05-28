@@ -15,6 +15,7 @@ import com.qxtao.easydict.utils.constant.NetConstant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.LinkedList
 import java.util.Queue
 
@@ -89,18 +90,16 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
     }
 
     fun setWordSelected(position: Int){
-        if (!selectPopupMenuList(wordPopWindowList, position))  return
-        wordListData.updateConfig(wordMap[position]!!)
+        if (!selectPopupMenuList(wordPopWindowList, position)) return
         dataLoadInfo.value = -1
-        initData()
-    }
-
-    fun resetConfig(){
-        wordListData.updateConfig(isConfig = false)
+        viewModelScope.launch(Dispatchers.IO){
+            async{ wordListData.updateConfig(wordMap[position]!!) }.await()
+            withContext(Dispatchers.Main){ initData() }
+        }
     }
 
     fun setClasSelected(position: Int){
-        if (!selectPopupMenuList(clasPopWindowList, position))  return
+        if (!selectPopupMenuList(clasPopWindowList, position)) return
         dataLoadInfo.value = -1
         viewModelScope.launch(Dispatchers.IO){
             dataLoadInfo.postValue(0)

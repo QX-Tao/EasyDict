@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:autofit="http://schemas.android.com/tools"
-    android:layout_marginBottom="11dp"
+    android:layout_marginBottom="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -15,14 +15,15 @@
         android:clickable="true"
         android:focusable="true"
         android:background="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="@color/colorBgWhite1"
+        app:strokeColor="@color/trans"
+        app:cardBackgroundColor="?attr/colorSurfaceContainer"
         app:cardCornerRadius="15dp"
         app:cardElevation="0dp">
 
         <TextView
             android:id="@+id/tv_book_name"
             android:textSize="16sp"
-            android:textColor="@color/secondTextColor"
+            android:textColor="?attr/colorOnSurface"
             android:padding="16dp"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"

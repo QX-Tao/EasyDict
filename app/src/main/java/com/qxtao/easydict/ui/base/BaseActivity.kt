@@ -3,21 +3,24 @@
 package com.qxtao.easydict.ui.base
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.color.DynamicColors
 import com.qxtao.easydict.R
+import com.qxtao.easydict.application.EasyDictApplication
+import com.qxtao.easydict.utils.common.ThemeUtils
 import com.qxtao.easydict.utils.factory.isNotSystemInDarkMode
-import com.qxtao.easydict.utils.factory.isSystemInDarkMode
+import rikka.material.app.MaterialActivity
 
 
-abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->VB) : AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->VB) : MaterialActivity() {
 
     protected val binding by lazy{ block(layoutInflater) }
     private lateinit var _context: Context
@@ -27,6 +30,8 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
         super.onCreate(savedInstanceState)
         _context = this
         onCreate1(savedInstanceState)
+        EasyDictApplication.instance.addActivity(this)
+
         /**
          * Display SplashScreen
          * 展示开屏动画
@@ -65,6 +70,14 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
         bindViews()
         initViews()
         addListener()
+    }
+
+
+    override fun onApplyUserThemeResource(theme: Resources.Theme, isDecorView: Boolean) {
+        if (!ThemeUtils.isSystemAccent(this)) {
+            theme.applyStyle(ThemeUtils.getColorThemeStyleRes(this), true)
+        }
+        theme.applyStyle(rikka.material.preference.R.style.ThemeOverlay_Rikka_Material3_Preference, true)
     }
 
 
@@ -130,6 +143,7 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
     override fun onDestroy() {
         onDestroy1()
         super.onDestroy()
+        EasyDictApplication.instance.removeActivity(this)
     }
 
     /**

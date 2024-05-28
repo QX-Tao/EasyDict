@@ -125,6 +125,19 @@ class WordBookData (
         }
     }
 
+    // 删除所有单词本
+    suspend fun deleteAllWordBooks(): Boolean {
+        return withContext(Dispatchers.IO){
+            try {
+                db.delete(WORD_BOOK_TABLE_NAME, null, null)
+                db.delete(WORD_TABLE_NAME, null, null)
+                true
+            } catch (e: Exception) {
+                false
+            }
+        }
+    }
+
     // 删除单词本中的指定单词
     fun deleteWordFromBook(word: String) {
         db.delete(WORD_TABLE_NAME, "$COLUMN_WORD = ?", arrayOf(word))

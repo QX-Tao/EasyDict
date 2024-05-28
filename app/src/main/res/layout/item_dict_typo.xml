@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/tv_item_lang"
-        android:textColor="@color/theme_color_gol"
-        android:background="@color/colorBgLightYellow3"
+        android:textColor="?attr/colorPrimary"
+        android:background="?attr/colorSurfaceContainer"
         android:textStyle="bold"
         android:paddingTop="1dp"
         android:paddingBottom="1dp"
@@ -25,6 +25,6 @@
         android:layout_marginStart="8dp"
         android:textSize="16sp"
         android:lineSpacingExtra="3dp"
-        android:textColor="@color/theme_color_gol" />
+        android:textColor="?attr/colorPrimary" />
 
 </LinearLayout>

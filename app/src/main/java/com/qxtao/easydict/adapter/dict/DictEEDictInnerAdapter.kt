@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_COMPACT
 import android.text.Spannable
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.EETranslationItem
+import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,8 +51,9 @@ class DictEEDictInnerAdapter(mItemList: ArrayList<EETranslationItem>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val numm = position + 1
         val item: EETranslationItem = mItemList[position]
-        holder.tvNum.text = "${position + 1}"
+        holder.tvNum.text = numm.toString()
         holder.tvTran.text = item.tran
 
         val s = mutableListOf<String>()
@@ -97,7 +101,7 @@ class DictEEDictInnerAdapter(mItemList: ArrayList<EETranslationItem>) :
                             }
                             override fun updateDrawState(ds: TextPaint) {
                                 ds.isUnderlineText = false
-                                ds.color = holder.itemView.context.getColor(R.color.theme_color_ori)
+                                ds.color = ColorUtils.colorTertiary(holder.itemView.context)
                             }
                         }
                         it.setSpan(clickableSpan, wordText.getSpanStart(spa), wordText.getSpanEnd(spa), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

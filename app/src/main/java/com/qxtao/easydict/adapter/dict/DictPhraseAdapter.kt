@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
@@ -14,20 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Phr
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class DictPhraseAdapter(phrItems: ArrayList<Phr>) :
+class DictPhraseAdapter(private val phrItems: ArrayList<Phr>) :
     RecyclerView.Adapter<DictPhraseAdapter.ViewHolder>() {
-    private val phrItems: ArrayList<Phr>
-
-
-    init {
-        this.phrItems = phrItems
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -50,7 +47,7 @@ class DictPhraseAdapter(phrItems: ArrayList<Phr>) :
             }
             override fun updateDrawState(ds: TextPaint) {
                 ds.isUnderlineText = false
-                ds.color = holder.itemView.context.getColor(R.color.theme_color_ori)
+                ds.color = ColorUtils.colorTertiary(holder.itemView.context)
             }
         }
         span.setSpan(clickableSpan, 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

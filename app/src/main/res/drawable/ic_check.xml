@@ -2,8 +2,8 @@
     android:viewportWidth="708" android:width="18dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="#F2CFEE" android:fillType="evenOdd"
         android:pathData="M10.5,354C10.5,164.29 164.29,10.5 354,10.5 543.71,10.5 697.5,164.29 697.5,354 697.5,543.71 543.71,697.5 354,697.5 164.29,697.5 10.5,543.71 10.5,354Z"
-        android:strokeColor="@color/secondTextColor" android:strokeWidth="20.625"/>
+        android:strokeColor="?attr/colorOnSurface" android:strokeWidth="20.625"/>
     <path android:fillColor="#F2385A" android:fillType="evenOdd"
         android:pathData="M509.63,210.5 L332.18,420.16 243.99,342.75 208.5,383.61 337.56,496.5 550.5,244.91Z"
-        android:strokeColor="#000000" android:strokeWidth="20.625"/>
+        android:strokeColor="?attr/colorOnSurface" android:strokeWidth="20.625"/>
 </vector>

@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentDictDefinitionBinding
 import com.qxtao.easydict.ui.activity.dict.APPBAR_LAYOUT_COLLAPSED
@@ -25,14 +26,10 @@ import com.qxtao.easydict.utils.factory.screenRotation
 class DictDefinitionFragment : BaseFragment<FragmentDictDefinitionBinding>(FragmentDictDefinitionBinding::inflate) {
     // define variable
     private lateinit var dictViewModel: DictViewModel
-    private val searchStr by lazy { arguments?.getString("searchStr") }
 
     // define widget
     private lateinit var vHolder: View
-    private lateinit var cvTitle : CardView
-    private lateinit var ivMoreButton : ImageView
-    private lateinit var ivBackButton : ImageView
-    private lateinit var tvTitle : TextView
+    private lateinit var mtTitle : MaterialToolbar
 
     fun newInstance(searchStr: String): DictDefinitionFragment {
         val args = Bundle()
@@ -44,19 +41,11 @@ class DictDefinitionFragment : BaseFragment<FragmentDictDefinitionBinding>(Fragm
 
     override fun bindViews() {
         vHolder = binding.vHolder
-        cvTitle = binding.cvTitle
-        tvTitle = binding.includeTitleBarSecond.tvTitle
-        ivBackButton = binding.includeTitleBarSecond.ivBackButton
-        ivMoreButton = binding.includeTitleBarSecond.ivMoreButton
+        mtTitle = binding.mtTitle
     }
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
-        ivMoreButton.visibility = View.GONE
-        tvTitle.text = getString(R.string.definition)
-        dictViewModel.detailFragmentAppBarExpanded.observe(this){
-            cvTitle.cardElevation = if (it == APPBAR_LAYOUT_COLLAPSED) 0f else SizeUtils.dp2px(4f).toFloat()
-        }
     }
 
     override fun addListener() {
@@ -76,7 +65,7 @@ class DictDefinitionFragment : BaseFragment<FragmentDictDefinitionBinding>(Fragm
             }
             insets
         }
-        ivBackButton.setOnClickListener{
+        mtTitle.setNavigationOnClickListener {
             mListener.onFragmentInteraction("onBackPressed")
         }
     }

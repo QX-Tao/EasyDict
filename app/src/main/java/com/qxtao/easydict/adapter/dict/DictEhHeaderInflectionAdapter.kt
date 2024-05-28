@@ -14,14 +14,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class DictEhHeaderInflectionAdapter(inflectionItems: ArrayList<Inflection>) :
+class DictEhHeaderInflectionAdapter(private val inflectionItems: ArrayList<Inflection>) :
     RecyclerView.Adapter<DictEhHeaderInflectionAdapter.ViewHolder>() {
-    private val inflectionItems: ArrayList<Inflection>
-
-
-    init {
-        this.inflectionItems = inflectionItems
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -15,13 +15,8 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictEtymAdapter(mItemList: ArrayList<Etym>) :
+class DictEtymAdapter(private val mItemList: ArrayList<Etym>) :
     RecyclerView.Adapter<DictEtymAdapter.ViewHolder>() {
-    private val mItemList: ArrayList<Etym>
-
-    init {
-        this.mItemList = mItemList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/switch_list"
+        android:icon="@drawable/ic_switch_list"
+        android:showAsAction="always"
+        android:title="@string/switch_list" />
+
+</menu>

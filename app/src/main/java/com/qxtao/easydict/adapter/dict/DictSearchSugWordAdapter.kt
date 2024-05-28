@@ -15,15 +15,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class DictSearchSugWordAdapter(mItemData: ArrayList<SimpleDictData.SimpleDict>) :
+class DictSearchSugWordAdapter(private val mItemData: ArrayList<SimpleDictData.SimpleDict>) :
     RecyclerView.Adapter<DictSearchSugWordAdapter.ViewHolder>() {
 
-    private val mItemData: ArrayList<SimpleDictData.SimpleDict>
     private var itemClickListener: OnItemClickListener? = null
-
-    init {
-        this.mItemData = mItemData
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)

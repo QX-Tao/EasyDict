@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Trans
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,15 +25,10 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictHeHeaderExplainAdapter(mItemList: ArrayList<Trans>) :
+class DictHeHeaderExplainAdapter(private val mItemList: ArrayList<Trans>) :
     RecyclerView.Adapter<DictHeHeaderExplainAdapter.ViewHolder>() {
-    private val mItemList: ArrayList<Trans>
     private var playButtonClickListener: OnPlayButtonClickListener? = null
     private var playPosition: Int = -1
-
-    init {
-        this.mItemList = mItemList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -52,7 +50,7 @@ class DictHeHeaderExplainAdapter(mItemList: ArrayList<Trans>) :
                     }
                     override fun updateDrawState(ds: TextPaint) {
                         ds.isUnderlineText = false
-                        ds.color = holder.itemView.context.getColor(R.color.theme_color_ori)
+                        ds.color = ColorUtils.colorTertiary(holder.itemView.context)
                     }
                 }
                 spannableString.setSpan(clickableSpan, 0, it.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

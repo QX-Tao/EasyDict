@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:showAsAction="never"
+        android:id="@+id/refresh"
+        android:title="@string/refresh" />
+
+    <item
+        android:showAsAction="never"
+        android:id="@+id/copy_url"
+        android:title="@string/copy_url" />
+
+    <item
+        android:showAsAction="never"
+        android:id="@+id/open_in_browser"
+        android:title="@string/open_in_browser" />
+
+    <item
+        android:showAsAction="never"
+        android:id="@+id/clear_cache"
+        android:title="@string/clear_cache" />
+
+    <item
+        android:showAsAction="never"
+        android:id="@+id/exit"
+        android:title="@string/exit" />
+
+</menu>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBgLightBlack1"
+    android:background="?attr/paletteNeutral10"
     tools:context=".ui.fragment.daysentence.DaySentenceDetailFragment">
 
     <ImageView
@@ -124,10 +124,10 @@
 
         <com.qxtao.easydict.ui.view.LoadingView
             android:id="@+id/lv_loading"
-            android:background="@color/colorBgLightBlack1"
+            android:background="?attr/paletteNeutral10"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:ballColor="@color/themeMainColor"
+            app:ballColor="?attr/colorSecondary"
             app:internal="60"
             app:duration="200"
             app:max_radius="20"
@@ -139,7 +139,7 @@
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/ll_loading_fail"
-            android:background="@color/colorBgLightBlack1"
+            android:background="?attr/paletteNeutral10"
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"

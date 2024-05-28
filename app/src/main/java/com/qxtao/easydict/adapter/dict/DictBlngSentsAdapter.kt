@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_COMPACT
@@ -16,6 +18,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.SentencePair
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +56,7 @@ class DictBlngSentsAdapter(mItemSentenceList: ArrayList<SentencePair>) :
         for (span in tagedSentenceText.getSpans(0, tagedSentenceText.length, Any::class.java)){
             if (span is StyleSpan && span.style == Typeface.BOLD){
                 tagedSentenceSpannable.removeSpan(span)
-                tagedSentenceSpannable.setSpan(ForegroundColorSpan(holder.itemView.context.getColor(R.color.theme_color_gol)),
+                tagedSentenceSpannable.setSpan(ForegroundColorSpan(ColorUtils.colorPrimary(holder.itemView.context)),
                     tagedSentenceText.getSpanStart(span), tagedSentenceText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
@@ -65,7 +68,7 @@ class DictBlngSentsAdapter(mItemSentenceList: ArrayList<SentencePair>) :
         for (span in tagedTranslationText.getSpans(0, tagedTranslationText.length, Any::class.java)){
             if (span is StyleSpan && span.style == Typeface.BOLD){
                 tagedTranslationSpannable.removeSpan(span)
-                tagedTranslationSpannable.setSpan(ForegroundColorSpan(holder.itemView.context.getColor(R.color.theme_color_gol)),
+                tagedTranslationSpannable.setSpan(ForegroundColorSpan(ColorUtils.colorPrimary(holder.itemView.context)),
                     tagedTranslationText.getSpanStart(span), tagedTranslationText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }

@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
@@ -26,6 +28,7 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.CollinsEntry
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Entry
+import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -85,12 +88,12 @@ class DictCollinsOuterAdapter(mItemList: ArrayList<CollinsEntry>) :
                             if (span is StyleSpan && span.style == Typeface.BOLD){
                                 it.removeSpan(span)
                                 it.setSpan(
-                                    ForegroundColorSpan(holder.itemView.context.getColor(R.color.theme_color_gol)),
+                                    ForegroundColorSpan(ColorUtils.colorPrimary(holder.itemView.context)),
                                     tranText.getSpanStart(span), tranText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             }
                             if (span is StyleSpan && span.style == Typeface.ITALIC){
                                 it.setSpan(
-                                    ForegroundColorSpan(holder.itemView.context.getColor(R.color.secondInsTextColor)),
+                                    ForegroundColorSpan(ColorUtils.colorOnSurfaceVariant(holder.itemView.context)),
                                     tranText.getSpanStart(span), tranText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             }
                             if (span is UnderlineSpan){
@@ -100,7 +103,7 @@ class DictCollinsOuterAdapter(mItemList: ArrayList<CollinsEntry>) :
                                     }
                                     override fun updateDrawState(ds: TextPaint) {
                                         ds.isUnderlineText = false
-                                        ds.color = holder.itemView.context.getColor(R.color.theme_color_ori)
+                                        ds.color = ColorUtils.colorTertiary(holder.itemView.context)
                                     }
                                 }
                                 it.setSpan(clickableSpan, tranText.getSpanStart(span), tranText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

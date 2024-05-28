@@ -29,20 +29,22 @@
         android:orientation="vertical">
 
         <TextView
+            android:textColorHighlight="?attr/colorSecondaryContainer"
             android:textIsSelectable="true"
             android:id="@+id/tv_item_tran"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondTextColor"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp" />
 
         <TextView
+            android:textColorHighlight="?attr/colorSecondaryContainer"
             android:textIsSelectable="true"
             android:id="@+id/tv_item_exam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textColor="@color/secondInsTextColor"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp" />
 
     </LinearLayout>

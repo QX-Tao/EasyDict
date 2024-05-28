@@ -20,7 +20,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EasyDict"
-        tools:targetApi="33">
+        tools:targetApi="34">
+        <meta-data
+            android:name="android.app.WallpaperSupport"
+            android:value="true" />
+        <activity
+            android:name=".ui.activity.settings.SettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.wordbook.WordBookActivity"
             android:exported="false" />
@@ -55,7 +61,6 @@
         <activity
             android:name=".ui.activity.dict.DictActivity"
             android:exported="true"
-            android:theme="@style/Theme.EasyDict.Starting"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

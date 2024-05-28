@@ -29,7 +29,7 @@ class WordListData (
         private const val COLUMN_SELECTED = "selected"
         private const val COLUMN_IS_CONFIRMED = "is_confirmed"
         private const val LINE_CONFIG_ID = 1
-        private val TABLE_LIST = listOf("cet4", "cet6", "chuzhong", "gaokao", "ielts", "kaoyan", "tem4", "tem8", "toefl", "xiaoxue")
+        private val TABLE_LIST = listOf("cet4", "cet6", "kaoyan", "ielts", "toefl", "xiaoxue", "chuzhong", "gaokao", "tem4", "tem8")
         private const val COLUMN_WORD = "word"
         private const val COLUMN_TRANSLATION = "translation"
         private const val COLUMN_IS_COLLECTED =  "is_collected"
@@ -61,17 +61,24 @@ class WordListData (
         }
     }
 
-    fun updateConfig(selected: String = "cet4", isConfig: Boolean = true){
-        val values = ContentValues().apply {
-            put(COLUMN_SELECTED, selected)
-            put(COLUMN_IS_CONFIRMED, if (isConfig) 1 else 0)
-        }
-        val whereClause = "$COLUMN_CONFIG_ID = ?"
-        val whereArgs = arrayOf(LINE_CONFIG_ID.toString())
-        val rowsUpdated = db.update(TABLE_DB_CONFIG, values, whereClause, whereArgs)
-        if (rowsUpdated == 0) {
-            values.put(COLUMN_CONFIG_ID, LINE_CONFIG_ID)
-            db.insert(TABLE_DB_CONFIG, null, values)
+    suspend fun updateConfig(selected: String = "cet4", isConfig: Boolean = true): Boolean {
+        return withContext(Dispatchers.IO){
+            try {
+                val values = ContentValues().apply {
+                    put(COLUMN_SELECTED, selected)
+                    put(COLUMN_IS_CONFIRMED, if (isConfig) 1 else 0)
+                }
+                val whereClause = "$COLUMN_CONFIG_ID = ?"
+                val whereArgs = arrayOf(LINE_CONFIG_ID.toString())
+                val rowsUpdated = db.update(TABLE_DB_CONFIG, values, whereClause, whereArgs)
+                if (rowsUpdated == 0) {
+                    values.put(COLUMN_CONFIG_ID, LINE_CONFIG_ID)
+                    db.insert(TABLE_DB_CONFIG, null, values)
+                }
+                true
+            } catch (_: Exception) {
+                false
+            }
         }
     }
 

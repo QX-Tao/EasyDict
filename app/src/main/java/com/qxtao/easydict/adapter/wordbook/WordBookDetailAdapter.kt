@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.wordbook
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,22 +15,18 @@ import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.database.WordBookData
 import com.qxtao.easydict.ui.activity.dict.DictActivity
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("NotifyDataSetChanged")
-class WordBookDetailAdapter(bookWordList: ArrayList<WordBookData.Word>) : RecyclerView.Adapter<WordBookDetailAdapter.ViewHolder>() {
-    private val bookWordList: ArrayList<WordBookData.Word>
+class WordBookDetailAdapter(private val bookWordList: ArrayList<WordBookData.Word>) : RecyclerView.Adapter<WordBookDetailAdapter.ViewHolder>() {
     var multiSelectedList = mutableSetOf<Int>()
     private var inMultiSelectMode = false
     private var onItemClickListener: OnItemClickListener? = null
     private var onItemLongClickListener: OnItemLongClickListener? = null
-
-    init {
-        this.bookWordList = bookWordList
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
@@ -37,10 +35,10 @@ class WordBookDetailAdapter(bookWordList: ArrayList<WordBookData.Word>) : Recycl
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.viewBackground.setBackgroundColor(if(multiSelectedList.contains(position)) ColorUtils.colorSurfaceContainer(holder.itemView.context) else ColorUtils.colorSurface(holder.itemView.context))
         val item = bookWordList[position]
         holder.textOrigin.text = item.word
         holder.textTranslation.text = item.translation
-        holder.viewBackground.setBackgroundColor(holder.itemView.context.getColor(if(multiSelectedList.contains(position)) R.color.colorBgWhite2 else R.color.colorBgWhite1))
         if (inMultiSelectMode){
             holder.layoutContent.setOnClickListener {
                 if (multiSelectedList.contains(position)){

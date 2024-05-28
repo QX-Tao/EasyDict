@@ -1,7 +1,6 @@
 package com.qxtao.easydict.ui.activity.dict
 
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +26,7 @@ import com.xuexiang.xhttp2.exception.ApiException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
@@ -135,9 +135,7 @@ class DictViewModel(
     fun getDictSearchHistory(){
         viewModelScope.launch(Dispatchers.IO) {
             val list = searchHistoryData.getSearchHistory()
-            withContext(Dispatchers.Main) {
-                _dictSearchHistory.value = list
-            }
+            _dictSearchHistory.postValue(list)
         }
     }
 
@@ -335,45 +333,6 @@ class DictViewModel(
             hasShowDetailFragment = Triple(true, collinsResponse.value != null && collinsResponse.value?.collins_entries?.isNotEmpty() == true,
                 eeDictionaryResponse.value != null && eeDictionaryResponse.value?.word != null && eeDictionaryResponse.value?.source != null)
 
-            // 双语例句分类
-            val items = mutableListOf<DictBlngClassificationAdapter.DictBlngClassificationItem>()
-            bilingualSentencesResponse.value?.`sentence-multi`.let {
-                if (it != null){
-                    items.add(
-                        DictBlngClassificationAdapter.DictBlngClassificationItem(
-                            TYPE_BLNG_CLASSIFICATION_SELECT,
-                            "所有"
-                        )
-                    )
-                    for (item in it){
-                        items.add(
-                            DictBlngClassificationAdapter.DictBlngClassificationItem(
-                                TYPE_BLNG_CLASSIFICATION_NORMAL,
-                                item.tran!!
-                            )
-                        )
-                    }
-                } else if (bilingualSentencesResponse.value?.`sentence-pair`!= null){
-                    items.add(
-                        DictBlngClassificationAdapter.DictBlngClassificationItem(
-                            TYPE_BLNG_CLASSIFICATION_SELECT,
-                            "所有"
-                        )
-                    )
-                } else return@launch
-            }
-            blngClassification.postValue(items)
-            val upd = blngSents.value?.toMutableMap() ?: mutableMapOf()
-            for (item in items){
-                if (item.text == "所有") {
-                    upd[item.text] = bilingualSentencesResponse.value?.`sentence-pair`
-                    continue
-                }
-                upd[item.text] = bilingualSentencesResponse.value?.`sentence-multi`?.find { it.tran == item.text }?.`sentence-pair`
-            }
-            blngSents.postValue(upd)
-            blngSelectedItem.postValue("所有")
-
             // 外部词典/翻译
             if (ehResponse.value != null && heResponse.value == null){
                 if (ehResponse.value?.isTran == true){
@@ -532,6 +491,45 @@ class DictViewModel(
                     _dictExternalDict.postValue(externalDictTransItems)
                 }
             }
+
+            // 双语例句分类
+            val items = mutableListOf<DictBlngClassificationAdapter.DictBlngClassificationItem>()
+            bilingualSentencesResponse.value?.`sentence-multi`.let {
+                if (it != null){
+                    items.add(
+                        DictBlngClassificationAdapter.DictBlngClassificationItem(
+                            TYPE_BLNG_CLASSIFICATION_SELECT,
+                            "所有"
+                        )
+                    )
+                    for (item in it){
+                        items.add(
+                            DictBlngClassificationAdapter.DictBlngClassificationItem(
+                                TYPE_BLNG_CLASSIFICATION_NORMAL,
+                                item.tran!!
+                            )
+                        )
+                    }
+                } else if (bilingualSentencesResponse.value?.`sentence-pair`!= null){
+                    items.add(
+                        DictBlngClassificationAdapter.DictBlngClassificationItem(
+                            TYPE_BLNG_CLASSIFICATION_SELECT,
+                            "所有"
+                        )
+                    )
+                } else return@launch
+            }
+            blngClassification.postValue(items)
+            val upd = blngSents.value?.toMutableMap() ?: mutableMapOf()
+            for (item in items){
+                if (item.text == "所有") {
+                    upd[item.text] = bilingualSentencesResponse.value?.`sentence-pair`
+                    continue
+                }
+                upd[item.text] = bilingualSentencesResponse.value?.`sentence-multi`?.find { it.tran == item.text }?.`sentence-pair`
+            }
+            blngSents.postValue(upd)
+            blngSelectedItem.postValue("所有")
         }
     }
 

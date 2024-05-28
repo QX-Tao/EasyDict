@@ -34,7 +34,7 @@
             android:ellipsize="end"
             android:textSize="15sp"
             android:text="@string/def_str"
-            android:textColor="@color/secondTextColor"
+            android:textColor="?attr/colorOnSurface"
             android:textStyle="bold" />
 
         <TextView
@@ -47,7 +47,7 @@
             android:maxLines="1"
             android:textSize="14sp"
             android:text="@string/def_str"
-            android:textColor="@color/thirdTextColor" />
+            android:textColor="?attr/colorOnSurfaceVariant" />
 
     </LinearLayout>
 

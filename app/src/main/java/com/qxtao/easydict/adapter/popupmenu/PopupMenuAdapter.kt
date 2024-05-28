@@ -2,6 +2,7 @@ package com.qxtao.easydict.adapter.popupmenu
 
 import android.annotation.SuppressLint
 import android.content.res.TypedArray
+import android.graphics.Color
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -11,16 +12,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
+import com.qxtao.easydict.utils.common.ColorUtils
 
 
 @SuppressLint("NotifyDataSetChanged")
-class PopupMenuAdapter(popupMenuItems: List<PopupMenuItem>) : RecyclerView.Adapter<PopupMenuAdapter.ViewHolder>() {
-    private val popupMenuItems: List<PopupMenuItem>
+class PopupMenuAdapter(private val popupMenuItems: List<PopupMenuItem>) : RecyclerView.Adapter<PopupMenuAdapter.ViewHolder>() {
     private var meanItemClickListener: OnMenuItemClickListener? = null
-
-    init {
-        this.popupMenuItems = popupMenuItems
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
@@ -32,10 +29,10 @@ class PopupMenuAdapter(popupMenuItems: List<PopupMenuItem>) : RecyclerView.Adapt
         val item: PopupMenuItem = popupMenuItems[position]
         holder.textMenuContent.text = item.menuItemText
         if (item.isMenuItemSelected){
-            holder.textMenuContent.setTextColor(holder.layoutMenuItem.context.getColor(R.color.themeThirdColor))
-            holder.imageMenuSelect.setColorFilter(holder.layoutMenuItem.context.getColor(R.color.themeThirdColor))
+            holder.textMenuContent.setTextColor(ColorUtils.colorPrimary(holder.itemView.context))
+            holder.imageMenuSelect.setColorFilter(ColorUtils.colorPrimary(holder.itemView.context))
             holder.imageMenuSelect.visibility = View.VISIBLE
-            holder.layoutMenuItem.setBackgroundColor(holder.layoutMenuItem.context.getColor(R.color.colorBgLightYellow3))
+            holder.layoutMenuItem.setBackgroundColor(ColorUtils.colorSurfaceContainer(holder.itemView.context))
         } else {
             val typedValue = TypedValue()
             holder.layoutMenuItem.context.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
@@ -43,7 +40,7 @@ class PopupMenuAdapter(popupMenuItems: List<PopupMenuItem>) : RecyclerView.Adapt
             val typedArray: TypedArray = holder.layoutMenuItem.context.theme.obtainStyledAttributes(typedValue.resourceId, attribute)
             holder.layoutMenuItem.background = typedArray.getDrawable(0)
             holder.imageMenuSelect.visibility = View.INVISIBLE
-            holder.textMenuContent.setTextColor(holder.layoutMenuItem.context.getColor(R.color.secondTextColor))
+            holder.textMenuContent.setTextColor(ColorUtils.colorOnSurface(holder.itemView.context))
         }
 
         holder.itemView.setOnClickListener {

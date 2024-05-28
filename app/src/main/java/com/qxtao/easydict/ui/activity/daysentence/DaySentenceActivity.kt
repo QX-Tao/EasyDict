@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.R
 import com.qxtao.easydict.database.DailySentenceData
 import com.qxtao.easydict.databinding.ActivityDaySentenceBinding
@@ -44,9 +45,7 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
         }
     }
     // define widget
-    private lateinit var ivBackButton : ImageView
-    private lateinit var ivSwitchButton : ImageView
-    private lateinit var tvTitle : TextView
+    private lateinit var mtTitle : MaterialToolbar
     private lateinit var daySentenceViewPager : ViewPager2
 
     companion object{
@@ -65,24 +64,22 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
     }
 
     override fun bindViews() {
-        tvTitle = binding.tvTitle
-        ivBackButton = binding.ivBackButton
-        ivSwitchButton = binding.ivSwitchButton
+        mtTitle = binding.mtTitle
         daySentenceViewPager = binding.daySentenceViewPager
     }
 
     override fun initViews() {
-        tvTitle.text = getString(R.string.daily_sentence)
         daySentenceViewPager.adapter = daySentencePagerAdapter
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun addListener() {
-        ivBackButton.setOnClickListener { finish() }
-        ivSwitchButton.setOnClickListener{
+        mtTitle.setNavigationOnClickListener { finish() }
+        mtTitle.setOnMenuItemClickListener {
             daySentenceViewPager.currentItem = if (daySentenceViewPager.currentItem == 0) 1 else 0
+            true
         }
-        tvTitle.setOnTouchListener(OnDoubleClickListener(object : DoubleClickCallback {
+        mtTitle.setOnTouchListener(OnDoubleClickListener(object : DoubleClickCallback {
             override fun onDoubleClick() {
                 if (daySentenceViewPager.currentItem == 1) {
                     daySentenceViewModel.isDoubleClickHeader.value = true

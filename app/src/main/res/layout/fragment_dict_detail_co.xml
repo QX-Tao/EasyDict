@@ -8,14 +8,14 @@
     tools:context=".ui.fragment.dict.DictDetailCOFragment">
 
     <LinearLayout
-        android:background="@color/colorBgWhite2"
+        android:background="?attr/colorSurfaceContainer"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="vertical"
-            android:background="@color/colorBgWhite1"
+            android:background="?attr/colorSurface"
             android:padding="15dp"
             android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
@@ -23,7 +23,7 @@
 
             <TextView
                 android:textStyle="bold"
-                android:textColor="@color/firstTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 android:text="@string/corinthian_dictionary"
                 android:layout_width="wrap_content"

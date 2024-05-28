@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -15,7 +15,7 @@
         android:layout_marginBottom="24dp"
         android:textSize="19sp"
         android:layout_gravity="center"
-        android:textColor="@color/firstTextColor"
+        android:textColor="?attr/colorOnSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -23,9 +23,9 @@
         android:id="@+id/cv_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        app:cardBackgroundColor="@color/colorBgWhite5"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainer"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp">
 
@@ -35,9 +35,6 @@
             android:layout_height="60dp"
             android:singleLine="true"
             style="@style/EditTextStyle"
-            android:textCursorDrawable="@drawable/sp_edittext_cursor"
-            android:textColorHint="@color/secondInsTextColor"
-            android:textColor="@color/firstInsTextColor"
             android:drawablePadding="12dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
@@ -52,7 +49,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
@@ -67,28 +64,24 @@
             android:id="@+id/tv_cancel"
             android:textStyle="bold"
             android:clickable="true"
-            android:background="@drawable/bg_ripple_r36"
+            android:background="@drawable/bg_ripple_r40"
             android:gravity="center"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:layout_height="36dp"
-            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_width="64dp"
             android:textSize="14sp"
-            android:textColor="@color/themeMainColor"
+            android:textColor="?attr/colorPrimary"
             android:text="@string/cancel"/>
 
         <TextView
             android:id="@+id/tv_confirm"
             android:textStyle="bold"
             android:gravity="center"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:layout_height="36dp"
-            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_width="64dp"
             android:clickable="true"
-            android:background="@drawable/bg_ripple_r36"
+            android:background="@drawable/bg_ripple_r40"
             android:textSize="14sp"
-            android:textColor="@color/themeMainColor"
+            android:textColor="?attr/colorPrimary"
             android:text="@string/confirm"/>
 
     </LinearLayout>

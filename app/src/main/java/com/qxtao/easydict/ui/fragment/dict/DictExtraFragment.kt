@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.DictAuthSentsAdapter
 import com.qxtao.easydict.adapter.dict.DictBlngClassificationAdapter
@@ -77,9 +78,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     private lateinit var rvExternalTransAdapter: DictExternalDictTransAdapter
     // define widget
     private lateinit var vHolder: View
-    private lateinit var ivMoreButton : ImageView
-    private lateinit var ivBackButton : ImageView
-    private lateinit var tvTitle : TextView
+    private lateinit var mtTitle : MaterialToolbar
     private lateinit var rvRecycleView : RecyclerView
     private lateinit var rvBlngSentsPartClassification : RecyclerView
     private lateinit var llRelWordPartWord : LinearLayout
@@ -98,9 +97,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
 
     override fun bindViews() {
         vHolder = binding.vHolder
-        tvTitle = binding.includeTitleBarSecond.tvTitle
-        ivBackButton = binding.includeTitleBarSecond.ivBackButton
-        ivMoreButton = binding.includeTitleBarSecond.ivMoreButton
+        mtTitle = binding.mtTitle
         rvRecycleView = binding.rvRecycleView
         rvBlngSentsPartClassification = binding.rvBlngSentsPartClassification
         llRelWordPartWord = binding.llRelWordPartWord
@@ -112,7 +109,6 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
-        ivMoreButton.visibility = View.GONE
         initData()
     }
 
@@ -137,7 +133,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
         llLoadingFail.setOnClickListener {
             initData()
         }
-        ivBackButton.setOnClickListener{
+        mtTitle.setNavigationOnClickListener{
             mListener.onFragmentInteraction("onBackPressed")
         }
     }
@@ -145,7 +141,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     private fun initData() {
         when (extraStyle) {
             AUTH_SENTS_PART_MORE -> {
-                tvTitle.text = getString(R.string.authoritative_example)
+                mtTitle.title = getString(R.string.authoritative_example)
                 rvDictAuthSentsAdapter = DictAuthSentsAdapter(ArrayList())
                 rvRecycleView.adapter = rvDictAuthSentsAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
@@ -154,10 +150,8 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                         WebActivity.start(
                             requireActivity(),
                             rvDictAuthSentsAdapter.getItem(position).url!!,
-                            isUseTitleBarSpace = false,
                             allowOtherUrls = true,
-                            useWebTitle = true,
-                            showOpenInBrowserButton = true
+                            useWebTitle = true
                         )
                     }
                 })
@@ -197,21 +191,21 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 llLoadingFail.setOnClickListener { dictViewModel.onlineSearchSent() }
             }
             ANTONYM_PART_MORE -> {
-                tvTitle.text = getString(R.string.antonym)
+                mtTitle.title = getString(R.string.antonym)
                 rvDictAntoAdapter =  DictSynoAntoAdapter(ArrayList())
                 rvRecycleView.adapter = rvDictAntoAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
                 rvDictAntoAdapter.setData(dictViewModel.antoResponse.value?.antos)
             }
             PHRASE_PART_MORE -> {
-                tvTitle.text = getString(R.string.phrase)
+                mtTitle.title = getString(R.string.phrase)
                 rvPhraseAdapter =  DictPhraseAdapter(ArrayList())
                 rvRecycleView.adapter = rvPhraseAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
                 rvPhraseAdapter.setData(dictViewModel.phrsResponse.value?.phrs)
             }
             SYNONYM_PART_MORE -> {
-                tvTitle.text = getString(R.string.synonym)
+                mtTitle.title = getString(R.string.synonym)
                 rvDictSynoAdapter =  DictSynoAntoAdapter(ArrayList())
                 rvRecycleView.adapter = rvDictSynoAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
@@ -219,7 +213,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
 
             }
             THESAURUS_PART_MORE -> {
-                tvTitle.text = getString(R.string.thesaurus)
+                mtTitle.title = getString(R.string.thesaurus)
                 rvDictThesurusOuterAdapter = DictThesurusOuterAdapter(ArrayList())
                 rvRecycleView.adapter = rvDictThesurusOuterAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
@@ -227,7 +221,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                     (it1.thesaurus?.size ?: 0) > 0 })
             }
             BLNG_SENTS_PART_MORE -> {
-                tvTitle.text = getString(R.string.bilingual_example)
+                mtTitle.title = getString(R.string.bilingual_example)
                 rvBlngSentsPartClassification.visibility = View.VISIBLE
                 rvBlngSentsPartClassificationAdapter = DictBlngClassificationAdapter(ArrayList())
                 rvBlngSentsPartClassification.adapter = rvBlngSentsPartClassificationAdapter
@@ -292,7 +286,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 })
             }
             REL_WORD_PART_MORE -> {
-                tvTitle.text = getString(R.string.rel_word)
+                mtTitle.title = getString(R.string.rel_word)
                 llRelWordPartWord.visibility = View.VISIBLE
                 rvRelWordAdapter =  DictRelWordAdapter(ArrayList())
                 rvRecycleView.adapter = rvRelWordAdapter
@@ -303,7 +297,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 rvRelWordAdapter.setData(rel)
             }
             ETYM_PART_MORE -> {
-                tvTitle.text = getString(R.string.etym)
+                mtTitle.title = getString(R.string.etym)
                 rvEtymAdapter =  DictEtymAdapter(ArrayList())
                 rvRecycleView.adapter = rvEtymAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
@@ -313,28 +307,28 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 rvEtymAdapter.setData(etyms)
             }
             WEB_TRANS_PART_MORE -> {
-                tvTitle.text = getString(R.string.web_trans)
+                mtTitle.title = getString(R.string.web_trans)
                 rvDictWebTransOuterAdapter =  DictWebTransOuterAdapter(ArrayList())
                 rvRecycleView.adapter = rvDictWebTransOuterAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
                 rvDictWebTransOuterAdapter.setData(dictViewModel.webTransResponse.value?.`web-translation`)
             }
             SPECIAL_PART_MORE -> {
-                tvTitle.text = getString(R.string.special_trans)
+                mtTitle.title = getString(R.string.special_trans)
                 rvDictSpecialOuterAdapter =  DictSpecialOuterAdapter(ArrayList())
                 rvRecycleView.adapter = rvDictSpecialOuterAdapter
                 rvRecycleView.layoutManager = LinearLayoutManager(requireActivity())
                 rvDictSpecialOuterAdapter.setData(dictViewModel.specialResponse.value?.entries)
             }
             EXTERNAL_DICT_PART_MORE -> {
-                tvTitle.text = getString(R.string.dict)
+                mtTitle.title = getString(R.string.dict)
                 rvExternalDictAdapter = DictExternalDictTransAdapter(ArrayList())
                 rvRecycleView.adapter = rvExternalDictAdapter
                 rvRecycleView.layoutManager = FlexboxLayoutManager(requireActivity())
                 rvExternalDictAdapter.setData(dictViewModel.dictExternalDict.value)
             }
             EXTERNAL_TRANS_PART_MORE -> {
-                tvTitle.text = getString(R.string.translation)
+                mtTitle.title = getString(R.string.translation)
                 rvExternalTransAdapter = DictExternalDictTransAdapter(ArrayList())
                 rvRecycleView.adapter = rvExternalTransAdapter
                 rvRecycleView.layoutManager = FlexboxLayoutManager(requireActivity())

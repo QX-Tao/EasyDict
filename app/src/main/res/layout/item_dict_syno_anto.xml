@@ -30,7 +30,7 @@
                 android:id="@+id/tv_item_explain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondTextColor"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp" />
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_marginTop="8dp"
                 android:textSize="16sp"
                 android:lineSpacingExtra="3dp"
-                android:textColor="@color/thirdInsTextColor" />
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
         </LinearLayout>
 

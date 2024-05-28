@@ -1,6 +1,8 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Html
 import android.text.Spannable
@@ -14,6 +16,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.WebTrans
+import com.qxtao.easydict.utils.common.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,13 +24,8 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictWebTransInnerAdapter(mItemList: ArrayList<WebTrans>) :
+class DictWebTransInnerAdapter(private val mItemList: ArrayList<WebTrans>) :
     RecyclerView.Adapter<DictWebTransInnerAdapter.ViewHolder>() {
-    private val mItemList: ArrayList<WebTrans>
-
-    init {
-        this.mItemList = mItemList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -63,7 +61,7 @@ class DictWebTransInnerAdapter(mItemList: ArrayList<WebTrans>) :
                     if (span is StyleSpan && span.style == Typeface.BOLD){
                         lineSentenceSpannable.removeSpan(span)
                         lineSentenceSpannable.setSpan(
-                            ForegroundColorSpan(holder.itemView.context.getColor(R.color.theme_color_gol)),
+                            ForegroundColorSpan(ColorUtils.colorPrimary(holder.itemView.context)),
                             lineSentenceText.getSpanStart(span), lineSentenceText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }

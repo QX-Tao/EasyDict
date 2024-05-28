@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/colorBgWhite1"
     android:layout_height="match_parent"
     tools:context=".ui.fragment.dict.DictDetailFragment">
 
@@ -18,12 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/trans"
+            app:liftOnScrollColor="@android:color/transparent"
             app:layout_behavior="com.qxtao.easydict.ui.view.FixAppBarLayoutBehavior">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="@color/trans"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
@@ -47,9 +48,9 @@
                             android:paddingStart="3dp"
                             android:paddingEnd="3dp"
                             android:ellipsize="end"
-                            android:textColorHighlight="@color/themeMainLightColor"
+                            android:textColorHighlight="?attr/colorSecondaryContainer"
                             android:textIsSelectable="true"
-                            android:textColor="@color/firstTextColor"
+                            android:textColor="?attr/colorOnSurface"
                             app:layout_constraintBottom_toTopOf="@id/cl_voice"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/iv_word_collect"
@@ -103,7 +104,7 @@
                                 app:layout_constraintBottom_toBottomOf="@id/iv_uk_voice"
                                 android:gravity="center_vertical"
                                 android:drawablePadding="5dp"
-                                android:textColor="@color/thirdTextColor"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:id="@+id/tv_uk_voice"
                                 android:paddingStart="3dp"
                                 android:paddingEnd="3dp"
@@ -129,7 +130,7 @@
                                 app:layout_constraintBottom_toBottomOf="@id/iv_us_voice"
                                 android:gravity="center_vertical"
                                 android:drawablePadding="5dp"
-                                android:textColor="@color/thirdTextColor"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:id="@+id/tv_us_voice"
                                 android:paddingStart="3dp"
                                 android:paddingEnd="3dp"
@@ -152,10 +153,11 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <ImageView
+                        <net.csdn.roundview.RoundImageView
                             android:visibility="gone"
                             android:scaleType="centerCrop"
                             android:id="@+id/iv_wd_pic"
+                            app:rRadius="5dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="@id/cl_voice"
                             android:layout_width="64dp"
@@ -183,7 +185,7 @@
                                 app:layout_constraintBottom_toTopOf="@+id/tv_trans_from_roman"
                                 android:layout_marginBottom="12dp"
                                 android:textSize="17sp"
-                                android:textColor="@color/thirdTextColor"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
 
@@ -196,7 +198,7 @@
                                 app:foldedSuffix="@string/empty_string"
                                 app:expandedSuffix="@string/empty_string"
                                 android:textSize="17sp"
-                                android:textColor="@color/thirdTextColor"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
 
@@ -222,7 +224,7 @@
                                 app:layout_constraintTop_toTopOf="@+id/iv_trans_from_voice"
                                 app:layout_constraintBottom_toBottomOf="@+id/iv_trans_from_voice"
                                 app:layout_constraintLeft_toRightOf="@+id/iv_trans_from_voice"
-                                android:src="@drawable/ic_copy2"
+                                android:src="@drawable/ic_copy"
                                 android:background="@drawable/bg_ripple_r30"
                                 android:padding="3dp"
                                 android:layout_height="30dp"
@@ -250,7 +252,7 @@
                             app:layout_constraintBottom_toTopOf="@id/cl_trans_to"
                             android:layout_marginBottom="12dp"
                             android:layout_marginTop="12dp"
-                            android:background="@color/colorBgWhite2"
+                            android:background="?attr/colorSurfaceContainer"
                             android:layout_height="0.5dp"
                             android:layout_width="match_parent"/>
 
@@ -267,7 +269,7 @@
                                 app:layout_constraintBottom_toTopOf="@+id/tv_trans_to_roman"
                                 android:layout_marginBottom="12dp"
                                 android:textSize="17sp"
-                                android:textColor="@color/secondTextColor"
+                                android:textColor="?attr/colorOnSurface"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
 
@@ -280,7 +282,7 @@
                                 app:foldedSuffix="@string/empty_string"
                                 app:expandedSuffix="@string/empty_string"
                                 android:textSize="17sp"
-                                android:textColor="@color/thirdTextColor"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
 
@@ -306,7 +308,7 @@
                                 app:layout_constraintTop_toTopOf="@+id/iv_trans_to_voice"
                                 app:layout_constraintBottom_toBottomOf="@+id/iv_trans_to_voice"
                                 app:layout_constraintLeft_toRightOf="@+id/iv_trans_to_voice"
-                                android:src="@drawable/ic_copy2"
+                                android:src="@drawable/ic_copy"
                                 android:background="@drawable/bg_ripple_r30"
                                 android:padding="3dp"
                                 android:layout_height="30dp"
@@ -317,7 +319,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
-                        android:background="@color/colorBgWhite2"
+                        android:background="?attr/colorSurfaceContainer"
                         android:layout_width="match_parent"
                         android:layout_height="8dp"/>
 
@@ -325,38 +327,25 @@
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/mcv_search_detail_tablayout"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/colorBgWhite1"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/search_detail_tablayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/search_detail_tablayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="8dp"
-                    android:background="@color/trans"
-                    app:tabSelectedTextColor="@color/firstTextColor"
-                    app:tabIndicatorColor="@color/themeMainColor"
-                    app:tabTextColor="@color/thirdTextColor"
-                    app:tabMinWidth="0dp"
-                    app:tabPaddingStart="10dp"
-                    app:tabPaddingEnd="10dp"
-                    app:tabPaddingBottom="4dp"
-                    app:tabMode="scrollable"
-                    app:tabIndicatorAnimationDuration="400"
-                    app:tabBackground="@null"
-                    app:tabRippleColor="@null"
-                    app:tabIndicatorFullWidth="false"
-                    app:tabIndicator="@drawable/bg_indicator_rectangle_shape" />
-
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp"
+                android:background="@color/trans"
+                app:tabMinWidth="0dp"
+                app:tabPaddingStart="10dp"
+                app:tabPaddingEnd="10dp"
+                app:tabPaddingBottom="4dp"
+                app:tabMode="scrollable"
+                app:tabIndicatorAnimationDuration="400"
+                app:tabBackground="@null"
+                app:tabRippleColor="@null"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicator="@drawable/bg_indicator_rectangle_shape" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -378,7 +367,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:id="@+id/ll_offline_result"
-            android:background="@color/colorBgWhite2"
+            android:background="?attr/colorSurfaceContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -387,7 +376,7 @@
                 android:orientation="vertical"
                 android:padding="15dp"
                 android:layout_marginBottom="8dp"
-                android:background="@color/colorBgWhite1"
+                android:background="?attr/colorSurface"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent">
 
@@ -399,9 +388,9 @@
                     android:paddingStart="3dp"
                     android:paddingEnd="3dp"
                     android:ellipsize="end"
-                    android:textColorHighlight="@color/themeMainLightColor"
+                    android:textColorHighlight="?attr/colorSecondaryContainer"
                     android:textIsSelectable="true"
-                    android:textColor="@color/firstTextColor"
+                    android:textColor="?attr/colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -411,7 +400,8 @@
                     android:lineSpacingExtra="3dp"
                     android:textIsSelectable="true"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/secondTextColor"
+                    android:textColorHighlight="?attr/colorSecondaryContainer"
+                    android:textColor="?attr/colorOnSurface"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"/>
 
@@ -421,7 +411,7 @@
                 android:orientation="vertical"
                 android:padding="15dp"
                 android:layout_marginBottom="8dp"
-                android:background="@color/colorBgWhite1"
+                android:background="?attr/colorSurface"
                 android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent">
@@ -430,7 +420,7 @@
                     android:id="@+id/tv_offline_desc"
                     android:textSize="16sp"
                     android:text="@string/loading_fail_desc"
-                    android:textColor="@color/secondTextColor"
+                    android:textColor="?attr/colorOnSurface"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"/>
 
@@ -439,7 +429,7 @@
                     android:layout_marginTop="15dp"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/themeMainColor"
+                    app:cardBackgroundColor="?attr/colorPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -456,7 +446,7 @@
                         android:focusable="true"
                         android:background="?android:attr/selectableItemBackground"
                         android:text="@string/reload"
-                        android:textColor="@color/secondTextColor"
+                        android:textColor="?attr/colorOnSurface"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"/>
 
@@ -471,7 +461,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:visibility="gone"
         android:id="@+id/cl_loading"
-        android:background="@color/colorBgWhite1"
+        android:background="?attr/colorSurface"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -494,7 +484,7 @@
             android:textSize="16sp"
             android:layout_marginTop="10dp"
             android:text="@string/loading"
-            android:textColor="@color/secondTextColor"
+            android:textColor="?attr/colorOnSurface"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
