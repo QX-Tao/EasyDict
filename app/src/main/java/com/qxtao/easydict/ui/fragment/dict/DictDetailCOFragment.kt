@@ -16,7 +16,6 @@ import com.qxtao.easydict.utils.common.SizeUtils
 
 class DictDetailCOFragment : BaseFragment<FragmentDictDetailCoBinding>(FragmentDictDetailCoBinding::inflate) {
     // define variable
-    private var isInitView = false
     private lateinit var dictViewModel: DictViewModel
     private lateinit var rvDictCollinsOuterAdapter: DictCollinsOuterAdapter
 
@@ -30,8 +29,8 @@ class DictDetailCOFragment : BaseFragment<FragmentDictDetailCoBinding>(FragmentD
     }
 
     override fun initViews() {
-        isInitView = true
         dictViewModel = (activity as DictActivity).getDictViewModel()
+
         rvDictCollinsOuterAdapter = DictCollinsOuterAdapter(ArrayList())
         rvCollins.adapter = rvDictCollinsOuterAdapter
         rvCollins.layoutManager = LinearLayoutManager(requireActivity())
@@ -40,19 +39,12 @@ class DictDetailCOFragment : BaseFragment<FragmentDictDetailCoBinding>(FragmentD
                 rvDictCollinsOuterAdapter.setData(it?.collins_entries)
             }
         }
-        nsvContent.scrollY = dictViewModel.nsvOffset[CO_FRAGMENT] ?: 0
-        isInitView = false
     }
 
     override fun addListener() {
         ViewCompat.setOnApplyWindowInsetsListener(nsvContent){ view, insets ->
             view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
             insets
-        }
-        nsvContent.viewTreeObserver.addOnScrollChangedListener {
-            if (!isInitView){
-                dictViewModel.setNsvScrollOffset(CO_FRAGMENT, nsvContent.scrollY)
-            }
         }
     }
 

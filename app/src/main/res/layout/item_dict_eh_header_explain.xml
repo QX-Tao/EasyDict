@@ -10,7 +10,7 @@
         android:textIsSelectable="true"
         android:id="@+id/tv_explain_trans"
         android:lineSpacingExtra="3dp"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_size_normal"
         android:textColor="?attr/colorOnSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

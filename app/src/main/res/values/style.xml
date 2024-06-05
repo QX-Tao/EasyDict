@@ -23,13 +23,12 @@
     </declare-styleable>
 
     <declare-styleable name="ExpandableTextView">
-        <attr name="expandableText" format="string" />
-        <attr name="expandedSuffix" format="string" />
-        <attr name="foldedSuffix" format="string" />
-        <attr name="foldLines" format="integer" />
-        <attr name="suffixTextColor" format="color" />
-        <attr name="expandDuration" format="integer" />
+        <attr name="limitedMaxLines" format="integer" />
+        <attr name="originalText" format="string" />
+        <attr name="expandAction" format="string" />
+        <attr name="expandActionColor" format="string" />
     </declare-styleable>
+
 
     <declare-styleable name="AlignTextView">
         <attr name="alignOnlyOneLine" format="boolean"/>

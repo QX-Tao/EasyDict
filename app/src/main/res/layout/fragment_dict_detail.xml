@@ -42,7 +42,7 @@
 
                         <me.grantland.widget.AutofitTextView
                             android:id="@+id/tv_word"
-                            android:textSize="34sp"
+                            android:textSize="@dimen/text_size_extra_large"
                             android:textStyle="bold"
                             android:maxLines="1"
                             android:paddingStart="3dp"
@@ -110,7 +110,7 @@
                                 android:paddingEnd="3dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
-                                android:textSize="17sp" />
+                                android:textSize="@dimen/text_size_normal" />
 
                             <ImageView
                                 app:layout_constraintTop_toBottomOf="@id/iv_uk_voice"
@@ -136,7 +136,7 @@
                                 android:paddingEnd="3dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
-                                android:textSize="17sp" />
+                                android:textSize="@dimen/text_size_normal" />
 
                             <ImageView
                                 android:visibility="gone"
@@ -184,7 +184,7 @@
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintBottom_toTopOf="@+id/tv_trans_from_roman"
                                 android:layout_marginBottom="12dp"
-                                android:textSize="17sp"
+                                android:textSize="@dimen/text_size_normal"
                                 android:textColor="?attr/colorOnSurfaceVariant"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
@@ -194,10 +194,9 @@
                                 app:layout_constraintTop_toBottomOf="@+id/tv_trans_from"
                                 app:layout_constraintBottom_toTopOf="@+id/iv_trans_from_voice"
                                 android:layout_marginBottom="12dp"
-                                app:foldLines="1"
-                                app:foldedSuffix="@string/empty_string"
-                                app:expandedSuffix="@string/empty_string"
-                                android:textSize="17sp"
+                                app:expandAction="@string/empty_string"
+                                app:limitedMaxLines="1"
+                                android:textSize="@dimen/text_size_normal"
                                 android:textColor="?attr/colorOnSurfaceVariant"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
@@ -268,7 +267,7 @@
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintBottom_toTopOf="@+id/tv_trans_to_roman"
                                 android:layout_marginBottom="12dp"
-                                android:textSize="17sp"
+                                android:textSize="@dimen/text_size_normal"
                                 android:textColor="?attr/colorOnSurface"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
@@ -278,10 +277,9 @@
                                 app:layout_constraintTop_toBottomOf="@+id/tv_trans_to"
                                 app:layout_constraintBottom_toTopOf="@+id/iv_trans_to_voice"
                                 android:layout_marginBottom="12dp"
-                                app:foldLines="1"
-                                app:foldedSuffix="@string/empty_string"
-                                app:expandedSuffix="@string/empty_string"
-                                android:textSize="17sp"
+                                app:expandAction="@string/empty_string"
+                                app:limitedMaxLines="1"
+                                android:textSize="@dimen/text_size_normal"
                                 android:textColor="?attr/colorOnSurfaceVariant"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
@@ -382,7 +380,7 @@
 
                 <me.grantland.widget.AutofitTextView
                     android:id="@+id/tv_offline_word"
-                    android:textSize="34sp"
+                    android:textSize="@dimen/text_size_extra_large"
                     android:textStyle="bold"
                     android:maxLines="1"
                     android:paddingStart="3dp"
@@ -396,7 +394,7 @@
 
                 <TextView
                     android:id="@+id/tv_offline_translation"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_size_normal"
                     android:lineSpacingExtra="3dp"
                     android:textIsSelectable="true"
                     android:layout_marginTop="10dp"
@@ -418,7 +416,7 @@
 
                 <TextView
                     android:id="@+id/tv_offline_desc"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_size_normal"
                     android:text="@string/loading_fail_desc"
                     android:textColor="?attr/colorOnSurface"
                     android:layout_height="wrap_content"
@@ -427,7 +425,7 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv_reload"
                     android:layout_marginTop="15dp"
-                    app:cardCornerRadius="24dp"
+                    app:cardCornerRadius="@dimen/card_view_radius_large"
                     app:cardElevation="0dp"
                     app:cardBackgroundColor="?attr/colorPrimary"
                     android:layout_width="wrap_content"
@@ -435,7 +433,7 @@
 
                     <TextView
                         android:id="@+id/tv_reload"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_normal"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:paddingStart="18dp"
@@ -446,7 +444,7 @@
                         android:focusable="true"
                         android:background="?android:attr/selectableItemBackground"
                         android:text="@string/reload"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="?attr/colorOnPrimary"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"/>
 
@@ -481,7 +479,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_normal"
             android:layout_marginTop="10dp"
             android:text="@string/loading"
             android:textColor="?attr/colorOnSurface"

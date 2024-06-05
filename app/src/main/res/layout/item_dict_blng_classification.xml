@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/trans"
         app:cardElevation="0dp"
-        app:cardCornerRadius="26dp">
+        app:cardCornerRadius="@dimen/card_view_radius_medium">
 
         <TextView
             android:id="@+id/tv_blng_classification"
-            android:textSize="13sp"
+            android:textSize="@dimen/text_size_medium"
             android:text="@string/def_str"
             android:clickable="true"
             android:focusable="true"
@@ -23,7 +23,7 @@
             android:paddingEnd="12dp"
             android:gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"/>
+            android:layout_height="32dp"/>
 
     </androidx.cardview.widget.CardView>
 

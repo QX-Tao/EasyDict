@@ -43,7 +43,7 @@
                 android:layout_marginTop="15dp"
                 android:id="@+id/tv_eh_header_exam_type"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -81,7 +81,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/bilingual_example"
@@ -91,7 +91,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -140,7 +140,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/authoritative_example"
@@ -150,7 +150,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -191,7 +191,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/web_trans"
@@ -201,7 +201,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -242,7 +242,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/special_trans"
@@ -252,7 +252,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -293,7 +293,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/thesaurus"
@@ -303,7 +303,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -344,7 +344,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/synonym"
@@ -354,7 +354,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -395,7 +395,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/antonym"
@@ -405,7 +405,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -446,7 +446,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/phrase"
@@ -456,7 +456,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -497,7 +497,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/rel_word"
@@ -507,7 +507,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -531,7 +531,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="@string/root_from_eee"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_normal"
                 android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -544,7 +544,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginStart="10dp"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_normal"
                 android:textColor="?attr/colorPrimary"
                 app:layout_constraintStart_toEndOf="@id/tv_rel_word_part_word"
                 app:layout_constraintBottom_toBottomOf="@id/tv_rel_word_part_word"/>
@@ -572,7 +572,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/etym"
@@ -582,7 +582,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -623,7 +623,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/baike"
@@ -633,7 +633,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -656,7 +656,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -667,13 +667,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:maxHeight="120dp"
                 android:textIsSelectable="true"
                 android:textColorHighlight="?attr/colorSecondaryContainer"
-                app:foldLines="6"
-                app:foldedSuffix="@string/empty_string"
-                app:expandedSuffix="@string/empty_string"
-                android:textSize="15sp"
+                app:expandAction="@string/empty_string"
+                app:limitedMaxLines="6"
+                android:textSize="@dimen/text_size_normal"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_word"/>
@@ -683,7 +681,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_small"
                 android:text="@string/source_"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 app:layout_constraintStart_toStartOf="parent"
@@ -695,7 +693,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="5dp"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_small"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 app:layout_constraintStart_toEndOf="@+id/tv_source"
                 app:layout_constraintTop_toBottomOf="@id/tv_baike_digest_part_desc"/>
@@ -745,7 +743,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/tv_not_result_desc"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/not_result_desc"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_height="wrap_content"
@@ -754,7 +752,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_retype"
                 android:layout_marginTop="15dp"
-                app:cardCornerRadius="24dp"
+                app:cardCornerRadius="@dimen/card_view_radius_large"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="?attr/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
@@ -765,7 +763,7 @@
 
                 <TextView
                     android:id="@+id/tv_retype"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_size_normal"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:paddingStart="18dp"
@@ -776,7 +774,7 @@
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:text="@string/retype"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?attr/colorOnPrimary"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"/>
 
@@ -798,7 +796,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/tv_external_dict_title"
@@ -808,7 +806,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"
@@ -850,7 +848,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/tv_external_trans_title"
@@ -860,7 +858,7 @@
 
             <TextView
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="@string/more"
                 android:drawablePadding="5dp"
                 android:paddingStart="6dp"

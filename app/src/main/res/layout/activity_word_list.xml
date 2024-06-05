@@ -62,8 +62,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/no_words_in_this_category"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="13sp"
-                app:drawableTopCompat="@drawable/ic_category_no_word" />
+                android:textSize="@dimen/text_size_normal"
+                android:drawablePadding="16dp"
+                app:drawableTopCompat="@drawable/ic_no_data" />
 
         </LinearLayout>
 
@@ -99,7 +100,7 @@
                 android:gravity="center"
                 android:padding="20dp"
                 android:drawablePadding="15dp"
-                android:textSize="17sp"
+                android:textSize="@dimen/text_size_normal"
                 android:textColor="?attr/colorOnSurface"
                 android:text="@string/failed_to_load_click_the_screen_to_try_again"
                 android:layout_width="match_parent"
@@ -107,18 +108,6 @@
                 app:drawableTopCompat="@drawable/ic_loading_fail" />
 
         </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:visibility="gone"
-            android:id="@+id/fab_voice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:layout_marginEnd="20dp"
-            android:tooltipText="@string/voice"
-            app:elevation="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

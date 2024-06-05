@@ -15,10 +15,13 @@ import com.qxtao.easydict.adapter.dict.DictBlngClassificationAdapter
 import com.qxtao.easydict.adapter.dict.DictExternalDictTransAdapter
 import com.qxtao.easydict.adapter.dict.TYPE_BLNG_CLASSIFICATION_NORMAL
 import com.qxtao.easydict.adapter.dict.TYPE_BLNG_CLASSIFICATION_SELECT
+import com.qxtao.easydict.database.DailySentenceData
 import com.qxtao.easydict.database.SearchHistoryData
 import com.qxtao.easydict.database.SimpleDictData
 import com.qxtao.easydict.database.WordBookData
+import com.qxtao.easydict.database.WordListData
 import com.qxtao.easydict.utils.common.HttpHelper
+import com.qxtao.easydict.utils.common.TimeUtils
 import com.qxtao.easydict.utils.constant.NetConstant
 import com.xuexiang.xhttp2.XHttp
 import com.xuexiang.xhttp2.callback.SimpleCallBack
@@ -26,7 +29,6 @@ import com.xuexiang.xhttp2.exception.ApiException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
@@ -34,13 +36,24 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.json.JSONObject
 import java.util.LinkedList
 import java.util.Queue
+import java.util.Stack
 
 
 class DictViewModel(
     private val simpleDictData: SimpleDictData,
     private val searchHistoryData: SearchHistoryData,
-    private val wordBookData: WordBookData
+    private val wordBookData: WordBookData,
+    private val dailySentenceData: DailySentenceData?,
+    private val wordListData: WordListData?
 ) : ViewModel() {
+    val wordNameMap = mapOf("cet4" to "四级大纲", "cet6" to "六级大纲", "kaoyan" to "考研词汇", "ielts" to "雅思词汇",
+        "toefl" to "托福词汇", "xiaoxue" to "小学词汇", "chuzhong" to "初中大纲", "gaokao" to "高考大纲", "tem4" to "专四大纲", "tem8" to "专八大纲")
+    private val voiceSoundMap = mapOf(-1 to NetConstant.dictVoice, 0 to NetConstant.voiceUs, 1 to NetConstant.voiceUk)
+    var currentFragmentTag: String? = null
+    var addedFragment = mutableSetOf<String>()
+    var addedFragmentStack = Stack<String>()
+    var extraFragmentStyle = MutableLiveData<String>()
+
     private val _dictSearchHistory = MutableLiveData<List<SearchHistoryData.SearchHistory>?>()
     val dictSearchHistory: LiveData<List<SearchHistoryData.SearchHistory>?> = _dictSearchHistory
     private val _dictSearchSuggestion = MutableLiveData<List<SimpleDictData.SimpleDict>?>()
@@ -55,12 +68,13 @@ class DictViewModel(
     var dataLoadInfo = MutableLiveData<Int>() // 初始化-1  加载中0 已加载1 加载失败2
     var dataMoreBlngLoadInfo = MutableLiveData<Int>() // 初始化-1  加载中0 已加载1 加载失败2
     var dataMoreAuthLoadInfo = MutableLiveData<Int>() // 初始化-1  加载中0 已加载1 加载失败2
-    var dataSuggestionLoadInfo = MutableLiveData<Int>() // 初始化-1  加载中0 已加载1
+    private var dataSuggestionLoadInfo = MutableLiveData<Int>() // 初始化-1  加载中0 已加载1
     var hasShowRvInfo = MutableLiveData<Int>() //history or suggesting
+    var playSound = 0
     var hasShowDetailFragment = Triple(true, false, false) //JM-first  CO-second  EE-third
+    var dailySentenceItem = MutableLiveData<Pair<Boolean, DailySentenceData.DailySentence?>?>()
+    var wordListInfo = MutableLiveData<Pair<Boolean, Triple<String, Int, Int>?>?>()
     var searchText = MutableLiveData<SearchText>()
-    var detailFragmentAppBarExpanded = MutableLiveData<Int>() // appBarLayout状态
-    var nsvOffset = mutableMapOf(JM_FRAGMENT to 0, CO_FRAGMENT to 0, EE_FRAGMENT to 0) // 页面滚动状态
     val playPosition = MutableLiveData<Map<Int, Int>>() // -1不播放
     private var _mediaPlayer: MediaPlayer?= null
     var hasSearchResult = MutableLiveData<Boolean>() // 初始化-1 无结果0 有结果1
@@ -96,8 +110,14 @@ class DictViewModel(
     var blngSelectedItem = MutableLiveData<String>()
 
     companion object{
-        fun Factory(simpleDictData: SimpleDictData, searchHistoryData: SearchHistoryData, wordBookData: WordBookData): ViewModelProvider.Factory = viewModelFactory {
-            initializer { DictViewModel(simpleDictData, searchHistoryData, wordBookData) }
+        fun Factory(simpleDictData: SimpleDictData, searchHistoryData: SearchHistoryData, wordBookData: WordBookData,
+                    dailySentenceData: DailySentenceData, wordListData: WordListData
+        ): ViewModelProvider.Factory = viewModelFactory {
+            initializer { DictViewModel(simpleDictData, searchHistoryData, wordBookData, dailySentenceData, wordListData) }
+        }
+        fun Factory(simpleDictData: SimpleDictData, searchHistoryData: SearchHistoryData, wordBookData: WordBookData
+        ): ViewModelProvider.Factory = viewModelFactory {
+            initializer { DictViewModel(simpleDictData, searchHistoryData, wordBookData, null, null) }
         }
     }
 
@@ -108,14 +128,14 @@ class DictViewModel(
         _dictExternalDict.value = mutableListOf()
         _dictExternalTrans.value = mutableListOf()
         dataLoadInfo.value = -1
-        detailFragmentAppBarExpanded.value = APPBAR_LAYOUT_EXPANDED
         dataMoreBlngLoadInfo.value = -1
         dataMoreAuthLoadInfo.value = -1
         dataSuggestionLoadInfo.value = -1
         isSearchTextFavorite.value = false
         hasShowRvInfo.value = DICT_RV_HISTORY
         searchText.value = SearchText(null, "",  0)
-        getDictSearchSugWord()
+        dailySentenceItem.value = null
+        wordListInfo.value = null
     }
 
     // 设置搜索文本
@@ -124,11 +144,6 @@ class DictViewModel(
     }
     private fun setSearchText(searchText: String?, editSearchText: String = searchText ?: ""){
         this.searchText.value = SearchText(searchText, editSearchText, searchText?.length ?: editSearchText.length)
-    }
-
-    // 设置页面滚动状态
-    fun setNsvScrollOffset(fragment: Int, offset: Int){
-        nsvOffset[fragment] = offset
     }
 
     // 获取搜索记录
@@ -180,6 +195,52 @@ class DictViewModel(
         }
     }
 
+    // 获取单词列表
+    fun getWordListInfo(){
+        wordListInfo.value = null
+        viewModelScope.launch(Dispatchers.IO){
+            wordListInfo.postValue(wordListData?.getSelectBookInfo())
+        }
+    }
+
+    // 获取每日一句
+    fun getDailySentence() {
+        dailySentenceItem.value = null
+        viewModelScope.launch(Dispatchers.IO){
+            dailySentenceItem.postValue(getDailySentenceItem(TimeUtils.getCurrentDateByPattern("yyyy-MM-dd")))
+        }
+    }
+    private suspend fun getDailySentenceItem(date: String): Pair<Boolean, DailySentenceData.DailySentence?> {
+        return withContext(Dispatchers.IO){
+            val tmp = dailySentenceData?.getDataByDate(date)
+            if (tmp != null){
+                Pair(true, DailySentenceData.DailySentence(tmp.date, tmp.enSentence, tmp.cnSentence, tmp.imageUrl, tmp.ttsUrl))
+            } else {
+                try {
+                    val imgResponse = HttpHelper.requestDisableCertificateValidationResponse(
+                        NetConstant.imgApi + TimeUtils.getFormatDateByPattern(date, "yyyy-MM-dd", "yyyyMMdd"))
+                    val imageUrl = imgResponse.request.url.toString()
+
+                    val dailySentenceResponseJson = HttpHelper.requestResult(NetConstant.dailySentenceApi + date)
+                    val dailySentenceJsonObject = JSONObject(dailySentenceResponseJson)
+                    val enSentence: String = dailySentenceJsonObject.getString("content").trim()
+                    val chSentence: String = dailySentenceJsonObject.getString("note").trim()
+                    val ttsUrl: String = dailySentenceJsonObject.getString("tts")
+
+                    if (imageUrl.isNotEmpty() && enSentence.isNotEmpty() && chSentence.isNotEmpty() && ttsUrl.isNotEmpty()) {
+                        dailySentenceData?.insertData(date, enSentence, chSentence, imageUrl, ttsUrl)
+                        Pair(true, DailySentenceData.DailySentence(date, enSentence, chSentence, imageUrl, ttsUrl))
+                    } else {
+                        Pair(false, null)
+                    }
+
+                }catch (e: Exception) {
+                    Pair(false, null)
+                }
+            }
+        }
+    }
+
     // 搜索提示
     fun searchInWordData(str: String){
         viewModelScope.launch(Dispatchers.IO) {
@@ -191,12 +252,6 @@ class DictViewModel(
                 hasShowRvInfo.value = if (list?.isNotEmpty() == true) DICT_RV_SUGGESTION else DICT_RV_SUGGESTION_LM
             }
         }
-    }
-
-    // 让检索结果为空
-    fun setDictSearchSuggestionEmpty() {
-        _dictSearchSuggestion.value = mutableListOf()
-        dataSuggestionLoadInfo.value = -1
     }
 
     // hasFragment的列表显示控制
@@ -282,8 +337,6 @@ class DictViewModel(
     // 清除旧数据
     private fun clearResponseData(){
         playPosition.value = mapOf(VOICE_AUTH_PART to -1, VOICE_BLNG_PART to -1, VOICE_EH_PART to -1, VOICE_NORMAL to -1)
-        detailFragmentAppBarExpanded.value = APPBAR_LAYOUT_EXPANDED
-        nsvOffset = mutableMapOf(JM_FRAGMENT to 0, CO_FRAGMENT to 0, EE_FRAGMENT to 0)
         _dictExternalDict.value = mutableListOf()
         _dictExternalTrans.value = mutableListOf()
         searchInfoResponse.value = null
@@ -543,7 +596,7 @@ class DictViewModel(
         blngSelectedItem.value = text
     }
 
-    fun startPlaySound(type: Int, position: Int, audio: String, le: String): Boolean {
+    fun startPlaySound(type: Int, position: Int, audio: String, le: String, playSound: Int = this.playSound): Boolean {
         try {
             if (playPosition.value?.get(type) == position) {
                 stopPlaySound()
@@ -553,7 +606,7 @@ class DictViewModel(
                 val upd = playPosition.value?.toMutableMap() ?: mutableMapOf(VOICE_AUTH_PART to -1, VOICE_BLNG_PART to -1, VOICE_NORMAL to -1)
                 upd[type] = position
                 playPosition.value = upd
-                val data = "${NetConstant.dictVoice}?audio=${audio}&le=${le}"
+                val data = if (playSound == -1) "${NetConstant.dictVoice}?audio=${audio}&le=${le}" else voiceSoundMap[playSound] + "${audio}&le=${le}"
                 _mediaPlayer = MediaPlayer().apply {
                     setDataSource(data)
                     prepareAsync()

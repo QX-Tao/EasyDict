@@ -8,25 +8,15 @@ import com.google.android.material.color.DynamicColors
 import com.qxtao.easydict.R
 import com.qxtao.easydict.utils.constant.ShareConstant.DARK_MODE
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SYSTEM_THEME
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_AMBER
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_BLUE
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_BLUE_GREY
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_BROWN
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_CYAN
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_DEEP_ORANGE
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_DEEP_PURPLE
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_GREEN
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_INDIGO
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_LIGHT_BLUE
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_LIGHT_GREEN
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_LIME
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_ORANGE
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_PINK
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_PURPLE
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_RED
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_SAKURA
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_TEAL
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_YELLOW
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_AMBER_GOLD
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_HAWTHORN_RED
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_LIME_GREEN
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_PERU_BROWN
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_SAKURA_PINK
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_SKY_BLUE
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_DODGER_BLUE
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_TEAL_GREEN
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_VIOLET_PURPLE
 import com.qxtao.easydict.utils.constant.ShareConstant.MODE_NIGHT_FOLLOW_SYSTEM
 import com.qxtao.easydict.utils.constant.ShareConstant.SYSTEM
 import com.qxtao.easydict.utils.constant.ShareConstant.THEME_COLOR
@@ -35,25 +25,15 @@ import com.qxtao.easydict.utils.constant.ShareConstant.THEME_COLOR
 object ThemeUtils {
 
     private val colorThemeMap: MutableMap<String, Int> = hashMapOf(
-        MATERIAL_AMBER to R.style.ThemeOverlay_MaterialAmber,
-        MATERIAL_BLUE to R.style.ThemeOverlay_MaterialBlue,
-        MATERIAL_BLUE_GREY to R.style.ThemeOverlay_MaterialBlueGrey,
-        MATERIAL_BROWN to R.style.ThemeOverlay_MaterialBrown,
-        MATERIAL_CYAN to R.style.ThemeOverlay_MaterialCyan,
-        MATERIAL_DEEP_ORANGE to R.style.ThemeOverlay_MaterialDeepOrange,
-        MATERIAL_DEEP_PURPLE to R.style.ThemeOverlay_MaterialDeepPurple,
-        MATERIAL_GREEN to R.style.ThemeOverlay_MaterialGreen,
-        MATERIAL_INDIGO to R.style.ThemeOverlay_MaterialIndigo,
-        MATERIAL_LIGHT_BLUE to R.style.ThemeOverlay_MaterialLightBlue,
-        MATERIAL_LIGHT_GREEN to R.style.ThemeOverlay_MaterialLightGreen,
-        MATERIAL_LIME to R.style.ThemeOverlay_MaterialLime,
-        MATERIAL_ORANGE to R.style.ThemeOverlay_MaterialOrange,
-        MATERIAL_PINK to R.style.ThemeOverlay_MaterialPink,
-        MATERIAL_PURPLE to R.style.ThemeOverlay_MaterialPurple,
-        MATERIAL_RED to R.style.ThemeOverlay_MaterialRed,
-        MATERIAL_SAKURA to R.style.ThemeOverlay_MaterialSakura,
-        MATERIAL_TEAL to R.style.ThemeOverlay_MaterialTeal,
-        MATERIAL_YELLOW to R.style.ThemeOverlay_MaterialYellow
+        MATERIAL_DODGER_BLUE to R.style.ThemeOverlay_MaterialDodgerBlue,
+        MATERIAL_SAKURA_PINK to R.style.ThemeOverlay_MaterialSakuraPink,
+        MATERIAL_AMBER_GOLD to R.style.ThemeOverlay_MaterialAmberGold,
+        MATERIAL_PERU_BROWN to R.style.ThemeOverlay_MaterialPeruBrown,
+        MATERIAL_VIOLET_PURPLE to R.style.ThemeOverlay_MaterialVioletPurple,
+        MATERIAL_TEAL_GREEN to R.style.ThemeOverlay_MaterialTealGreen,
+        MATERIAL_HAWTHORN_RED to R.style.ThemeOverlay_MaterialHawthornRed,
+        MATERIAL_LIME_GREEN to R.style.ThemeOverlay_MaterialLimeGreen,
+        MATERIAL_SKY_BLUE to R.style.ThemeOverlay_MaterialSkyBlue
     )
 
     fun isDynamicColorAvailable(): Boolean = DynamicColors.isDynamicColorAvailable()
@@ -63,10 +43,10 @@ object ThemeUtils {
 
     @StyleRes
     fun getColorThemeStyleRes(context: Context): Int =
-        colorThemeMap[getColorTheme(context)] ?: R.style.ThemeOverlay_MaterialBlue
-    private fun getColorTheme(context: Context): String? =
-        if (isSystemAccent(context)) SYSTEM else ShareUtils.getString(context, THEME_COLOR, MATERIAL_BLUE)
-    fun getThemeColor(context: Context): String? = ShareUtils.getString(context, THEME_COLOR, MATERIAL_BLUE)
+        colorThemeMap[getColorTheme(context)] ?: R.style.ThemeOverlay_MaterialDodgerBlue
+    fun getColorTheme(context: Context): String =
+        if (isSystemAccent(context)) SYSTEM else ShareUtils.getString(context, THEME_COLOR, MATERIAL_DODGER_BLUE)
+    fun getThemeColor(context: Context): String = ShareUtils.getString(context, THEME_COLOR, MATERIAL_DODGER_BLUE)
 
     fun getDarkTheme(context: Context): Int = ShareUtils.getInt(context, DARK_MODE, MODE_NIGHT_FOLLOW_SYSTEM)
 

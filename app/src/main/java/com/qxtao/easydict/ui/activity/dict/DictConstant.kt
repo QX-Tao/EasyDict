@@ -1,11 +1,20 @@
 package com.qxtao.easydict.ui.activity.dict
 
+const val SIMPLE_DICT_MD5 = "8b81915ef6f53264b5c1b4b49cbf6f99"
+const val SIMPLE_DICT_FILE_NAME = "simple_dict.db"
+const val SIMPLE_DICT_ZIP_FILE_PATH = "dict/simple_dict.zip"
+
 const val DICT_SEARCH_HAS_FRAGMENT = "dict_search_has_fragment"
 const val DICT_SEARCH_DETAIL_FRAGMENT = "dict_search_detail_fragment"
 
-const val DICT_SEARCH_DETAIL_FRAGMENT_TAG = "search_detail_fragment_tag"
-const val DICT_SEARCH_FRAGMENT_TAG = "search_fragment_tag"
-const val DICT_DEFINITION_FRAGMENT_TAG = "definition_fragment_tag"
+const val DICT_WELCOME_FRAGMENT_TAG = "dict_welcome_fragment_tag"
+const val DICT_SEARCH_FRAGMENT_TAG = "dict_search_fragment_tag"
+const val DICT_EXTRA_FRAGMENT_TAG = "dict_extra_fragment_tag"
+const val DICT_DEFINITION_FRAGMENT_TAG = "dict_definition_fragment_tag"
+
+const val DICT_SEARCH_HAS_FRAGMENT_TAG = "dict_search_has_fragment_tag"
+const val DICT_SEARCH_DETAIL_FRAGMENT_TAG = "dict_search_detail_fragment_tag"
+
 
 const val BLNG_SENTS_PART_MORE = "blng_sents_part_more"
 const val AUTH_SENTS_PART_MORE = "auth_sents_part_more"
@@ -19,10 +28,6 @@ const val REL_WORD_PART_MORE = "rel_word_part_more"
 const val ETYM_PART_MORE = "etym_part_more"
 const val EXTERNAL_DICT_PART_MORE = "external_dict_part_more"
 const val EXTERNAL_TRANS_PART_MORE = "external_trans_part_more"
-
-const val APPBAR_LAYOUT_EXPANDED = 0
-const val APPBAR_LAYOUT_COLLAPSED = 1
-const val APPBAR_LAYOUT_INTERMEDIATE = 2
 
 const val JM_FRAGMENT = 3
 const val CO_FRAGMENT = 4

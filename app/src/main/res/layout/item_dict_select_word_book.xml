@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="?attr/colorSurfaceContainer"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="@dimen/card_view_radius_medium"
     app:cardElevation="0dp"
     android:layout_width="match_parent"
     android:layout_marginBottom="12dp"
@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/tv_book_name"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_size_normal"
         android:textColor="?attr/colorOnSurface"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"

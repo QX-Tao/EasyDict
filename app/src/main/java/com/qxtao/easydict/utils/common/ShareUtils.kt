@@ -17,9 +17,9 @@ object ShareUtils {
         sp?.edit()?.putString(key, value)?.apply()
     }
 
-    fun getString(mContext: Context?, key: String?, defValue: String?): String? {
+    fun getString(mContext: Context?, key: String?, defValue: String): String {
         val sp = mContext?.getSharedPreferences(PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
-        return sp?.getString(key, defValue)
+        return sp?.getString(key, defValue) ?: defValue
     }
 
     fun putInt(mContext: Context?, key: String?, value: Int) {
@@ -30,6 +30,16 @@ object ShareUtils {
     fun getInt(mContext: Context?, key: String?, defValue: Int): Int {
         val sp = mContext?.getSharedPreferences(PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
         return sp?.getInt(key, defValue) ?: defValue
+    }
+
+    fun putLong(mContext: Context?, key: String?, value: Long) {
+        val sp = mContext?.getSharedPreferences(PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
+        sp?.edit()?.putLong(key, value)?.apply()
+    }
+
+    fun getLong(mContext: Context?, key: String?, defValue: Long): Long {
+        val sp = mContext?.getSharedPreferences(PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
+        return sp?.getLong(key, defValue) ?: defValue
     }
 
     fun putBoolean(mContext: Context?, key: String?, value: Boolean) {

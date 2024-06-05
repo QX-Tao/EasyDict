@@ -76,17 +76,21 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
         wordBookViewModel.dataLoadInfo.observe(this){
             when (it) {
                 0 -> {
+                    hideAllMenuItem()
                     lvLoading.visibility = View.VISIBLE
                 }
                 1 -> {
+                    displayMenuItem(R.id.edit_word_book)
                     llListEmpty.visibility = View.GONE
                     lvLoading.visibility = View.GONE
                 }
                 2 -> {
+                    hideAllMenuItem()
                     llLoadingFail.visibility = View.VISIBLE
                 }
                 3 -> {
                     lvLoading.visibility = View.GONE
+                    hideAllMenuItem()
                     llListEmpty.visibility = View.VISIBLE
                 }
             }
@@ -207,5 +211,9 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
         val menuItemList = listOf(R.id.add_word_book, R.id.edit_word_book, R.id.select_all, R.id.unselect_all)
         menuItemList.forEach { mtTitle.menu.findItem(it).isVisible = false }
         mtTitle.menu.findItem(menuItemId).isVisible = true
+    }
+    private fun hideAllMenuItem(){
+        val menuItemList = listOf(R.id.add_word_book, R.id.edit_word_book, R.id.select_all, R.id.unselect_all)
+        menuItemList.forEach { mtTitle.menu.findItem(it).isVisible = false }
     }
 }

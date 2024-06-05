@@ -1,29 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ll_linearlayout"
-    android:gravity="center"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
-    android:paddingStart="27dp"
-    android:paddingEnd="27dp"
-    android:layout_width="match_parent"
+    android:id="@+id/cl_layout"
+    android:background="?android:selectableItemBackground"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+    <View
+        android:id="@+id/v_holder"
+        android:background="?attr/colorPrimary"
+        android:alpha="0.1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
     <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_image"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
         android:id="@+id/tv_text"
-        android:textSize="15sp"
-        android:layout_marginEnd="20dp"
+        android:textSize="@dimen/text_size_normal"
         android:layout_width="0dp"
         android:layout_weight="1"
+        app:layout_constraintWidth_min="96dp"
         android:layout_height="wrap_content"
         android:textColor="?attr/colorOnSurface"
         android:text="@string/def_str" />
 
     <ImageView
+        app:layout_constraintTop_toTopOf="@id/tv_text"
+        app:layout_constraintBottom_toBottomOf="@id/tv_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_text"
+        android:layout_marginEnd="16dp"
         android:id="@+id/iv_image"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:src="@drawable/ic_tick" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

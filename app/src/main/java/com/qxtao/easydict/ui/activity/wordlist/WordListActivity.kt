@@ -2,7 +2,6 @@ package com.qxtao.easydict.ui.activity.wordlist
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -21,7 +20,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.SnackbarContentLayout
@@ -35,8 +33,14 @@ import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.view.CustomPopWindow
 import com.qxtao.easydict.ui.view.LoadingView
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.common.SizeUtils
+import com.qxtao.easydict.utils.constant.ShareConstant.DEF_VOICE
+import com.qxtao.easydict.utils.constant.ShareConstant.MEI
 import com.qxtao.easydict.utils.factory.screenRotation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListBinding::inflate){
@@ -47,11 +51,11 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
     private lateinit var llListEmpty : LinearLayout
     private lateinit var vHolder: View
     private lateinit var snackBar: Snackbar
-    private lateinit var fabVoice: FloatingActionButton
     private lateinit var mtTitle: MaterialToolbar
     private lateinit var swList: View
 
     // define variable
+    private var isInitView = false
     private lateinit var wordListData: WordListData
     private lateinit var wordListViewModel: WordListViewModel
     private lateinit var adapter: WordListAdapter
@@ -91,17 +95,17 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                                 val layout = snackBar.view as Snackbar.SnackbarLayout
                                 if (layout.getChildAt(0) != null && layout.getChildAt(0) is SnackbarContentLayout) {
                                     val contentLayout = layout.getChildAt(0) as SnackbarContentLayout
-                                    layout.setPadding(SizeUtils.dp2px(12f), 0,
-                                        SizeUtils.dp2px(12f),
-                                        SizeUtils.dp2px(16f))
+                                    layout.setPadding(SizeUtils.dp2px(16f), 0,
+                                        SizeUtils.dp2px(16f),
+                                        SizeUtils.dp2px(24f))
                                     layout.setBackgroundColor(Color.TRANSPARENT)
-                                    contentLayout.setPadding(SizeUtils.dp2px(12f), 0, SizeUtils.dp2px(12f),0)
-                                    contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r15)
-                                    contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurface(mContext))
+                                    contentLayout.setPadding(SizeUtils.dp2px(12f), SizeUtils.dp2px(2f), SizeUtils.dp2px(12f),SizeUtils.dp2px(2f))
+                                    contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r16)
+                                    contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurfaceInverse(mContext))
                                 }
                                 snackBar.setAction(getString(R.string.undo_operate)) { wordListViewModel.undoDeleteWord() }
-                                    .setTextColor(ColorUtils.colorOnSurface(mContext))
-                                    .setActionTextColor(ColorUtils.colorPrimary(mContext))
+                                    .setTextColor(ColorUtils.colorOnSurfaceInverse(mContext))
+                                    .setActionTextColor(ColorUtils.colorPrimaryInverse(mContext))
                                     .show()
                                 snackBar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
                                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -123,16 +127,16 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                             val layout = snackBar.view as Snackbar.SnackbarLayout
                             if (layout.getChildAt(0) != null && layout.getChildAt(0) is SnackbarContentLayout) {
                                 val contentLayout = layout.getChildAt(0) as SnackbarContentLayout
-                                layout.setPadding(SizeUtils.dp2px(12f), 0,
-                                    SizeUtils.dp2px(12f),
-                                    SizeUtils.dp2px(16f))
+                                layout.setPadding(SizeUtils.dp2px(16f), 0,
+                                    SizeUtils.dp2px(16f),
+                                    SizeUtils.dp2px(24f))
                                 layout.setBackgroundColor(Color.TRANSPARENT)
-                                contentLayout.setPadding(SizeUtils.dp2px(12f), 0, SizeUtils.dp2px(12f),0)
-                                contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r15)
-                                contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurface(mContext))
+                                contentLayout.setPadding(SizeUtils.dp2px(12f), SizeUtils.dp2px(2f), SizeUtils.dp2px(12f),SizeUtils.dp2px(2f))
+                                contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r16)
+                                contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurfaceInverse(mContext))
                             }
-                            snackBar.setTextColor(ColorUtils.colorOnSurface(mContext))
-                                .setActionTextColor(ColorUtils.colorPrimary(mContext))
+                            snackBar.setTextColor(ColorUtils.colorOnSurfaceInverse(mContext))
+                                .setActionTextColor(ColorUtils.colorPrimaryInverse(mContext))
                                 .show()
                             wordListViewModel.collectWord(position)
                         }
@@ -183,11 +187,11 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                 // 绘制滑动图标说明
                 val textPaint1 = Paint().apply {
                     color = ColorUtils.colorOnPrimary(mContext)
-                    textSize = SizeUtils.sp2px(13f).toFloat()
+                    textSize = resources.getDimension(R.dimen.text_size_medium)
                 }
                 val textPaint2 = Paint().apply {
                     color = ColorUtils.colorOnError(mContext)
-                    textSize = SizeUtils.sp2px(13f).toFloat()
+                    textSize = resources.getDimension(R.dimen.text_size_medium)
                 }
                 val iconMargin = SizeUtils.dp2px(20f)
                 if (dX > 0 && wordListViewModel.getClasPopupMenuListSelectedPosition() != 3){
@@ -239,8 +243,10 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
     }
 
     override fun initViews() {
+        isInitView = true
         mtTitle.title = getString(R.string.word_list)
         wordListViewModel.initData()
+        wordListViewModel.playSound.value = if (ShareUtils.getString(mContext, DEF_VOICE, MEI) == MEI) 0 else 1
         rvListWord.layoutManager = LinearLayoutManager(this)
         adapter = WordListAdapter(ArrayList())
         rvListWord.adapter = adapter
@@ -253,11 +259,13 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
         }
         wordListViewModel.wordSelected.observe(this){
             mtTitle.title = it
+            rvListWord.scrollToPosition(0)
         }
         wordListViewModel.clasSelected.observe(this){
             mtTitle.subtitle = String.format(getString(R.string.word_clas_num_eee),
                 wordListViewModel.clasPopWindowList.find { it.isMenuItemSelected }?.menuItemText ?: getString(R.string.learning_words),
                 wordListViewModel.wordListItems.value?.size)
+            rvListWord.scrollToPosition(0)
         }
         wordListViewModel.dataLoadInfo.observe(this){
             when (it) {
@@ -281,20 +289,15 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                 }
             }
         }
-        wordListViewModel.isPlaying.observe(this){
-            fabVoice.visibility = if (it) View.VISIBLE else View.GONE
-        }
-        wordListViewModel.playSound.observe(this){
-            when (it) {
-                0 -> fabVoice.setImageResource(R.drawable.ic_mei)
-                1 -> fabVoice.setImageResource(R.drawable.ic_ying)
-            }
+        val lm = rvListWord.layoutManager as? LinearLayoutManager ?: return
+        CoroutineScope(Dispatchers.Main).launch {
+            lm.scrollToPositionWithOffset(wordListViewModel.firstVisibleItemPosition, wordListViewModel.topOffset)
+            isInitView = false
         }
     }
 
     override fun bindViews() {
         mtTitle = binding.mtTitle
-        fabVoice = binding.fabVoice
         rvListWord = binding.rvListWord
         lvLoading = binding.lvLoading
         llLoadingFail = binding.llLoadingFail
@@ -356,11 +359,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
             wordListViewModel.initData()
             llLoadingFail.visibility = View.GONE
         }
-        fabVoice.setOnClickListener {
-            val map = mapOf(0 to getString(R.string.ying), 1 to getString(R.string.mei))
-            showShortToast(String.format(getString(R.string.switch_to_eee_voice), map[wordListViewModel.playSound.value]))
-            wordListViewModel.switchVoice()
-        }
         adapter.setOnTextMeanClickListener(object : WordListAdapter.OnTextMeanClickListener{
             override fun onTextMeanClick(position: Int) {
                 wordListViewModel.setWordOnclick(position)
@@ -371,6 +369,19 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                 wordListViewModel.playWordVoice(position)
             }
         })
+        rvListWord.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val lm = recyclerView.layoutManager as? LinearLayoutManager ?: return
+                if (!isInitView) {
+                    wordListViewModel.firstVisibleItemPosition =
+                        lm.findFirstVisibleItemPosition()
+                    wordListViewModel.topOffset =
+                        lm.findViewByPosition(wordListViewModel.firstVisibleItemPosition)?.top
+                            ?: 0
+                }
+            }
+        })
 
     }
 
@@ -378,7 +389,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
         val contentView = LayoutInflater.from(this).inflate(R.layout.pop_menu_recycleview, null)
         val popWindow = CustomPopWindow.PopupWindowBuilder(this)
             .setView(contentView)
-            .enableBackgroundDark(true)
             .create()
             .showAsDropDown(view, view.right, view.top - view.bottom)
         val recycleView = contentView.findViewById<RecyclerView>(R.id.recyclerView)

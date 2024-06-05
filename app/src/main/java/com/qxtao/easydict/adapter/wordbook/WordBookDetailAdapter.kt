@@ -1,17 +1,12 @@
 package com.qxtao.easydict.adapter.wordbook
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.database.WordBookData
 import com.qxtao.easydict.ui.activity.dict.DictActivity

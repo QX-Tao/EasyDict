@@ -61,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/root_from_eee"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_normal"
                         android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold"/>
 
@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_normal"
                         android:textColor="?attr/colorPrimary"/>
 
                 </LinearLayout>
@@ -105,7 +105,7 @@
                 android:layout_height="48dp"/>
 
             <TextView
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_normal"
                 android:layout_marginTop="10dp"
                 android:text="@string/loading"
                 android:textColor="?attr/colorOnSurface"
@@ -133,7 +133,7 @@
                 android:src="@drawable/ic_loading_fail"/>
 
             <TextView
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_normal"
                 android:layout_marginTop="10dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="@string/failed_to_load_click_the_screen_to_try_again"

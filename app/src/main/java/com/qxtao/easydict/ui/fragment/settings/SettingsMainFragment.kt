@@ -1,11 +1,9 @@
 package com.qxtao.easydict.ui.fragment.settings
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -13,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
@@ -21,22 +20,27 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.popupmenu.PopupMenuAdapter
 import com.qxtao.easydict.adapter.popupmenu.PopupMenuItem
 import com.qxtao.easydict.databinding.FragmentSettingsMainBinding
-import com.qxtao.easydict.ui.activity.settings.SETTINGS_KEY_ABOUT
+import com.qxtao.easydict.ui.activity.settings.SETTINGS_ABOUT
+import com.qxtao.easydict.ui.activity.settings.SETTINGS_DICT_CARD
+import com.qxtao.easydict.ui.activity.settings.SETTINGS_WELCOME_SCREEN
 import com.qxtao.easydict.ui.activity.settings.SettingsActivity
 import com.qxtao.easydict.ui.activity.settings.SettingsViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.CustomPopWindow
 import com.qxtao.easydict.utils.common.ActivityUtils
+import com.qxtao.easydict.utils.common.FileUtils
 import com.qxtao.easydict.utils.common.ShareUtils
-import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.common.ThemeUtils
-import com.qxtao.easydict.utils.common.TimeUtils
-import com.qxtao.easydict.utils.constant.ShareConstant.DARK_MODE
+import com.qxtao.easydict.utils.constant.ShareConstant.DEF_VOICE
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_QUICK_SEARCH
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SYSTEM_THEME
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_VIEW
-import com.qxtao.easydict.utils.constant.ShareConstant.MODE_NIGHT_FOLLOW_SYSTEM
+import com.qxtao.easydict.utils.constant.ShareConstant.MEI
 import com.qxtao.easydict.utils.factory.screenRotation
-import org.w3c.dom.Text
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentSettingsMainBinding::inflate) {
     // define variable
@@ -49,6 +53,8 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
     private lateinit var clClearCache: ConstraintLayout
     private lateinit var clDarkMode: ConstraintLayout
     private lateinit var tvDarkModeDesc: TextView
+    private lateinit var tvClearCacheDesc: TextView
+    private lateinit var tvDefVoiceDesc: TextView
     private lateinit var tvThemeColorDesc: TextView
     private lateinit var clSystemThemeColor: ConstraintLayout
     private lateinit var clThemeColor: ConstraintLayout
@@ -58,6 +64,9 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
     private lateinit var clClearHistory: ConstraintLayout
     private lateinit var clClearWordBook: ConstraintLayout
     private lateinit var clClearWordList: ConstraintLayout
+    private lateinit var clDictCard: ConstraintLayout
+    private lateinit var clWelcomeScreen: ConstraintLayout
+    private lateinit var clDefVoice: ConstraintLayout
 
     override fun bindViews() {
         vHolder = binding.vHolder
@@ -67,15 +76,20 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
         swAppBrowser = binding.swAppBrowser
         clAppBrowser = binding.clAppBrowser
         clClearCache = binding.clClearCache
+        tvClearCacheDesc = binding.tvClearCacheDesc
         clDarkMode = binding.clDarkMode
         clSystemThemeColor = binding.clSystemThemeColor
         clThemeColor = binding.clThemeColor
         tvDarkModeDesc = binding.tvDarkModeDesc
         tvThemeColorDesc = binding.tvThemeColorDesc
+        tvDefVoiceDesc = binding.tvDefVoiceDesc
         mtTitle = binding.mtTitle
         clClearHistory = binding.clClearHistory
         clClearWordBook = binding.clClearWordBook
         clClearWordList = binding.clClearWordList
+        clDictCard = binding.clDictCard
+        clWelcomeScreen = binding.clWelcomeScreen
+        clDefVoice = binding.clDefVoice
     }
 
     override fun initViews() {
@@ -86,8 +100,13 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
         clThemeColor.visibility = if (!swSystemThemeColor.isChecked || !ThemeUtils.isDynamicColorAvailable()) View.VISIBLE else View.GONE
         tvDarkModeDesc.text = settingsViewModel.darkModeMap[ThemeUtils.getDarkTheme(mContext)]
         tvThemeColorDesc.text = settingsViewModel.themeColorMap[ThemeUtils.getThemeColor(mContext)]
+        tvDefVoiceDesc.text = settingsViewModel.defVoiceMap[ShareUtils.getString(mContext, DEF_VOICE, MEI)]
+
         settingsViewModel.selectPopupMenuList(settingsViewModel.darkModeList, settingsViewModel.darkModeMap[ThemeUtils.getDarkTheme(mContext)]!!)
         settingsViewModel.selectPopupMenuList(settingsViewModel.themeColorList, settingsViewModel.themeColorMap[ThemeUtils.getThemeColor(mContext)]!!)
+        settingsViewModel.selectPopupMenuList(settingsViewModel.defVoiceList, settingsViewModel.defVoiceMap[ShareUtils.getString(mContext, DEF_VOICE, MEI)]!!)
+
+        calculateClashSize()
     }
 
     override fun addListener() {
@@ -112,10 +131,16 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
             mListener.onFragmentInteraction("onBackPressed")
         }
         clAbout.setOnClickListener {
-            mListener.onFragmentInteraction("toDetailFragment", SETTINGS_KEY_ABOUT)
+            mListener.onFragmentInteraction("toDetailFragment", SETTINGS_ABOUT)
+        }
+        clDictCard.setOnClickListener {
+            mListener.onFragmentInteraction("toDetailFragment", SETTINGS_DICT_CARD)
+        }
+        clWelcomeScreen.setOnClickListener {
+            mListener.onFragmentInteraction("toDetailFragment", SETTINGS_WELCOME_SCREEN)
         }
         clClearCache.setOnClickListener {
-            mListener.onFragmentInteraction("clearCache")
+            clearCache()
         }
         clClearHistory.setOnClickListener {
             mListener.onFragmentInteraction("clearHistory")
@@ -125,6 +150,17 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
         }
         clClearWordList.setOnClickListener {
             mListener.onFragmentInteraction("clearWordList")
+        }
+        clDefVoice.setOnClickListener {
+            showPopupMenu(clDefVoice, settingsViewModel.defVoiceList).also {
+                it.second.setOnMenuItemClickListener(object : PopupMenuAdapter.OnMenuItemClickListener{
+                    override fun onMenuItemClick(position: Int) {
+                        ShareUtils.putString(mContext, DEF_VOICE, settingsViewModel.defVoiceMap.keys.toList()[position])
+                        tvDefVoiceDesc.text = settingsViewModel.defVoiceMap[ShareUtils.getString(mContext, DEF_VOICE, MEI)]
+                        it.first.dissmiss()
+                    }
+                })
+            }
         }
         clDarkMode.setOnClickListener {
             showPopupMenu(clDarkMode, settingsViewModel.darkModeList).also {
@@ -184,7 +220,6 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_menu_recycleview, null)
         val popWindow = CustomPopWindow.PopupWindowBuilder(mContext)
             .setView(contentView)
-            .enableBackgroundDark(true)
             .create()
             .showAsDropDown(view, view.right, view.top - view.bottom)
         val recycleView = contentView.findViewById<RecyclerView>(R.id.recyclerView)
@@ -199,6 +234,31 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
         })
         return Pair(popWindow, adapter)
     }
+
+    private fun calculateClashSize(){
+        lifecycleScope.launch {
+            val clashSize = withContext(Dispatchers.IO) {
+                async { FileUtils.getFileSizes(mContext.cacheDir) }.await()
+            }
+            withContext(Dispatchers.Main){
+                tvClearCacheDesc.text = FileUtils.formatFileSize(clashSize)
+            }
+        }
+    }
+    private fun clearCache() {
+        lifecycleScope.launch {
+            val clearCacheOk = withContext(Dispatchers.IO) {
+                async { FileUtils.clearFile(mContext.cacheDir) }.await()
+            }
+            if (clearCacheOk) {
+                calculateClashSize()
+                withContext(Dispatchers.Main) {
+                    showShortToast(mContext.getString(R.string.clear_cache_success))
+                }
+            }
+        }
+    }
+
 
 
 }

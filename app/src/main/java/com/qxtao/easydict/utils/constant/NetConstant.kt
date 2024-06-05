@@ -14,9 +14,7 @@ object NetConstant {
     // 在线词典
     const val dictBase = "https://inter.youdao.com/intersearch"
     const val dictMore = "https://dict.youdao.com/jsonapi"
-    const val dictVoice = "https://inter.youdao.com/dictvoice"
-
-    // 单词发音
+    const val dictVoice = "https://dict.youdao.com/dictvoice"
     const val voiceUk = "https://dict.youdao.com/dictvoice?type=1&audio="
     const val voiceUs = "https://dict.youdao.com/dictvoice?type=0&audio="
 }

@@ -28,7 +28,7 @@ class WordBookClassificationAdapter(private val bookNameList: ArrayList<String>)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = bookNameList[position]
         holder.textBookName.text = item
-        holder.cardBookList.setOnClickListener {
+        holder.textBookName.setOnClickListener {
             onItemClickListener?.onItemClick(position)
         }
     }
@@ -60,6 +60,5 @@ class WordBookClassificationAdapter(private val bookNameList: ArrayList<String>)
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textBookName: TextView = itemView.findViewById(R.id.tv_book_name)
-        val cardBookList: MaterialCardView = itemView.findViewById(R.id.mcv_word_book_list)
     }
 }

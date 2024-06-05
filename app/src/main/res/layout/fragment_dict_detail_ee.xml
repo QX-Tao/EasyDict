@@ -24,7 +24,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 android:text="@string/english_english_dictionary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

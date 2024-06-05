@@ -21,7 +21,7 @@
     <string name="undo_delete">撤销删除</string>
     <string name="undo_operate">撤销操作</string>
     <string name="easy_dict">易词典</string>
-    <string name="grammy_check">语法检查</string>
+    <string name="grammar_check">语法检查</string>
     <string name="check">检查</string>
     <string name="enter_text_to_check">输入要检查的英文文本</string>
     <string name="search_in_dict">在词典中查询</string>
@@ -101,6 +101,7 @@
     <string name="word_list_desc">单词列表 (背单词)</string>
     <string name="info">详情</string>
     <string name="no_words_in_this_category">此分类下暂时没有单词</string>
+    <string name="word_book_empty_in_this_category">此单词本为空</string>
     <string name="all_words">全部单词</string>
     <string name="word_clas_num_eee">%1$s: %2$d</string>
     <string name="mei">美</string>
@@ -174,8 +175,6 @@
     <string name="clear_history">清除搜索记录</string>
     <string name="other">其它</string>
     <string name="word_learn">单词学习</string>
-    <string name="quick_search">快速查词</string>
-    <string name="quick_search_desc">在通知栏展示查词框</string>
     <string name="def_voice">默认发音</string>
     <string name="def_voice_desc">适用于查词和单词本</string>
     <string name="clear_word_book">清空单词本</string>
@@ -185,7 +184,7 @@
     <string name="clear_word_book_desc">清空并删除所有单词本</string>
     <string name="app_browser">应用内浏览器</string>
     <string name="app_browser_desc">打开外部链接时，不使用外部浏览器，而是在应用内查看</string>
-    <string name="tv_clear_cache_desc">清除图片缓存和下载缓存</string>
+    <string name="tv_clear_cache_desc">清除应用程序在使用中产生的缓存文件</string>
     <string name="app_icon_source_link">https://www.iconfont.cn</string>
     <string name="app_version">v%1$s</string>
     <string name="clear_cache_success">清除缓存成功</string>
@@ -205,4 +204,22 @@
     <string name="refresh">刷新</string>
     <string name="copy_url">复制链接</string>
     <string name="exit">退出</string>
+    <string name="voice_input">语音输入</string>
+    <string name="grammar_check_desc">检查语法错误，让你的表达更加准确</string>
+    <string name="word_book_desc">将查询的单词或句子添加进单词本，方便复习和记忆</string>
+    <string name="have_learned">已学</string>
+    <string name="ci">词</string>
+    <string name="progress">进度</string>
+    <string name="percent">%</string>
+    <string name="no_book_select_desc">当前尚未选择单词书</string>
+    <string name="warning">警告</string>
+    <string name="web_request_download_file_desc">网页请求下载文件，是否前往下载？</string>
+    <string name="jump_date">日期跳转</string>
+    <string name="back_to_today">回到今天</string>
+    <string name="count_down">倒计时</string>
+    <string name="function_setting">功能管理</string>
+    <string name="add_count_down">添加倒计时</string>
+    <string name="please_input_count_down_name">请输入倒计时名称</string>
+    <string name="mt_title_count_down">%1$s: %2$d天</string>
+    <string name="dict_trans">词典/翻译</string>
 </resources>

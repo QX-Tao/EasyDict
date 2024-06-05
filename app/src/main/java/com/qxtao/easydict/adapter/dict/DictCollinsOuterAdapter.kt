@@ -1,8 +1,6 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
@@ -26,8 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.CollinsEntry
-import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Entry
+import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import kotlinx.coroutines.CoroutineScope
@@ -38,13 +36,8 @@ import per.wsj.library.AndRatingBar
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictCollinsOuterAdapter(mItemList: ArrayList<CollinsEntry>) :
+class DictCollinsOuterAdapter(private val mItemList: ArrayList<CollinsEntry>) :
     RecyclerView.Adapter<DictCollinsOuterAdapter.ViewHolder>() {
-    private val mItemList: ArrayList<CollinsEntry>
-
-    init {
-        this.mItemList = mItemList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

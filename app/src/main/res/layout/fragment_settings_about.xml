@@ -75,13 +75,13 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/tv_app_package_name"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="@dimen/card_view_radius_medium"
                         app:cardElevation="0dp">
 
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:padding="6dp"
+                            android:padding="4dp"
                             android:layout_gravity="center"
                             android:scaleType="centerCrop"
                             android:src="@drawable/ic_app_icon" />
@@ -100,7 +100,7 @@
                         android:text="@string/app_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         app:layout_constraintBottom_toBottomOf="@id/tv_app_package_name"
@@ -112,7 +112,7 @@
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"/>
+                        android:textSize="@dimen/text_size_medium"/>
 
                     <TextView
                         android:id="@+id/tv_app_package_info"
@@ -121,7 +121,7 @@
                         app:layout_constraintStart_toStartOf="@id/tv_app_package_name"
                         app:layout_constraintEnd_toEndOf="@id/tv_app_package_version"
                         android:text="@string/def_str"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -157,7 +157,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/tv_app_open_source"
                         app:cardBackgroundColor="?attr/colorSurfaceContainer"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="@dimen/card_view_radius_medium"
                         app:cardElevation="0dp">
 
                         <ImageView
@@ -181,7 +181,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_app_open_source_desc1"
@@ -190,7 +190,7 @@
                         app:layout_constraintStart_toStartOf="@id/tv_app_open_source"
                         app:layout_constraintEnd_toEndOf="@id/tv_app_open_source"
                         android:text="@string/app_open_source_link"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -226,7 +226,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/tv_app_icon_source"
                         app:cardBackgroundColor="?attr/colorSurfaceContainer"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="@dimen/card_view_radius_medium"
                         app:cardElevation="0dp">
 
                         <ImageView
@@ -250,7 +250,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_app_icon_source_desc1"
@@ -259,7 +259,7 @@
                         app:layout_constraintStart_toStartOf="@id/tv_app_icon_source"
                         app:layout_constraintEnd_toEndOf="@id/tv_app_icon_source"
                         android:text="@string/app_icon_source_link"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>

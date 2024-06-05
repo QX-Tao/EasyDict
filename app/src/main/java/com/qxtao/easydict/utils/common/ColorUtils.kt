@@ -5,8 +5,8 @@ import android.content.res.TypedArray
 import android.graphics.Color
 
 object ColorUtils {
-    fun paletteNeutral20(context: Context): Int {
-        val attribute1 = intArrayOf(rikka.material.R.attr.paletteNeutral20)
+    fun colorOnSecondaryFixedVariant(context: Context): Int {
+        val attribute1 = intArrayOf(com.google.android.material.R.attr.colorOnSecondaryFixed)
         val array1: TypedArray = context.theme.obtainStyledAttributes(attribute1)
         val color1 = array1.getColor(0, Color.TRANSPARENT)
         array1.recycle()
@@ -75,8 +75,36 @@ object ColorUtils {
         array1.recycle()
         return color1
     }
+    fun colorSecondaryContainer(context: Context): Int {
+        val attribute1 = intArrayOf(com.google.android.material.R.attr.colorSecondaryContainer)
+        val array1: TypedArray = context.theme.obtainStyledAttributes(attribute1)
+        val color1 = array1.getColor(0, Color.TRANSPARENT)
+        array1.recycle()
+        return color1
+    }
     fun colorOnError(context: Context): Int {
         val attribute1 = intArrayOf(com.google.android.material.R.attr.colorOnError)
+        val array1: TypedArray = context.theme.obtainStyledAttributes(attribute1)
+        val color1 = array1.getColor(0, Color.TRANSPARENT)
+        array1.recycle()
+        return color1
+    }
+    fun colorSurfaceInverse(context: Context): Int {
+        val attribute1 = intArrayOf(com.google.android.material.R.attr.colorSurfaceInverse)
+        val array1: TypedArray = context.theme.obtainStyledAttributes(attribute1)
+        val color1 = array1.getColor(0, Color.TRANSPARENT)
+        array1.recycle()
+        return color1
+    }
+    fun colorOnSurfaceInverse(context: Context): Int {
+        val attribute1 = intArrayOf(com.google.android.material.R.attr.colorOnSurfaceInverse)
+        val array1: TypedArray = context.theme.obtainStyledAttributes(attribute1)
+        val color1 = array1.getColor(0, Color.TRANSPARENT)
+        array1.recycle()
+        return color1
+    }
+    fun colorPrimaryInverse(context: Context): Int {
+        val attribute1 = intArrayOf(com.google.android.material.R.attr.colorPrimaryInverse)
         val array1: TypedArray = context.theme.obtainStyledAttributes(attribute1)
         val color1 = array1.getColor(0, Color.TRANSPARENT)
         array1.recycle()

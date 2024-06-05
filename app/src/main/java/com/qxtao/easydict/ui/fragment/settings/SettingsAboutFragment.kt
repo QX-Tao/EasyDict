@@ -32,9 +32,6 @@ class SettingsAboutFragment : BaseFragment<FragmentSettingsAboutBinding>(Fragmen
     private lateinit var settingsViewModel: SettingsViewModel
     // define widget
     private lateinit var vHolder: View
-    private lateinit var ivMoreButton : ImageView
-    private lateinit var ivBackButton : ImageView
-    private lateinit var tvTitle : TextView
     private lateinit var nsvContent: NestedScrollView
     private lateinit var clAppPackageInfo : ConstraintLayout
     private lateinit var clAppIconSource : ConstraintLayout

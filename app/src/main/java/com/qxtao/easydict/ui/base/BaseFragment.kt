@@ -60,13 +60,6 @@ abstract class BaseFragment<VB : ViewBinding>(val bindingBlock:(LayoutInflater, 
     protected open fun onViewCreated1(view: View, savedInstanceState: Bundle?) {}
 
     /**
-     * is bind eventbus
-     *
-     * 是否绑定eventbus事件
-     */
-    protected open fun isBindEventBusHere(): Boolean { return false }
-
-    /**
      * Callback [bindViews] method
      *
      * 回调 [bindViews] 方法

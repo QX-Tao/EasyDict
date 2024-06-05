@@ -3,7 +3,9 @@ package com.qxtao.easydict.utils.common
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 object TimeUtils {
     fun getDayOfMonth(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
@@ -21,11 +23,26 @@ object TimeUtils {
         return dateFormat.format(calendar.time)
     }
 
-    fun getSecondTimestampByYMD(year: Int, month: Int, day: Int): Long {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month - 1, day, 0, 0, 0)
-        return calendar.timeInMillis / 1000 // 将毫秒级时间戳转换为秒级时间戳
+    fun getFormatDateByTimeStamp(timeStamp: Long, pattern: String): String {
+        val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
+        return dateFormat.format(timeStamp)
     }
+
+    fun getTimestampByFormatDate(date: String, pattern: String, timeZone: String = "UTC"): Long {
+        val inputFormat = SimpleDateFormat(pattern, Locale.getDefault(Locale.Category.FORMAT))
+        inputFormat.timeZone = TimeZone.getTimeZone(timeZone)
+        val calendar = Calendar.getInstance()
+        calendar.time = inputFormat.parse(date)!!
+        return calendar.timeInMillis
+    }
+
+    fun getTimestampByYMD(year: Int, month: Int, day: Int, timeZone: String = "UTC"): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month - 1, day)
+        calendar.timeZone = TimeZone.getTimeZone(timeZone)
+        return calendar.timeInMillis
+    }
+
 
     fun getFormatDateByPattern(givenDate: String, pattern: String, format: String): String {
         val inputFormat =SimpleDateFormat(pattern, Locale.getDefault(Locale.Category.FORMAT))
@@ -118,7 +135,13 @@ object TimeUtils {
         val currentDate = getCurrentDateByPattern(pattern)
         val currentDateTime = dateFormat.parse(currentDate)!!
         val givenDateTime = dateFormat.parse(givenDate)!!
-        val differenceInMillis = currentDateTime.time - givenDateTime.time
+        val differenceInMillis = abs(currentDateTime.time - givenDateTime.time)
+        return TimeUnit.MILLISECONDS.toDays(differenceInMillis)
+    }
+
+    fun calculateDateDifference(timeStamp: Long):Long {
+        val currentTime = System.currentTimeMillis()
+        val differenceInMillis = abs(currentTime - timeStamp)
         return TimeUnit.MILLISECONDS.toDays(differenceInMillis)
     }
 

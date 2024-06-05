@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="card_view_radius_large">24dp</dimen>
+    <dimen name="card_view_radius_medium">16dp</dimen>
+    <dimen name="card_view_radius_small">8dp</dimen>
+    <dimen name="dialog_radius">24dp</dimen>
+
+    <!-- 字体大小 -->
+    <dimen name="text_size_extra_huge">68sp</dimen>
+    <dimen name="text_size_extra_large">34sp</dimen>
+    <dimen name="text_size_huge">20sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_normal">16sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+
+
+</resources>

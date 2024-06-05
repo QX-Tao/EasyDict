@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.utils.common.ColorUtils
@@ -32,13 +33,9 @@ class PopupMenuAdapter(private val popupMenuItems: List<PopupMenuItem>) : Recycl
             holder.textMenuContent.setTextColor(ColorUtils.colorPrimary(holder.itemView.context))
             holder.imageMenuSelect.setColorFilter(ColorUtils.colorPrimary(holder.itemView.context))
             holder.imageMenuSelect.visibility = View.VISIBLE
-            holder.layoutMenuItem.setBackgroundColor(ColorUtils.colorSurfaceContainer(holder.itemView.context))
+            holder.layoutHolder.visibility = View.VISIBLE
         } else {
-            val typedValue = TypedValue()
-            holder.layoutMenuItem.context.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
-            val attribute = intArrayOf(android.R.attr.selectableItemBackground)
-            val typedArray: TypedArray = holder.layoutMenuItem.context.theme.obtainStyledAttributes(typedValue.resourceId, attribute)
-            holder.layoutMenuItem.background = typedArray.getDrawable(0)
+            holder.layoutHolder.visibility = View.GONE
             holder.imageMenuSelect.visibility = View.INVISIBLE
             holder.textMenuContent.setTextColor(ColorUtils.colorOnSurface(holder.itemView.context))
         }
@@ -73,6 +70,6 @@ class PopupMenuAdapter(private val popupMenuItems: List<PopupMenuItem>) : Recycl
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textMenuContent: TextView = itemView.findViewById(R.id.tv_text)
         val imageMenuSelect: ImageView = itemView.findViewById(R.id.iv_image)
-        val layoutMenuItem: LinearLayout = itemView.findViewById(R.id.ll_linearlayout)
+        val layoutHolder: View = itemView.findViewById(R.id.v_holder)
     }
 }

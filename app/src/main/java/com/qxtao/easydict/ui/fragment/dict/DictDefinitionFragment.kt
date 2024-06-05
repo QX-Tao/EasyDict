@@ -1,25 +1,19 @@
 package com.qxtao.easydict.ui.fragment.dict
 
-import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentDictDefinitionBinding
-import com.qxtao.easydict.ui.activity.dict.APPBAR_LAYOUT_COLLAPSED
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
-import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.isLandscape
 import com.qxtao.easydict.utils.factory.screenRotation
 
 
@@ -30,15 +24,6 @@ class DictDefinitionFragment : BaseFragment<FragmentDictDefinitionBinding>(Fragm
     // define widget
     private lateinit var vHolder: View
     private lateinit var mtTitle : MaterialToolbar
-
-    fun newInstance(searchStr: String): DictDefinitionFragment {
-        val args = Bundle()
-        args.putString("searchStr", searchStr)
-        val fragment = DictDefinitionFragment()
-        fragment.arguments = args
-        return fragment
-    }
-
     override fun bindViews() {
         vHolder = binding.vHolder
         mtTitle = binding.mtTitle
@@ -46,6 +31,11 @@ class DictDefinitionFragment : BaseFragment<FragmentDictDefinitionBinding>(Fragm
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
+        childFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(R.id.dict_definition_fragment, DictDetailFragment::class.java, null)
+            addToBackStack(null)
+        }
     }
 
     override fun addListener() {

@@ -4,16 +4,13 @@ package com.qxtao.easydict.ui.base
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
-import com.google.android.material.color.DynamicColors
-import com.qxtao.easydict.R
 import com.qxtao.easydict.application.EasyDictApplication
 import com.qxtao.easydict.utils.common.ThemeUtils
 import com.qxtao.easydict.utils.factory.isNotSystemInDarkMode
@@ -29,15 +26,10 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _context = this
+        setContentView(binding.root)
+        bindViews()
         onCreate1(savedInstanceState)
         EasyDictApplication.instance.addActivity(this)
-
-        /**
-         * Display SplashScreen
-         * 展示开屏动画
-         */
-        if (isDisplaySplashScreen()) { installSplashScreen() }
-        setContentView(binding.root)
         /**
          * Hide Activity title bar
          * 隐藏系统的标题栏
@@ -55,19 +47,16 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
          * set Status color
          * 设置状态颜色
          */
-        window.setDecorFitsSystemWindows(false)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        setStatusColor(
-            ResourcesCompat.getColor(resources, R.color.trans, null),
-            ResourcesCompat.getColor(resources, R.color.trans, null),
-            ResourcesCompat.getColor(resources, R.color.trans, null)
-        )
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
+        window.navigationBarDividerColor = Color.TRANSPARENT
         /**
          * Init children
          * 装载子类
          */
         onCreate()
-        bindViews()
         initViews()
         addListener()
     }
@@ -77,8 +66,8 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
         if (!ThemeUtils.isSystemAccent(this)) {
             theme.applyStyle(ThemeUtils.getColorThemeStyleRes(this), true)
         }
-        theme.applyStyle(rikka.material.preference.R.style.ThemeOverlay_Rikka_Material3_Preference, true)
     }
+    override fun computeUserThemeKey(): String = ThemeUtils.getColorTheme(this)
 
 
     /**
@@ -86,25 +75,6 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
      * 回调 [onCreate] 方法
      */
     abstract fun onCreate()
-
-    /**
-     * isDisplaySplashScreen
-     * SplashScreen 开屏动画
-     */
-    protected open fun isDisplaySplashScreen(): Boolean { return false }
-
-    /**
-     * setStatusColor
-     * 设置状态颜色
-     */
-    protected open fun setStatusColor(statusBarColor: Int, navigationBarColor: Int, navigationBarDividerColor: Int) {
-        setStatusBarColor(statusBarColor)
-        setNavigationBarColor(navigationBarColor)
-        setNavigationBarDividerColor(navigationBarDividerColor)
-    }
-    protected open fun setStatusBarColor(statusBarColor: Int) { window?.statusBarColor = statusBarColor }
-    protected open fun setNavigationBarColor(navigationBarColor: Int) { window?.navigationBarColor = navigationBarColor }
-    protected open fun setNavigationBarDividerColor(navigationBarDividerColor: Int) { window?.navigationBarDividerColor = navigationBarDividerColor }
 
     /**
      * Callback [bindViews] method

@@ -1,11 +1,5 @@
 package com.qxtao.easydict.ui.activity.daysentence
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
-import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.Fragment
@@ -14,50 +8,35 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CompositeDateValidator
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.qxtao.easydict.R
 import com.qxtao.easydict.database.DailySentenceData
 import com.qxtao.easydict.databinding.ActivityDaySentenceBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.base.BaseFragment
-import com.qxtao.easydict.ui.fragment.daysentence.DaySentenceMoreFragment
-import com.qxtao.easydict.ui.fragment.daysentence.DaySentenceDetailFragment
-import com.qxtao.easydict.ui.fragment.daysentence.DaySentenceOneFragment
-import com.qxtao.easydict.ui.view.OnDoubleClickListener
-import com.qxtao.easydict.ui.view.OnDoubleClickListener.DoubleClickCallback
+import com.qxtao.easydict.ui.fragment.daysentence.DaySentenceFragment
 import com.qxtao.easydict.utils.common.TimeUtils
-import com.qxtao.easydict.utils.factory.isAppearanceLight
 
 
 class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDaySentenceBinding::inflate),
     BaseFragment.OnFragmentInteractionListener  {
     // define variable
     private val daySentencePagerAdapter by lazy { DaySentencePagerAdapter(this) }
-    val daySentenceOnePagerAdapter by lazy { DaySentenceOnePagerAdapter(this) }
     private lateinit var daySentenceViewModel: DaySentenceViewModel
     private lateinit var dailySentenceData: DailySentenceData
-    private val d by lazy {
-        intent?.getIntExtra("fragmentPosition",0)
-    }
     private val dispatcher: OnBackPressedDispatcher = onBackPressedDispatcher
     private val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            finish()
-        }
+        override fun handleOnBackPressed() { finish() }
     }
     // define widget
     private lateinit var mtTitle : MaterialToolbar
     private lateinit var daySentenceViewPager : ViewPager2
 
-    companion object{
-        fun start(activity: Activity, d: Int){
-            val intent = Intent(activity, DaySentenceActivity::class.java)
-            intent.putExtra("fragmentPosition", d)
-            activity.startActivity(intent)
-        }
-    }
-
     override fun onCreate() {
-        isAppearanceLight = false
         dailySentenceData = DailySentenceData(mContext)
         daySentenceViewModel = ViewModelProvider(this, DaySentenceViewModel.Factory(dailySentenceData))[DaySentenceViewModel::class.java]
         dispatcher.addCallback(callback)
@@ -72,48 +51,31 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
         daySentenceViewPager.adapter = daySentencePagerAdapter
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun addListener() {
         mtTitle.setNavigationOnClickListener { finish() }
         mtTitle.setOnMenuItemClickListener {
-            daySentenceViewPager.currentItem = if (daySentenceViewPager.currentItem == 0) 1 else 0
-            true
-        }
-        mtTitle.setOnTouchListener(OnDoubleClickListener(object : DoubleClickCallback {
-            override fun onDoubleClick() {
-                if (daySentenceViewPager.currentItem == 1) {
-                    daySentenceViewModel.isDoubleClickHeader.value = true
+            when (it.itemId) {
+                R.id.back_to_today -> daySentenceViewPager.setCurrentItem(0, false)
+                R.id.jump_date -> showDatePicker()
+                R.id.reload -> {
+                    val currentItem = daySentenceViewPager.currentItem
+                    val cFragment = supportFragmentManager.findFragmentByTag("f$currentItem") as? DaySentenceFragment
+                    cFragment?.reloadData()
                 }
             }
-        }))
-
+            true
+        }
     }
 
-    override fun onFragmentInteraction(vararg data: Any?) {
-
-    }
+    override fun onFragmentInteraction(vararg data: Any?) {}
 
     fun getDaySentenceViewModel(): DaySentenceViewModel = daySentenceViewModel
 
-    /**
-     * PagerAdapter Class
-     * @constructor
-     */
     private inner class DaySentencePagerAdapter(fActivity: FragmentActivity) :
-        FragmentStateAdapter(fActivity) {
-        override fun getItemCount() = 2
-        override fun createFragment(position: Int) = when(position){
-            0 -> DaySentenceOneFragment().newInstance(d!!)
-            1 -> DaySentenceMoreFragment()
-            else -> DaySentenceOneFragment()
-        }
-    }
-
-    inner class DaySentenceOnePagerAdapter(fActivity: FragmentActivity) :
         FragmentStateAdapter(fActivity) {
         override fun getItemCount() = TimeUtils.calculateDateDifference(ORIGIN_DATE, "yyyy-MM-dd").toInt() + 1
         override fun createFragment(position: Int) : Fragment {
-            return DaySentenceDetailFragment().newInstance(TimeUtils.getDateByPatternAndD(position,"yyyy-MM-dd"))
+            return DaySentenceFragment().newInstance(TimeUtils.getDateByPatternAndD(position,"yyyy-MM-dd"))
         }
     }
 
@@ -121,6 +83,24 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
         super.onDestroy1()
         if (this::dailySentenceData.isInitialized) dailySentenceData.close()
         if (this::daySentenceViewModel.isInitialized) daySentenceViewModel.stopPlaySound()
+    }
+
+    private fun showDatePicker() {
+        val builder = MaterialDatePicker.Builder.datePicker()
+        val date = TimeUtils.getDateByPatternAndD(daySentenceViewPager.currentItem,"yyyy-MM-dd")
+        builder.setSelection(TimeUtils.getTimestampByFormatDate(date, "yyyy-MM-dd"))
+        builder.setCalendarConstraints(CalendarConstraints.Builder()
+            .setValidator(CompositeDateValidator.allOf(listOf(
+                DateValidatorPointForward.from(TimeUtils.getTimestampByFormatDate(ORIGIN_DATE, "yyyy-MM-dd")),
+                DateValidatorPointBackward.now())))
+            .build()
+        )
+        val picker = builder.build()
+        picker.addOnPositiveButtonClickListener {
+            val datee = TimeUtils.getFormatDateByTimeStamp(it,"yyyy-MM-dd")
+            daySentenceViewPager.setCurrentItem(TimeUtils.calculateDateDifference(datee, "yyyy-MM-dd").toInt(), false)
+        }
+        picker.show(supportFragmentManager, picker.toString())
     }
 
 }

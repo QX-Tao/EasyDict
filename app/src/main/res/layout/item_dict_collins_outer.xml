@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/tv_super_header_word"
         android:layout_marginBottom="7dp"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_size_normal"
         android:textColor="?attr/colorOnSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/tv_head_word"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_normal"
             android:textStyle="bold"
             android:gravity="center"
             android:textColor="?attr/colorPrimary"
@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/tv_phonetic"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_size_normal"
             android:gravity="center"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_marginEnd="10dp"
@@ -56,7 +56,7 @@
 
         <TextView
             android:id="@+id/tv_word_form"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_size_normal"
             android:gravity="center"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?attr/colorOnSurface"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_size_normal" />
 
     <TextView
         android:textColorHighlight="?attr/colorSecondaryContainer"
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?attr/colorSurfaceVariant"
-        android:textSize="14sp" />
+        android:textSize="@dimen/text_size_medium" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_item_collins"

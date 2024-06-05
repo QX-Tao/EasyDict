@@ -62,7 +62,6 @@ import com.qxtao.easydict.utils.factory.screenRotation
 class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExtraBinding::inflate) {
     // define variable
     private lateinit var dictViewModel: DictViewModel
-    private val extraStyle by lazy { arguments?.getString("extraStyle") }
     private lateinit var rvBlngSentsPartClassificationAdapter: DictBlngClassificationAdapter
     private lateinit var rvDictBlngSentsAdapter: DictBlngSentsAdapter
     private lateinit var rvDictAuthSentsAdapter: DictAuthSentsAdapter
@@ -87,14 +86,6 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     private lateinit var llLoadingFail: LinearLayout
     private lateinit var nsvContent: NestedScrollView
 
-    fun newInstance(extraStyle: String): DictExtraFragment {
-        val args = Bundle()
-        args.putString("extraStyle", extraStyle)
-        val fragment = DictExtraFragment()
-        fragment.arguments = args
-        return fragment
-    }
-
     override fun bindViews() {
         vHolder = binding.vHolder
         mtTitle = binding.mtTitle
@@ -109,7 +100,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
-        initData()
+        dictViewModel.extraFragmentStyle.observe(this){ initData(it) }
     }
 
     override fun addListener() {
@@ -131,14 +122,16 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
             insets
         }
         llLoadingFail.setOnClickListener {
-            initData()
+            initData(dictViewModel.extraFragmentStyle.value!!)
         }
         mtTitle.setNavigationOnClickListener{
             mListener.onFragmentInteraction("onBackPressed")
         }
     }
 
-    private fun initData() {
+    private fun initData(extraStyle: String) {
+        rvBlngSentsPartClassification.visibility = View.GONE
+        llRelWordPartWord.visibility = View.GONE
         when (extraStyle) {
             AUTH_SENTS_PART_MORE -> {
                 mtTitle.title = getString(R.string.authoritative_example)

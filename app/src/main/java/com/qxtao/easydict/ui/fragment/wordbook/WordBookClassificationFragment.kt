@@ -109,11 +109,11 @@ class WordBookClassificationFragment : BaseFragment<FragmentWordBookClassificati
                 // 绘制滑动图标说明
                 val textPaint1 = Paint().apply {
                     color = ColorUtils.colorOnPrimary(mContext)
-                    textSize = SizeUtils.sp2px(13f).toFloat()
+                    textSize = resources.getDimension(R.dimen.text_size_medium)
                 }
                 val textPaint2 = Paint().apply {
                     color = ColorUtils.colorOnError(mContext)
-                    textSize = SizeUtils.sp2px(13f).toFloat()
+                    textSize = resources.getDimension(R.dimen.text_size_medium)
                 }
                 val iconMargin = SizeUtils.dp2px(20f)
                 if (dX > 0 ){
@@ -188,7 +188,7 @@ class WordBookClassificationFragment : BaseFragment<FragmentWordBookClassificati
 
     override fun addListener() {
         ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            rvWordBook.setPadding(SizeUtils.dp2px(16f), SizeUtils.dp2px(16f), SizeUtils.dp2px(16f),
+            rvWordBook.setPadding(SizeUtils.dp2px(16f), SizeUtils.dp2px(16f),  SizeUtils.dp2px(16f),
                 SizeUtils.dp2px(16f) + insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
             val displayCutout = insets.displayCutout
             val params = view.layoutParams as ConstraintLayout.LayoutParams

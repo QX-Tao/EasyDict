@@ -55,65 +55,6 @@
                     android:paddingBottom="6dp"
                     android:textColor="?attr/colorPrimary"
                     android:text="@string/word_learn"/>
-                <!-- 状态栏快速查词 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_quick_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:padding="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/iv_quick_search"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_quick_search"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_quick_search"
-                        android:scaleType="centerCrop" />
-
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/tv_quick_search_desc1"
-                        app:layout_constraintStart_toEndOf="@id/iv_quick_search"
-                        app:layout_constraintEnd_toStartOf="@id/sw_quick_search"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="2dp"
-                        android:id="@+id/tv_quick_search"
-                        android:text="@string/quick_search"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_quick_search_desc1"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_quick_search"
-                        app:layout_constraintStart_toStartOf="@id/tv_quick_search"
-                        app:layout_constraintEnd_toEndOf="@id/tv_quick_search"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:text="@string/quick_search_desc"
-                        android:textSize="14sp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_quick_search"
-                        android:background="@null"
-                        android:id="@+id/sw_quick_search"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
                 <!-- 默认发音设置 -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_def_voice"
@@ -148,7 +89,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_def_voice_desc1"
@@ -157,7 +98,7 @@
                         app:layout_constraintStart_toStartOf="@id/tv_def_voice"
                         app:layout_constraintEnd_toEndOf="@id/tv_def_voice"
                         android:text="@string/def_voice_desc"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -170,7 +111,7 @@
                         app:layout_constraintEnd_toStartOf="@id/iv_def_voice_arrow"
                         android:layout_marginEnd="10dp"
                         android:text="@string/def_str"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -219,7 +160,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_clear_history_desc1"
@@ -228,7 +169,7 @@
                         app:layout_constraintStart_toStartOf="@id/tv_clear_history"
                         app:layout_constraintEnd_toEndOf="@id/tv_clear_history"
                         android:text="@string/clear_history_desc"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -267,7 +208,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_clear_word_book_desc1"
@@ -276,7 +217,7 @@
                         app:layout_constraintStart_toStartOf="@id/tv_clear_word_book"
                         app:layout_constraintEnd_toEndOf="@id/tv_clear_word_book"
                         android:text="@string/clear_word_book_desc"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -315,7 +256,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_clear_word_list_desc1"
@@ -324,7 +265,7 @@
                         app:layout_constraintStart_toStartOf="@id/tv_clear_word_list"
                         app:layout_constraintEnd_toEndOf="@id/tv_clear_word_list"
                         android:text="@string/clear_word_list_desc"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -376,7 +317,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <ImageView
                         android:src="@drawable/ic_right"
@@ -391,7 +332,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <!-- 词典卡片 -->
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_ic_dict_card"
+                    android:id="@+id/cl_dict_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -422,7 +363,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <ImageView
                         android:src="@drawable/ic_right"
@@ -482,7 +423,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_system_theme_color_desc1"
@@ -492,7 +433,7 @@
                         app:layout_constraintEnd_toEndOf="@id/tv_system_theme_color"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:text="@string/system_theme_color_desc"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
@@ -540,7 +481,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_theme_color_desc"
@@ -550,7 +491,7 @@
                         app:layout_constraintEnd_toStartOf="@id/iv_theme_color_arrow"
                         android:layout_marginEnd="10dp"
                         android:text="@string/def_str"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -599,7 +540,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_dark_mode_desc"
@@ -609,7 +550,7 @@
                         app:layout_constraintEnd_toStartOf="@id/iv_dark_mode_arrow"
                         android:layout_marginEnd="10dp"
                         android:text="@string/def_str"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -672,7 +613,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_app_browser_desc1"
@@ -681,7 +622,7 @@
                         app:layout_constraintStart_toStartOf="@id/tv_app_browser"
                         app:layout_constraintEnd_toEndOf="@id/tv_app_browser"
                         android:text="@string/app_browser_desc"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
@@ -723,14 +664,15 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/tv_clear_cache_desc1"
                         app:layout_constraintStart_toEndOf="@id/iv_clear_cache"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tv_clear_cache_desc"
                         android:layout_marginBottom="2dp"
+                        android:layout_marginEnd="10dp"
                         android:id="@+id/tv_clear_cache"
                         android:text="@string/clear_cache"
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <TextView
                         android:id="@+id/tv_clear_cache_desc1"
@@ -739,9 +681,21 @@
                         app:layout_constraintStart_toStartOf="@id/tv_clear_cache"
                         app:layout_constraintEnd_toEndOf="@id/tv_clear_cache"
                         android:text="@string/tv_clear_cache_desc"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tv_clear_cache_desc"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_clear_cache"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:text="@string/def_str"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -778,7 +732,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/text_size_normal"/>
 
                     <ImageView
                         android:src="@drawable/ic_right"

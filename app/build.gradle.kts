@@ -8,25 +8,15 @@ plugins {
 materialThemeBuilder {
     themes {
         for ((name, color) in listOf(
-            "Amber" to "FFC107",
-            "Blue" to "2196F3",
-            "BlueGrey" to "607D8F",
-            "Brown" to "795548",
-            "Cyan" to "00BCD4",
-            "DeepOrange" to "FF5722",
-            "DeepPurple" to "673AB7",
-            "Green" to "4FAF50",
-            "Indigo" to "3F51B5",
-            "LightBlue" to "03A9F4",
-            "LightGreen" to "8BC3A4",
-            "Lime" to "CDDC39",
-            "Orange" to "FF9800",
-            "Pink" to "E91E63",
-            "Purple" to "9C27B0",
-            "Red" to "F44336",
-            "Sakura" to "FF9CA8",
-            "Teal" to "009688",
-            "Yellow" to "FFEB3B"
+            "DodgerBlue" to "1E90FF",
+            "SakuraPink" to "FF9CA8",
+            "AmberGold" to "DD9C00",
+            "PeruBrown" to "795548",
+            "VioletPurple" to "673AB7",
+            "TealGreen" to "009688",
+            "HawthornRed" to "F44336",
+            "LimeGreen" to "CDDC39",
+            "SkyBlue" to "87CEEB"
         )) {
             create("Material$name") {
                 lightThemeFormat = "ThemeOverlay.Light.%s"
@@ -54,8 +44,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -87,7 +76,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.webkit)
     implementation(libs.androidx.sqlite.ktx)
@@ -110,9 +98,8 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.permissionsdispatcher)
     implementation(libs.roundview)
-    implementation(libs.rikkax.core)
     implementation(libs.rikkax.material)
-    implementation(libs.rikkax.material.preference)
+    implementation ("com.github.giangpham96.expandable-text:expandable_textview:2.0.1")
     kapt(libs.permissionsdispatcher.processor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

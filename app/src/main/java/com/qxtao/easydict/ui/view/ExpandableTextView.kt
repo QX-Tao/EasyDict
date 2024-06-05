@@ -1,269 +1,256 @@
 package com.qxtao.easydict.ui.view
 
 import android.animation.Animator
-import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Color
-import android.text.Layout
+import android.os.Build
+import android.text.DynamicLayout
+import android.text.Layout.Alignment.ALIGN_NORMAL
+import android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.text.StaticLayout
-import android.text.TextPaint
 import android.text.TextUtils
-import android.text.style.ClickableSpan
+import android.text.TextUtils.TruncateAt.END
+import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
-import android.view.MotionEvent
-import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.View.MeasureSpec.EXACTLY
+import android.view.View.MeasureSpec.UNSPECIFIED
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.qxtao.easydict.R
+import kotlin.math.abs
 
-class ExpandableTextView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-    AppCompatTextView(context, attrs, defStyleAttr) {
+class ExpandableTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : AppCompatTextView(context, attrs, defStyleAttr) {
 
-    private var mOriginText: CharSequence? = null
-    private var mExpandedText: SpannableStringBuilder = createSpannableStringBuilder("")
-    private var mFoldedText: SpannableStringBuilder = createSpannableStringBuilder("")
-
-    private var mMeasuredWidth: Int = 0
-    private var mFoldedHeight: Int = 0 //折叠后的高度
-    private var mFoldAnimator: Animator? = null //折叠动画
-    private var mExpandedHeight: Int = 0
-    private var mExpandAnimator: Animator? = null
-
-    /**
-     * 折叠行数阈值，本文行数超过阈值时才可已折叠
-     */
-    private val mFoldedLines: Int
-    private val mSuffixTextColor: Int
-    private val mFoldedSuffix: SpannableString //折叠状态下的文本后缀
-    private val mExpandedSuffix: SpannableString//展开状态下的文本后缀
-
-    private var canFold: Boolean = true
-    private var isFolded: Boolean = false
-
-    private val mDuration: Long
-    private var isAnimating: Boolean = false
-
-    @Suppress("unused")
-    var layoutHeight: Int = 0
+    var originalText: String = ""
         set(value) {
             field = value
-            layoutParams.height = value
-            requestLayout()
+            updateCollapsedDisplayedText(ctaChanged = false)
+        }
+    var expandAction: String = ""
+        set(value) {
+            field = value
+            val ellipsis = Typography.ellipsis
+            val start = ellipsis.toString().length
+            expandActionSpannable = SpannableString("$ellipsis $value")
+            expandActionSpannable.setSpan(
+                ForegroundColorSpan(expandActionColor),
+                start,
+                expandActionSpannable.length,
+                SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            updateCollapsedDisplayedText(ctaChanged = true)
+        }
+    var limitedMaxLines: Int = 3
+        set(value) {
+            check(maxLines == -1 || value <= maxLines) {
+                """
+                    maxLines ($maxLines) must be greater than or equal to limitedMaxLines ($value). 
+                    maxLines can be -1 if there is no upper limit for lineCount.
+                """.trimIndent()
+            }
+            field = value
+            updateCollapsedDisplayedText(ctaChanged = false)
         }
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    @ColorInt
+    var expandActionColor: Int = ContextCompat.getColor(context, android.R.color.holo_purple)
+        set(value) {
+            field = value
+            val colorSpan = ForegroundColorSpan(value)
+            val ellipsis = Typography.ellipsis
+            val start = ellipsis.toString().length
+            expandActionSpannable.setSpan(colorSpan, start, expandActionSpannable.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+            updateCollapsedDisplayedText(ctaChanged = true)
+        }
+
+    var collapsed = true
+        private set
+    val expanded get() = !collapsed
+
+    private var oldTextWidth = 0
+    private var animator: Animator? = null
+    private var expandActionSpannable = SpannableString("")
+    private var expandActionStaticLayout: StaticLayout? = null
+    private var collapsedDisplayedText: CharSequence? = null
 
     init {
-        val typedValue = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView)
-        mOriginText = typedValue.getString(R.styleable.ExpandableTextView_expandableText)
-        mDuration = typedValue.getInt(
-            R.styleable.ExpandableTextView_expandDuration,
-            DEFAULT_DURATION_TIME
-        ).toLong()
-        mFoldedLines = typedValue.getInt(
-            R.styleable.ExpandableTextView_foldLines,
-            DEFAULT_EXPANDABLE_LINES
-        )
-        mSuffixTextColor = typedValue.getColor(
-            R.styleable.ExpandableTextView_suffixTextColor,
-            DEFAULT_SUFFIX_TEXT_COLOR
-        )
-        val foldSuffix = typedValue.getString(R.styleable.ExpandableTextView_foldedSuffix)
-            ?: DEFAULT_ACTION_TEXT_EXPAND
-        mFoldedSuffix = createClickedSpannableString(
-            ELLIPSIS_STRING + foldSuffix,
-            ELLIPSIS_STRING.length
-        )
-        val expandText = typedValue.getString(R.styleable.ExpandableTextView_expandedSuffix)
-            ?: DEFAULT_ACTION_TEXT_FOLD
-        mExpandedSuffix = createClickedSpannableString(expandText)
-        //取消clickableSpan点击背景
-//        highlightColor = Color.argb(0, 0, 0, 0)
-        typedValue.recycle()
-    }
-
-    /**
-     * 设置原始文本
-     * 若文本所需显示的函数小于[mFoldedLines]，则不会做任何处理，
-     * 否则文本可以展开与折叠
-     *
-     * @param text TextView所需显示的原始文本
-     */
-    fun setExpandableText(text: CharSequence) {
-        mOriginText = text
-        if (mMeasuredWidth <= 0) return
-        val layout = createStaticLayout(text)
-        canFold = layout.lineCount > mFoldedLines
-        isFolded = canFold
-        if (canFold) {
-            buildExpandableText(layout)
-            setText(if (isFolded) mFoldedText else mExpandedText)
-        } else {
-            setText(mOriginText)
+        ellipsize = END
+        val a = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView)
+        expandAction = a.getString(R.styleable.ExpandableTextView_expandAction) ?: expandAction
+        expandActionColor = a.getColor(R.styleable.ExpandableTextView_expandActionColor, expandActionColor)
+        originalText = a.getString(R.styleable.ExpandableTextView_originalText) ?: originalText
+        limitedMaxLines = a.getInt(R.styleable.ExpandableTextView_limitedMaxLines, limitedMaxLines)
+        check(maxLines == -1 || limitedMaxLines <= maxLines) {
+            """
+                maxLines ($maxLines) must be greater than or equal to limitedMaxLines ($limitedMaxLines). 
+                maxLines can be -1 if there is no upper limit for lineCount.
+            """.trimIndent()
         }
-    }
-
-    /**
-     * 展开/折叠
-     */
-    fun toggleExpand() {
-        if (!canFold || isAnimating) return
-        isFolded = !isFolded
-        if (isFolded) {
-            mFoldAnimator?.start()
-        } else {
-            mExpandAnimator?.start()
-        }
+        a.recycle()
+        setOnClickListener { toggle() }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val givenWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val textWidth = givenWidth - compoundPaddingStart - compoundPaddingEnd
+        if (textWidth == oldTextWidth || animator?.isRunning == true) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+            return
+        }
+        oldTextWidth = textWidth
+        updateCollapsedDisplayedText(ctaChanged = true, textWidth)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if ((mMeasuredWidth == 0 || mMeasuredWidth != measuredWidth) && !isAnimating) {
-            mMeasuredWidth = measuredWidth
-            if (canFold) mOriginText?.let { setExpandableText(it) }
-        }
     }
 
-    /**
-     * 重写方法以支持ClickSpan的点击事件
-     * 直接设置LinkMovementMethod的话会导致TextView可以滑动，当执行折叠动画时整个文本会被向上推，达不到预期效果
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        val curText = text
-        val action = event?.action
-        when {
-            curText is Spanned && (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN) -> {
-                val x = (event.x - totalPaddingLeft + scrollX).toInt()
-                val y = (event.y - totalPaddingTop + scrollY).toInt()
-                val line = layout.getLineForVertical(y)
-                val off = layout.getOffsetForHorizontal(line, x.toFloat())
-                val link = curText.getSpans(off, off, ClickableSpan::class.java)
-                if (link.isNotEmpty()) {
-                    if (action == MotionEvent.ACTION_UP) link[0].onClick(this)
-                    return true
+    override fun setMaxLines(maxLines: Int) {
+        check(maxLines == -1 || limitedMaxLines <= maxLines) {
+            """
+                maxLines ($maxLines) must be greater than or equal to limitedMaxLines ($limitedMaxLines). 
+                maxLines can be -1 if there is no upper limit for lineCount.
+            """.trimIndent()
+        }
+        super.setMaxLines(maxLines)
+        updateCollapsedDisplayedText(ctaChanged = false)
+    }
+
+    override fun onDetachedFromWindow() {
+        animator?.cancel()
+        super.onDetachedFromWindow()
+    }
+
+    override fun setEllipsize(where: TextUtils.TruncateAt?) {
+        /**
+         * Due to this issue https://stackoverflow.com/questions/63939222/constraintlayout-ellipsize-start-not-working,
+         * this view only supports TextUtils.TruncateAt.END
+         */
+        super.setEllipsize(END)
+    }
+
+    fun toggle() {
+        if (originalText == collapsedDisplayedText) {
+            collapsed = !collapsed
+            return
+        }
+        val height0 = height
+        text = if (collapsed) originalText else collapsedDisplayedText
+        measure(MeasureSpec.makeMeasureSpec(width, EXACTLY), MeasureSpec.makeMeasureSpec(height, UNSPECIFIED))
+        val height1 = measuredHeight
+        animator?.cancel()
+        val dur = (abs(height1 - height0) * 2L).coerceAtMost(300L)
+        animator = ValueAnimator.ofInt(height0, height1)
+            .apply {
+                interpolator = FastOutSlowInInterpolator()
+                duration = dur
+                addUpdateListener { value ->
+                    val params = layoutParams
+                    layoutParams.height = value.animatedValue as Int
+                    layoutParams = params
                 }
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationStart(animation: Animator) {
+                        super.onAnimationStart(animation)
+                        collapsed = !collapsed
+                        text = originalText
+                    }
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        super.onAnimationEnd(animation)
+                        text = if (collapsed) collapsedDisplayedText else originalText
+                        val params = layoutParams
+                        layoutParams.height = WRAP_CONTENT
+                        layoutParams = params
+                    }
+                })
+                start()
             }
-            else -> return super.onTouchEvent(event)
-        }
-        return super.onTouchEvent(event)
     }
 
-    /**
-     * 构建展开/折叠状态下的文本
-     */
-    private fun buildExpandableText(originLayout: Layout) {
-        if (TextUtils.isEmpty(mOriginText)) return
-        mExpandedText = createSpannableStringBuilder(mOriginText!!).append(mExpandedSuffix)
-        mExpandedHeight = createStaticLayout(mExpandedText).height + paddingTop + paddingBottom
-
-        val lineEnd = originLayout.getLineEnd(mFoldedLines - 1)
-        var foldText = mOriginText!!.subSequence(0, lineEnd)
-        var builder = createSpannableStringBuilder(foldText).append(mFoldedSuffix)
-        while (createStaticLayout(builder).lineCount > mFoldedLines) {
-            foldText = foldText.subSequence(0, foldText.length - 1)
-            builder = createSpannableStringBuilder(foldText).append(mFoldedSuffix)
+    private fun resolveDisplayedText(staticLayout: StaticLayout): CharSequence? {
+        val truncatedTextWithoutCta = staticLayout.text
+        if (truncatedTextWithoutCta.toString() != originalText) {
+            val totalTextWidthWithoutCta =
+                (0 until staticLayout.lineCount).sumOf { staticLayout.getLineWidth(it).toInt() }
+            val totalTextWidthWithCta = totalTextWidthWithoutCta - expandActionStaticLayout!!.getLineWidth(0)
+            val textWithoutCta = TextUtils.ellipsize(originalText, paint, totalTextWidthWithCta, END)
+            val defaultEllipsisStart = textWithoutCta.indexOf(Typography.ellipsis)
+            // in case the size only fits cta, shows cta only
+            if (textWithoutCta == "") return expandActionStaticLayout!!.text
+            // on some devices Typography.ellipsis can't be found,
+            // in that case don't replace ellipsis sign with ellipsizedText
+            // users are still able to expand ellipsized text
+            if (defaultEllipsisStart == -1) {
+                return truncatedTextWithoutCta
+            }
+            val defaultEllipsisEnd = defaultEllipsisStart + 1
+            val span = SpannableStringBuilder()
+                .append(textWithoutCta)
+                .replace(defaultEllipsisStart, defaultEllipsisEnd, expandActionStaticLayout!!.text)
+            return maybeRemoveEndingCharacters(staticLayout, span)
+        } else {
+            return originalText
         }
-//        val foldText =
-//            mOriginText!!.subSequence(0, lineEnd - mFoldedSuffix.length - 1)
-//        mFoldedText = createSpannableStringBuilder(foldText).append(mFoldedSuffix)
-        mFoldedText = createSpannableStringBuilder(builder)
-        mFoldedHeight = createStaticLayout(mFoldedText).height + paddingTop + paddingBottom
-
-        mFoldAnimator = createAnimation(mExpandedHeight, mFoldedHeight, null) {
-            text = mFoldedText
-        }
-        mExpandAnimator = createAnimation(mFoldedHeight, mExpandedHeight, {
-            text = mExpandedText
-        }, null)
     }
 
-    /**
-     * 根据[source]创建一个[StaticLayout]对象，用于辅助计算文本可显示行数、高度等
-     */
-    @SuppressLint("ObsoleteSdkInt")
-    private fun <T : CharSequence> createStaticLayout(source: T): Layout =
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            StaticLayout.Builder.obtain(source, 0, source.length, paint, mMeasuredWidth)
-                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
-                .setIncludePad(includeFontPadding)
+    // sanity check before applying the text. Most of the time, the loop doesn't happen
+    private fun maybeRemoveEndingCharacters(
+        staticLayout: StaticLayout,
+        span: SpannableStringBuilder,
+    ): SpannableStringBuilder {
+        val textWidth = staticLayout.width
+        val dynamicLayout = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            DynamicLayout.Builder.obtain(span, paint, textWidth)
+                .setAlignment(ALIGN_NORMAL)
+                .setIncludePad(false)
                 .setLineSpacing(lineSpacingExtra, lineSpacingMultiplier)
                 .build()
         } else {
             @Suppress("DEPRECATION")
-            StaticLayout(
-                source,
-                paint,
-                mMeasuredWidth,
-                Layout.Alignment.ALIGN_NORMAL,
-                lineSpacingMultiplier,
-                lineSpacingExtra,
-                includeFontPadding
-            )
+            DynamicLayout(span, span, paint, textWidth, ALIGN_NORMAL, lineSpacingMultiplier, lineSpacingExtra, false)
         }
 
-    private fun createClickedSpannableString(
-        charSequence: CharSequence, start: Int = 0
-    ): SpannableString = SpannableString(charSequence).apply {
-        setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                toggleExpand()
-            }
-
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.color = mSuffixTextColor
-                ds.isUnderlineText = false
-            }
-        }, start, charSequence.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+        val ctaIndex = span.indexOf(expandActionStaticLayout!!.text.toString())
+        var removingCharIndex = ctaIndex - 1
+        while (removingCharIndex >= 0 && dynamicLayout.lineCount > limitedMaxLines) {
+            span.delete(removingCharIndex, removingCharIndex + 1)
+            removingCharIndex--
+        }
+        return span
     }
 
-    private fun createSpannableStringBuilder(charSequence: CharSequence) =
-        SpannableStringBuilder(charSequence)
-
-    private fun createAnimation(
-        start: Int,
-        end: Int,
-        startCallback: (() -> Unit)?,
-        endCallback: (() -> Unit)?
-    ): ObjectAnimator {
-        val animator = ObjectAnimator.ofInt(this, "layoutHeight", start, end)
-        animator.duration = mDuration
-        animator.interpolator = AccelerateDecelerateInterpolator()
-        animator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) {
-                isAnimating = true
-                startCallback?.invoke()
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-                isAnimating = false
-                endCallback?.invoke()
-            }
-
-            override fun onAnimationCancel(animation: Animator) {
-            }
-
-            override fun onAnimationRepeat(animation: Animator) {
-            }
-
-        })
-        return animator
+    private fun updateCollapsedDisplayedText(
+        ctaChanged: Boolean,
+        textWidth: Int = measuredWidth - compoundPaddingStart - compoundPaddingEnd,
+    ) {
+        if (textWidth <= 0) return
+        val collapsedStaticLayout = getStaticLayout(limitedMaxLines, originalText, textWidth)
+        if (ctaChanged)
+            expandActionStaticLayout = getStaticLayout(1, expandActionSpannable, textWidth)
+        collapsedDisplayedText = resolveDisplayedText(collapsedStaticLayout)
+        text = if (collapsed) collapsedDisplayedText else originalText
     }
 
-    companion object {
-        val ELLIPSIS_STRING = String(charArrayOf('\u2026')) //省略号
-        const val DEFAULT_EXPANDABLE_LINES = 4
-        const val DEFAULT_DURATION_TIME = 300
-        val DEFAULT_SUFFIX_TEXT_COLOR = Color.rgb(255, 97, 46)
+    private fun getStaticLayout(targetMaxLines: Int, text: CharSequence, textWidth: Int): StaticLayout {
+        val maximumLineWidth = textWidth.coerceAtLeast(0)
+        val alignment = ALIGN_NORMAL
 
-        const val DEFAULT_ACTION_TEXT_FOLD = "收起"
-        const val DEFAULT_ACTION_TEXT_EXPAND = "展开"
+        return StaticLayout.Builder
+            .obtain(text, 0, text.length, paint, maximumLineWidth)
+            .setIncludePad(false)
+            .setMaxLines(targetMaxLines)
+            .setAlignment(alignment)
+            .setEllipsize(END)
+            .setLineSpacing(lineSpacingExtra, lineSpacingMultiplier)
+            .build()
     }
 
 }

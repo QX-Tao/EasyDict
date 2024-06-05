@@ -1,12 +1,10 @@
 package com.qxtao.easydict.ui.activity.dict
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
@@ -18,14 +16,10 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
@@ -33,12 +27,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.color.DynamicColors
 import com.qxtao.easydict.R
 import com.qxtao.easydict.adapter.dict.DictSelectWordBookAdapter
+import com.qxtao.easydict.database.DailySentenceData
 import com.qxtao.easydict.database.SearchHistoryData
 import com.qxtao.easydict.database.SimpleDictData
 import com.qxtao.easydict.database.WordBookData
+import com.qxtao.easydict.database.WordListData
 import com.qxtao.easydict.databinding.ActivityDictBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.base.BaseFragment
@@ -46,12 +41,12 @@ import com.qxtao.easydict.ui.fragment.dict.DictDefinitionFragment
 import com.qxtao.easydict.ui.fragment.dict.DictDetailFragment
 import com.qxtao.easydict.ui.fragment.dict.DictExtraFragment
 import com.qxtao.easydict.ui.fragment.dict.DictHasFragment
-import com.qxtao.easydict.ui.fragment.dict.DictSearchEditFragment
 import com.qxtao.easydict.ui.fragment.dict.DictSearchFragment
 import com.qxtao.easydict.ui.fragment.dict.DictWelcomeFragment
+import com.qxtao.easydict.ui.view.LoadingView
 import com.qxtao.easydict.utils.common.AssetsUtils
 import com.qxtao.easydict.utils.common.EncryptUtils
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -63,6 +58,7 @@ import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 import java.util.Locale
+import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
 
@@ -74,21 +70,19 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     private lateinit var searchHistoryData: SearchHistoryData
     private lateinit var simpleDictData: SimpleDictData
     private lateinit var wordBookData: WordBookData
+    private lateinit var dailySentenceData: DailySentenceData
+    private lateinit var wordListData: WordListData
     private lateinit var dispatcher: OnBackPressedDispatcher
     private lateinit var callback: OnBackPressedCallback
     private val recognitionHelper: RecognitionHelper by lazy { RecognitionHelper(this) }
-    private val searchStr get() = intent.getStringExtra("onSearch")
+    private val searchStr by lazy { intent?.getStringExtra("onSearch") }
 
     // define widget
     private lateinit var speechDialog: AlertDialog
+    private lateinit var lvLoading: LoadingView
 
     companion object {
         private var isReady = false
-        fun onSearchStr(activity: Activity, str: String){
-            val intent = Intent(activity, DictActivity::class.java)
-            intent.putExtra("onSearch", str)
-            activity.startActivity(intent)
-        }
         fun onSearchStr(context: Context, str: String){
             val intent = Intent(context, DictActivity::class.java)
             intent.putExtra("onSearch", str)
@@ -98,6 +92,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
 
     override fun onCreate1(savedInstanceState: Bundle?) {
         super.onCreate1(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) displaySplash()
         if (savedInstanceState == null){
             if (searchStr.isNullOrBlank()){
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -106,12 +101,15 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                         simpleDictData = SimpleDictData(mContext)
                         searchHistoryData = SearchHistoryData(mContext)
                         wordBookData = WordBookData(mContext)
+                        dailySentenceData = DailySentenceData(mContext)
+                        wordListData = WordListData(mContext)
                         withContext(Dispatchers.Main){
                             dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                                searchHistoryData, wordBookData))[DictViewModel::class.java]
+                                searchHistoryData, wordBookData, dailySentenceData, wordListData))[DictViewModel::class.java]
                             toWelcomeFragment()
+                            lvLoading.visibility = View.GONE
+                            isReady = true
                         }
-                        isReady = true
                     } else {
                         withContext(Dispatchers.Main) {
                             showShortToast(getString(R.string.configure_simple_dict_error_desc))
@@ -121,47 +119,56 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                     }
                 }
             } else {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    simpleDictData = SimpleDictData(mContext)
+                    searchHistoryData = SearchHistoryData(mContext)
+                    wordBookData = WordBookData(mContext)
+                    withContext(Dispatchers.Main){
+                        dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
+                            searchHistoryData, wordBookData))[DictViewModel::class.java]
+                        toDefinitionFragment(searchStr!!)
+                        lvLoading.visibility = View.GONE
+                    }
+                }
+            }
+        } else {
+            if (searchStr.isNullOrBlank()){
+                simpleDictData = SimpleDictData(mContext)
+                searchHistoryData = SearchHistoryData(mContext)
+                wordBookData = WordBookData(mContext)
+                dailySentenceData = DailySentenceData(mContext)
+                wordListData = WordListData(mContext)
+                dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
+                    searchHistoryData, wordBookData, dailySentenceData, wordListData))[DictViewModel::class.java]
+                lvLoading.visibility = View.GONE
+            } else {
                 simpleDictData = SimpleDictData(mContext)
                 searchHistoryData = SearchHistoryData(mContext)
                 wordBookData = WordBookData(mContext)
                 dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
                     searchHistoryData, wordBookData))[DictViewModel::class.java]
-                toDefinitionFragment(searchStr)
+                lvLoading.visibility = View.GONE
             }
-        } else {
-            simpleDictData = SimpleDictData(mContext)
-            searchHistoryData = SearchHistoryData(mContext)
-            wordBookData = WordBookData(mContext)
-            dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                searchHistoryData, wordBookData))[DictViewModel::class.java]
         }
     }
 
     override fun onCreate() {
-        displaySplash()
         dispatcher = onBackPressedDispatcher
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                // 判断是否只有一个fragment 如果是则finish 不是则pop
-                if (supportFragmentManager.backStackEntryCount == 1) {
-                    finish()
-                } else {
-                    val currentFragment = supportFragmentManager.findFragmentById(R.id.dict_fragment)
-                    supportFragmentManager.popBackStack(null, 0)
-                    if (currentFragment is DictSearchFragment){
-                        CoroutineScope(Dispatchers.IO).launch {
-                            delay(400)
-                            withContext(Dispatchers.Main){
-                                dictViewModel.setSearchText(getString(R.string.empty_string),  0)
-                            }
-                        }
-                    }
+                val currentFragment = supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
+                when(currentFragment){
+                    is DictWelcomeFragment, is DictDefinitionFragment -> finish()
+                    is DictSearchFragment, is DictExtraFragment -> backFragment()
                 }
             }
         }
         dispatcher.addCallback(this, callback)
     }
 
+    override fun bindViews() {
+        lvLoading = binding.lvLoading
+    }
     override fun initViews() {}
     override fun addListener() {}
 
@@ -173,7 +180,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                 "toHasFragment" -> { toSearchFragment(DICT_SEARCH_HAS_FRAGMENT) }
                 "toWelcomeFragment" -> { toWelcomeFragment() }
                 "toDetailFragment" -> { toSearchFragment(DICT_SEARCH_DETAIL_FRAGMENT, data[1] as String) }
-                "toDictSearchEditFragment" -> { toSearchEditFragment(data[1] as View) }
                 "finishActivity" -> { finish() }
                 "onBackPressed" -> { dispatcher.onBackPressed() }
                 "voiceSearch" -> { checkAndVoiceSearchWithPermissionCheck() }
@@ -211,11 +217,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         dialog.show()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         onRequestPermissionsResult(requestCode, grantResults)
     }
@@ -224,7 +226,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         val dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_speech_input, null)
         val tvCancel = dialogView.findViewById<TextView>(R.id.tv_cancel)
         val tvInput = dialogView.findViewById<TextView>(R.id.tv_input)
-        val tvWrong = dialogView.findViewById<TextView>(R.id.tv_wrong)
         val tvConfirm =  dialogView.findViewById<TextView>(R.id.tv_confirm)
         val etInput = dialogView.findViewById<EditText>(R.id.et_input)
         val dialog = AlertDialog.Builder(mContext)
@@ -236,7 +237,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             dialog.dismiss()
         }
         tvInput.setOnClickListener {
-            tvWrong.visibility = View.INVISIBLE
             tvInput.visibility = View.GONE
             recognitionHelper.startRecognition()
         }
@@ -260,64 +260,21 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         mContext.startActivity(intent)
     }
 
-    private fun toWelcomeFragment(){
-        supportFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .add(R.id.dict_fragment, DictWelcomeFragment::class.java, null)
-            .addToBackStack(null)
-            .commit()
+    private fun toWelcomeFragment() = toFragment(DICT_WELCOME_FRAGMENT_TAG)
+
+    private fun toExtraFragment(extraStyle: String) {
+        toFragment(DICT_EXTRA_FRAGMENT_TAG)
+        dictViewModel.extraFragmentStyle.value = extraStyle
     }
 
-    private fun toSearchEditFragment(sharedElementView: View){
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            addSharedElement(sharedElementView, sharedElementView.transitionName)
-            replace(R.id.dict_fragment, DictSearchEditFragment())
-            addToBackStack(null)
-        }
-    }
-
-    private fun toExtraFragment(extraStyle: String){
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            replace(R.id.dict_fragment, DictExtraFragment().newInstance(extraStyle))
-            addToBackStack(null)
-        }
-    }
-
-    private fun toDefinitionFragment(searchStr: String?) {
-        if (searchStr.isNullOrBlank()) {
-            toWelcomeFragment()
-            return
-        }
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.dict_fragment)
-        val definitionFragment = supportFragmentManager.findFragmentByTag(DICT_DEFINITION_FRAGMENT_TAG)
-            ?: DictDefinitionFragment().newInstance(searchStr)
-        if (currentFragment is DictDefinitionFragment){
-            dictViewModel.onlineSearch(searchStr)
-            definitionFragment.childFragmentManager.commit{
-                setReorderingAllowed(true)
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                replace(R.id.dict_definition_fragment, DictDetailFragment::class.java, null)
-                addToBackStack(null)
-            }
-            dictViewModel.dictDetailMode = DICT_DETAIL_MODE_DEFINITION
-        } else {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                replace(R.id.dict_fragment, definitionFragment, DICT_DEFINITION_FRAGMENT_TAG)
-                addToBackStack(null)
-            }
-            supportFragmentManager.executePendingTransactions()
-            toDefinitionFragment(searchStr)
-        }
+    private fun toDefinitionFragment(searchStr: String) {
+        toFragment(DICT_DEFINITION_FRAGMENT_TAG)
+        dictViewModel.onlineSearch(searchStr)
+        dictViewModel.dictDetailMode = DICT_DETAIL_MODE_DEFINITION
     }
 
     private fun toSearchFragment(childFragment: String, searchStr: String? = null){
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.dict_fragment)
+        val currentFragment = supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
         val dictSearchFragment = supportFragmentManager.findFragmentByTag(DICT_SEARCH_FRAGMENT_TAG) ?: DictSearchFragment()
         when (currentFragment){
             is DictSearchFragment -> {
@@ -327,8 +284,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                         dictSearchFragment.childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                         dictSearchFragment.childFragmentManager.commit {
                             setReorderingAllowed(true)
-                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            replace(R.id.dict_search_content_fragment, DictHasFragment::class.java, null)
+                            replace(R.id.dict_search_content_fragment, DictHasFragment(), DICT_SEARCH_HAS_FRAGMENT_TAG)
                             addToBackStack(null)
                         }
                     }
@@ -345,7 +301,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                             dictSearchFragment.childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                             dictSearchFragment.childFragmentManager.commit {
                                 setReorderingAllowed(true)
-                                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 replace(R.id.dict_search_content_fragment, DictDetailFragment(), DICT_SEARCH_DETAIL_FRAGMENT_TAG)
                                 addToBackStack(null)
                             }
@@ -358,13 +313,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                 dictViewModel.onlineSearch(searchStr)
             }
             else -> {
-                supportFragmentManager.commit {
-                    setReorderingAllowed(true)
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    replace(R.id.dict_fragment, dictSearchFragment, DICT_SEARCH_FRAGMENT_TAG)
-                    addToBackStack(null)
-                }
-                supportFragmentManager.executePendingTransactions()
+                toFragment(DICT_SEARCH_FRAGMENT_TAG)
                 toSearchFragment(childFragment, searchStr)
             }
         }
@@ -445,6 +394,8 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         editText.clearFocus()
     }
 
+
+    // 重写方法 实现语音输入控制
     override fun onPartialResult(result: String) {
         val etInput = speechDialog.window?.findViewById<EditText>(R.id.et_input)
         val editableText = etInput?.editableText
@@ -454,7 +405,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         } else
             editableText.insert(index, result)
     }
-
     override fun onFinalResult(result: String) {
         val r = result.lowercase(Locale.ROOT).replaceFirstChar { if (it.isLowerCase()) it.titlecase(
             Locale.ROOT) else it.toString() }
@@ -468,23 +418,15 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             editableText.insert(index, r)
         tvInput?.visibility = View.VISIBLE
     }
-
     override fun onError(errCode: Int) {
-        val tvWrong = speechDialog.window?.findViewById<TextView>(R.id.tv_wrong)
         val tvInput =  speechDialog.window?.findViewById<TextView>(R.id.tv_input)
-        tvWrong?.visibility = View.VISIBLE
         tvInput?.visibility = View.VISIBLE
+        showShortToast(getString(R.string.go_wrong_try_again))
     }
+
 
     // 重写函数dispatchTouchEvent，实现点击搜索框外时，收起软键盘
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        // 排除部分控件
-        if (dictViewModel.hasShowRvInfo.value == DICT_RV_SUGGESTION_LM){
-            val ivUnfold = findViewById<ImageView>(R.id.iv_unfold)
-            // 判断ev是否落在view上
-            if (isTouchPointInView(ivUnfold, ev.x.toInt(), ev.y.toInt()))
-                return super.dispatchTouchEvent(ev)
-        }
         // 处理ACTION_DOWN事件
         if (ev.action == MotionEvent.ACTION_DOWN) {
             val view = currentFocus
@@ -513,26 +455,18 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             manager.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS)
         }
     }
-    private fun isTouchPointInView(view: View?, x: Int, y: Int): Boolean {
-        if (view == null) return false
-        val location = IntArray(2)
-        view.getLocationOnScreen(location)
-        val left = location[0]
-        val top = location[1]
-        val right = left + view.measuredWidth
-        val bottom = top + view.measuredHeight
-        return view.isClickable && y in top..bottom && x in left .. right
-    }
 
+
+    // 程序初始化解压数据
     private suspend fun unzipData() : Boolean {
         // 将基础词库取出来解压到数据库路径
         return withContext(Dispatchers.IO){
             val unzipFile = async {
-                    getDatabasePath("simple_dict.db")?.parent?.let { AssetsUtils.unZipAssetsFolder(applicationContext, "dict/simple_dict.zip", it) }
+                    getDatabasePath(SIMPLE_DICT_FILE_NAME)?.parent?.let { AssetsUtils.unZipAssetsFolder(applicationContext, SIMPLE_DICT_ZIP_FILE_PATH, it) }
                 }.await() == true
             val ready = try {
-                if (EncryptUtils.encryptMD5FileToString(getDatabasePath("simple_dict.db").absolutePath).lowercase()
-                    == "8b81915ef6f53264b5c1b4b49cbf6f99") true else unzipFile
+                if (EncryptUtils.encryptMD5FileToString(getDatabasePath(SIMPLE_DICT_FILE_NAME).absolutePath).lowercase()
+                    == SIMPLE_DICT_MD5) true else unzipFile
             } catch (e: Exception) { unzipFile }
             if (ready) return@withContext true else unzipData()
         }
@@ -546,7 +480,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         }
     }
 
-    override fun isDisplaySplashScreen(): Boolean  = true
     private fun displaySplash(){
         val content: View = findViewById(android.R.id.content)
         content.viewTreeObserver.addOnPreDrawListener(
@@ -562,4 +495,60 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             }
         )
     }
+
+    private fun toFragment(fragmentTag: String){
+        val toFragment = supportFragmentManager.findFragmentByTag(fragmentTag) ?: when(fragmentTag){
+            DICT_WELCOME_FRAGMENT_TAG -> DictWelcomeFragment()
+            DICT_SEARCH_FRAGMENT_TAG -> DictSearchFragment()
+            DICT_DEFINITION_FRAGMENT_TAG -> DictDefinitionFragment()
+            DICT_EXTRA_FRAGMENT_TAG -> DictExtraFragment()
+            else -> return
+        }
+        val fromFragment = supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
+        if (fromFragment != null){
+            if (dictViewModel.addedFragment.contains(fragmentTag)){
+                // 使用hide, show方法
+                supportFragmentManager.commit {
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    hide(fromFragment)
+                    show(toFragment)
+                }
+                supportFragmentManager.executePendingTransactions()
+            } else {
+                // 使用add, hide, show方法
+                supportFragmentManager.commit {
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    add(R.id.dict_fragment, toFragment, fragmentTag)
+                    hide(fromFragment)
+                    show(toFragment)
+                }
+                supportFragmentManager.executePendingTransactions()
+            }
+        } else {
+            // 使用add, show方法，这时候就不要加动画了
+            supportFragmentManager.commit {
+                add(R.id.dict_fragment, toFragment, fragmentTag)
+                show(toFragment)
+            }
+            supportFragmentManager.executePendingTransactions()
+        }
+        dictViewModel.addedFragment.add(fragmentTag)
+        dictViewModel.addedFragmentStack.add(fragmentTag)
+        dictViewModel.currentFragmentTag = fragmentTag
+    }
+    private fun backFragment(){
+        val cFragmentTag = dictViewModel.addedFragmentStack.pop()
+        val tFragmentTag = dictViewModel.addedFragmentStack.peek()
+        val toFragment = supportFragmentManager.findFragmentByTag(tFragmentTag) ?: return
+        val fromFragment = supportFragmentManager.findFragmentByTag(cFragmentTag) ?: return
+        // 使用hide, show方法
+        supportFragmentManager.commit {
+            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+            hide(fromFragment)
+            show(toFragment)
+        }
+        supportFragmentManager.executePendingTransactions()
+        dictViewModel.currentFragmentTag = tFragmentTag
+    }
+
 }

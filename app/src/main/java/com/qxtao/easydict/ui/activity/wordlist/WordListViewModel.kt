@@ -32,12 +32,10 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
     private val _wordListItems = MutableLiveData<List<WordListItem>?>()
     val wordListItems: LiveData<List<WordListItem>?> = _wordListItems
     private val deleteQueue: Queue<DeleteTuple> = LinkedList() // 哪一个量 position是多少 哪一个列表
-    var firstVisibleItemPosition = -1
     private var _mediaPlayer: MediaPlayer?= null
+    var firstVisibleItemPosition = -1
     var topOffset = -1
-    var appBarExpanded = true
     var dataLoadInfo =  MutableLiveData<Int>() // 初始化-1 加载中0 已加载1 加载失败2 列表为空3
-    var isPlaying = MutableLiveData<Boolean>()
     var playSound = MutableLiveData<Int>()
     var wordSelected = MutableLiveData<String?>()
     var clasSelected = MutableLiveData<String?>()
@@ -70,7 +68,6 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
     init {
         playSound.value = 0
         dataLoadInfo.value = -1
-        isPlaying.value = false
     }
 
     fun initData(){
@@ -168,7 +165,6 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
         val itemWord = _wordListItems.value!![position]
         try {
             stopPlaySound()
-            isPlaying.value = true
             playPosition = position
             _mediaPlayer = MediaPlayer().apply {
                 setDataSource(voiceSoundMap[playSound.value] + itemWord.wordName)
@@ -180,15 +176,12 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
     }
 
     fun stopPlaySound() {
-        isPlaying.value = false
         if (_mediaPlayer != null){
             _mediaPlayer?.stop()
             _mediaPlayer?.release()
             _mediaPlayer = null
         }
     }
-
-    fun isPlaying(): Boolean = isPlaying.value == true
 
     fun getDeleteQueue() = deleteQueue
 

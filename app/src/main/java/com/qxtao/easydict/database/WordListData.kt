@@ -82,6 +82,16 @@ class WordListData (
         }
     }
 
+    suspend fun getSelectBookInfo(): Pair<Boolean, Triple<String, Int, Int>?>{
+        return withContext(Dispatchers.IO){
+            if (!isConfirmed()){
+                Pair(false, null)
+            } else {
+                Pair(true, Triple(selected(), getAllWordListNum(), getLeanedWordListNum()))
+            }
+        }
+    }
+
     fun setIsCollected(word: String, tablePosition: Int, isCollected: Boolean){
         val values = ContentValues().apply {
             put(COLUMN_IS_COLLECTED, if (isCollected) System.currentTimeMillis() else 0)
@@ -200,6 +210,22 @@ class WordListData (
         }
     }
 
+    fun getLeanedWordListNum(): Int {
+        val selected = selected()
+        val cursor = db.rawQuery("SELECT COUNT(*) FROM $selected WHERE $COLUMN_IS_LEARNED != 0", null)
+        return cursor.moveToFirst().let { cursor.getInt(0) }
+    }
+    fun getAllWordListNum(): Int {
+        val selected = selected()
+        val cursor = db.rawQuery("SELECT COUNT(*) FROM $selected", null)
+        return cursor.moveToFirst().let { cursor.getInt(0) }
+    }
+    fun getCollectedWordListNum(): Int {
+        val selected = selected()
+        val cursor = db.rawQuery("SELECT COUNT(*) FROM $selected WHERE $COLUMN_IS_COLLECTED != 0", null)
+        return cursor.moveToFirst().let { cursor.getInt(0) }
+    }
+
 
     private fun clearAllTable(){
         db.execSQL("DELETE FROM $TABLE_DB_CONFIG")
@@ -208,7 +234,7 @@ class WordListData (
         }
     }
 
-    private fun isConfirmed(id : Int = LINE_CONFIG_ID): Boolean{
+    private fun isConfirmed(id : Int = LINE_CONFIG_ID): Boolean {
         val cursor = db.rawQuery("SELECT * FROM $TABLE_DB_CONFIG WHERE $COLUMN_CONFIG_ID = $id", null)
         return cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_CONFIRMED)) == 1
     }

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.settings.SettingsWelcomeScreenFragment">
+
+    <View
+        android:id="@+id/v_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintStart_toStartOf="@id/v_holder"
+        app:layout_constraintEnd_toEndOf="@id/v_holder"
+        app:layout_constraintTop_toTopOf="@id/v_holder"
+        app:layout_constraintBottom_toBottomOf="@id/v_holder"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.MaterialComponents.Toolbar"
+            android:id="@+id/mt_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:navigationContentDescription="@string/back"
+            app:title="@string/welcome_screen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_content"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@id/mt_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- 功能管理 -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="6dp"
+                    android:textColor="?attr/colorPrimary"
+                    android:text="@string/function_setting"/>
+
+                <!-- 倒计时 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_count_down"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/iv_count_down"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_count_down"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_count_down"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/sw_count_down"
+                        app:layout_constraintStart_toEndOf="@id/iv_count_down"
+                        android:layout_marginEnd="10dp"
+                        android:id="@+id/tv_count_down"
+                        android:text="@string/count_down"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_normal"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_count_down"
+                        android:background="@null"
+                        android:id="@+id/sw_count_down"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- 推荐搜索 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_suggest_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/iv_suggest_search"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_suggest_search2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_suggest_search"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/sw_suggest_search"
+                        app:layout_constraintStart_toEndOf="@id/iv_suggest_search"
+                        android:layout_marginEnd="10dp"
+                        android:id="@+id/tv_suggest_search"
+                        android:text="@string/suggest_search"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_normal"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_suggest_search"
+                        android:background="@null"
+                        android:id="@+id/sw_suggest_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- 背单词 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_word_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/iv_word_list"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_word_list2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_word_list"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/sw_word_list"
+                        app:layout_constraintStart_toEndOf="@id/iv_word_list"
+                        android:layout_marginEnd="10dp"
+                        android:id="@+id/tv_word_list"
+                        android:text="@string/recite_word"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_normal"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_word_list"
+                        android:background="@null"
+                        android:id="@+id/sw_word_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- 每日一句 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_daily_sentence"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/iv_daily_sentence"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_daily_sentence"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_daily_sentence"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/sw_daily_sentence"
+                        app:layout_constraintStart_toEndOf="@id/iv_daily_sentence"
+                        android:layout_marginEnd="10dp"
+                        android:id="@+id/tv_daily_sentence"
+                        android:text="@string/daily_sentence"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_normal"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_daily_sentence"
+                        android:background="@null"
+                        android:id="@+id/sw_daily_sentence"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- 单词本 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_word_book"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/iv_word_book"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_word_book2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_word_book"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/sw_word_book"
+                        app:layout_constraintStart_toEndOf="@id/iv_word_book"
+                        android:layout_marginEnd="10dp"
+                        android:id="@+id/tv_word_book"
+                        android:text="@string/word_book"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_normal"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_word_book"
+                        android:background="@null"
+                        android:id="@+id/sw_word_book"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- 语法检查 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_grammar_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/iv_grammar_check"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_grammar_check2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_grammar_check"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/sw_grammar_check"
+                        app:layout_constraintStart_toEndOf="@id/iv_grammar_check"
+                        android:layout_marginEnd="10dp"
+                        android:id="@+id/tv_grammar_check"
+                        android:text="@string/grammar_check"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_normal"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_grammar_check"
+                        android:background="@null"
+                        android:id="@+id/sw_grammar_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

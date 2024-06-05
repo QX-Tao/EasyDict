@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="?attr/colorSurfaceContainer"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="@dimen/card_view_radius_medium"
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,7 +55,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:ellipsize="end"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_medium"
                 android:maxLines="6"
                 android:text="@string/def_str"
                 android:textColor="?attr/colorOnSurfaceVariant" />

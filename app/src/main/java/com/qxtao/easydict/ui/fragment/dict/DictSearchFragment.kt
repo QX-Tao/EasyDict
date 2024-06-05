@@ -1,5 +1,7 @@
 package com.qxtao.easydict.ui.fragment.dict
 
+import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.Animation
@@ -35,8 +37,6 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
     private lateinit var ivBack : ImageView
     private lateinit var ivClear : ImageView
     private lateinit var ivSearch : ImageView
-    private lateinit var ivUnfoldEdit : ImageView
-    private lateinit var cvEditUnfold : CardView
     private lateinit var etSearchBox : EditText
 
     override fun bindViews() {
@@ -44,8 +44,6 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
         ivBack = binding.ivBack
         ivClear = binding.ivClear
         ivSearch = binding.ivSearch
-        ivUnfoldEdit = binding.ivUnfold
-        cvEditUnfold = binding.cvEditUnfold
         etSearchBox = binding.etSearchBox
         mcvSearchBox = binding.mcvSearchBox
         clRoot = binding.clRoot
@@ -58,11 +56,6 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
         dictViewModel.searchText.observe(this){
             etSearchBox.setText(it.editSearchText)
             etSearchBox.setSelection(if (it.editSearchText.length >= it.editCursor) it.editCursor else it.editSearchText.length)
-        }
-        dictViewModel.hasShowRvInfo.observe(this){
-            val currentFragment = childFragmentManager.findFragmentById(R.id.dict_search_content_fragment)
-            cvEditUnfold.visibility = if (it == DICT_RV_SUGGESTION_LM &&
-                dictViewModel.dataSuggestionLoadInfo.value == 1 && currentFragment is DictHasFragment) View.VISIBLE else View.GONE
         }
     }
 
@@ -85,10 +78,6 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
         }
         ivBack.setOnClickListener {
             mListener.onFragmentInteraction("onBackPressed")
-        }
-        ivUnfoldEdit.setOnClickListener {
-            dictViewModel.setSearchText(etSearchBox.text.toString(), etSearchBox.selectionStart)
-            mListener.onFragmentInteraction("toDictSearchEditFragment", mcvSearchBox)
         }
         etSearchBox.doAfterTextChanged {
             if (!etSearchBox.text.isNullOrEmpty()){

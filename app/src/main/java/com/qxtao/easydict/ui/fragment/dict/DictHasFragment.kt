@@ -2,7 +2,6 @@ package com.qxtao.easydict.ui.fragment.dict
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -71,17 +70,17 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
                     if (layout.getChildAt(0) != null && layout.getChildAt(0) is SnackbarContentLayout) {
                         val contentLayout = layout.getChildAt(0) as SnackbarContentLayout
                         layout.setPadding(
-                            SizeUtils.dp2px(12f), 0,
-                            SizeUtils.dp2px(12f),
-                            SizeUtils.dp2px(16f))
+                            SizeUtils.dp2px(16f), 0,
+                            SizeUtils.dp2px(16f),
+                            SizeUtils.dp2px(24f))
                         layout.setBackgroundColor(Color.TRANSPARENT)
-                        contentLayout.setPadding(SizeUtils.dp2px(12f), 0, SizeUtils.dp2px(12f),0)
-                        contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r15)
-                        contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurface(mContext))
+                        contentLayout.setPadding(SizeUtils.dp2px(12f), SizeUtils.dp2px(2f), SizeUtils.dp2px(12f),SizeUtils.dp2px(2f))
+                        contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r16)
+                        contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurfaceInverse(mContext))
                     }
                     snackBar.setAction(getString(R.string.undo_delete)) { dictViewModel.undoDeleteWord() }
-                        .setTextColor(ColorUtils.colorOnSurface(mContext))
-                        .setActionTextColor(ColorUtils.colorPrimary(mContext))
+                        .setTextColor(ColorUtils.colorOnSurfaceInverse(mContext))
+                        .setActionTextColor(ColorUtils.colorPrimaryInverse(mContext))
                         .show()
                     snackBar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -133,7 +132,7 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
                 // 绘制滑动图标说明
                 val textPaint = Paint().apply {
                     color = ColorUtils.colorOnError(mContext)
-                    textSize = SizeUtils.sp2px(13f).toFloat()
+                    textSize = resources.getDimension(R.dimen.text_size_medium)
                 }
                 val iconMargin = SizeUtils.dp2px(20f)
                 if (dX < 0){
@@ -173,6 +172,7 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
+
         (parentFragment as DictSearchFragment).getEditTextFocus()
         rvSearchHistoryAdapter = DictWordLineAdapter(ArrayList())
         rvSearchSuggestionAdapter = DictWordLineAdapter(ArrayList())

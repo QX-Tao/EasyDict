@@ -61,7 +61,6 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsB
             when(data[0]){
                 "onBackPressed" -> dispatcher.onBackPressed()
                 "toDetailFragment" -> toDetailFragment(data[1] as String)
-                "clearCache" -> clearCache()
                 "clearHistory" -> showClearHistoryDialog()
                 "clearWordBook" -> showClearWordBookDialog()
                 "clearWordList" -> showClearWordListDialog()
@@ -147,50 +146,5 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsB
     }
 
 
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun clearCache() {
-        GlobalScope.launch {
-            val clearCacheOk = withContext(Dispatchers.IO) {
-                async { clearCacheInternal() }.await()
-            }
-            if (clearCacheOk) {
-                withContext(Dispatchers.Main) {
-                    showShortToast(mContext.getString(R.string.clear_cache_success))
-                }
-            }
-        }
-    }
-    private suspend fun clearCacheInternal():Boolean {
-        return withContext(Dispatchers.IO) {
-            val cacheDir = mContext.cacheDir
-            if (cacheDir.exists()) {
-                val files = cacheDir.listFiles()
-                if (files != null) {
-                    for (file in files) {
-                        if (file.isDirectory) {
-                            deleteDir(file)
-                        } else {
-                            file.delete()
-                        }
-                    }
-                }
-            }
-            true
-        }
-    }
-    private fun deleteDir(dir: File): Boolean {
-        if (dir.isDirectory) {
-            val children = dir.list()
-            if (children != null) {
-                for (i in children.indices) {
-                    val success = deleteDir(File(dir, children[i]))
-                    if (!success) {
-                        return false
-                    }
-                }
-            }
-        }
-        return dir.delete()
-    }
 
 }

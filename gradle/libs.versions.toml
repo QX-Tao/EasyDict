@@ -4,7 +4,6 @@ andratingbar = "1.0.6"
 autofittextview = "0.2.1"
 cardview = "1.0.0"
 coil = "2.4.0"
-coreSplashscreen = "1.0.1"
 flexbox = "3.0.0"
 gson = "2.10.1"
 fragmentKtx = "1.7.1"
@@ -37,7 +36,6 @@ sqliteKtx = "2.4.0"
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 andratingbar = { module = "com.github.wdsqjq:AndRatingBar", version.ref = "andratingbar" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
@@ -67,9 +65,7 @@ rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }
 webprogress = { module = "com.github.youlookwhat:WebProgress", version.ref = "webprogress" }
 xhttp2 = { module = "com.github.xuexiangjys:XHttp2", version.ref = "xhttp2" }
 
-rikkax-core = { module = "dev.rikka.rikkax.core:core", version = "1.4.1" }
 rikkax-material = { module = "dev.rikka.rikkax.material:material", version = "2.7.0" }
-rikkax-material-preference = { module = "dev.rikka.rikkax.material:material-preference", version = "2.0.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

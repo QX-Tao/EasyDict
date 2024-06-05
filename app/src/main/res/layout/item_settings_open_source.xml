@@ -23,7 +23,7 @@
         android:layout_marginBottom="2dp"
         android:layout_height="wrap_content"
         android:textColor="?attr/colorOnSurface"
-        android:textSize="17sp" />
+        android:textSize="@dimen/text_size_normal" />
 
     <TextView
         app:layout_constraintTop_toBottomOf="@+id/tv_open_source_item_title"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="15sp" />
+        android:textSize="@dimen/text_size_normal" />
 
     <TextView
         app:layout_constraintTop_toBottomOf="@+id/tv_open_source_item_info"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="15sp" />
+        android:textSize="@dimen/text_size_normal" />
 
     <TextView
         app:layout_constraintTop_toBottomOf="@+id/tv_open_source_item_link"
@@ -58,7 +58,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="15sp" />
+        android:textSize="@dimen/text_size_normal" />
 
     <ImageView
         android:src="@drawable/ic_right"

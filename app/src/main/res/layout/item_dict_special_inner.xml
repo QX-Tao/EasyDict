@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="15sp" />
+            android:textSize="@dimen/text_size_normal" />
 
         <TextView
             app:layout_alignSelf="center"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="?attr/colorOnSurface"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_size_normal" />
 
     <TextView
         android:textColorHighlight="?attr/colorSecondaryContainer"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="14sp" />
+        android:textSize="@dimen/text_size_medium" />
 
     <TextView
         android:id="@+id/tv_item_source"
@@ -56,6 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="12sp" />
+        android:textSize="@dimen/text_size_small" />
 
 </LinearLayout>

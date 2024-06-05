@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorPrimary"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_size_normal" />
 
         <TextView
             android:maxLines="1"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_medium" />
 
     </LinearLayout>
 

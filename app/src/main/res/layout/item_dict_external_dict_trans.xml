@@ -16,7 +16,7 @@
     <com.google.android.material.card.MaterialCardView
         app:cardBackgroundColor="?attr/colorSurfaceContainer"
         app:strokeColor="@color/trans"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="@dimen/card_view_radius_small"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -35,6 +35,6 @@
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"/>
+        android:textSize="@dimen/text_size_small"/>
 
 </LinearLayout>

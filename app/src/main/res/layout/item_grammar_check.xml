@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     app:cardBackgroundColor="?attr/colorSurfaceContainer"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="15dp"
+    app:cardCornerRadius="@dimen/card_view_radius_medium"
     app:cardElevation="0dp">
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/raw_sentence_eee"
-            android:textSize="15sp" />
+            android:textSize="@dimen/text_size_normal" />
 
         <TextView
             android:id="@+id/tv_gc_suggestion"

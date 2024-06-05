@@ -16,7 +16,6 @@ import com.qxtao.easydict.utils.common.SizeUtils
 
 class DictDetailEEFragment : BaseFragment<FragmentDictDetailEeBinding>(FragmentDictDetailEeBinding::inflate) {
     // define variable
-    private var isInitView = false
     private lateinit var dictViewModel: DictViewModel
     private lateinit var rvDictEEDictOuterAdapter: DictEEDictOuterAdapter
 
@@ -31,8 +30,8 @@ class DictDetailEEFragment : BaseFragment<FragmentDictDetailEeBinding>(FragmentD
     }
 
     override fun initViews() {
-        isInitView = true
         dictViewModel = (activity as DictActivity).getDictViewModel()
+
         rvDictEEDictOuterAdapter = DictEEDictOuterAdapter(ArrayList())
         rvEEDict.adapter = rvDictEEDictOuterAdapter
         rvEEDict.layoutManager = LinearLayoutManager(requireActivity())
@@ -41,8 +40,6 @@ class DictDetailEEFragment : BaseFragment<FragmentDictDetailEeBinding>(FragmentD
                 rvDictEEDictOuterAdapter.setData(it?.word?.trs)
             }
         }
-        nsvContent.scrollY = dictViewModel.nsvOffset[EE_FRAGMENT] ?: 0
-        isInitView = false
     }
 
     override fun addListener() {
@@ -50,12 +47,6 @@ class DictDetailEEFragment : BaseFragment<FragmentDictDetailEeBinding>(FragmentD
             view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
             insets
         }
-        nsvContent.viewTreeObserver.addOnScrollChangedListener {
-            if (!isInitView){
-                dictViewModel.setNsvScrollOffset(EE_FRAGMENT, nsvContent.scrollY)
-            }
-        }
-
     }
 
 

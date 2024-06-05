@@ -20,14 +20,10 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentDictDetailBinding
-import com.qxtao.easydict.ui.activity.dict.APPBAR_LAYOUT_COLLAPSED
-import com.qxtao.easydict.ui.activity.dict.APPBAR_LAYOUT_EXPANDED
-import com.qxtao.easydict.ui.activity.dict.APPBAR_LAYOUT_INTERMEDIATE
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.dict.SEARCH_LE_EN
@@ -36,13 +32,13 @@ import com.qxtao.easydict.ui.activity.dict.VOICE_NORMAL
 import com.qxtao.easydict.ui.activity.photoview.PhotoViewActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
-import com.qxtao.easydict.utils.common.SizeUtils
+import com.qxtao.easydict.utils.common.ShareUtils
+import com.qxtao.easydict.utils.constant.ShareConstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.abs
 
 
 class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictDetailBinding::inflate) {
@@ -50,7 +46,6 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     private lateinit var dictDetailPagerAdapter : DictDetailPagerAdapter
     private val tabLayoutMap = mapOf(0 to "简明", 1 to "柯林斯", 2 to "英英")
     private lateinit var dictViewModel: DictViewModel
-    private var isInitView = false
     // define widget
     private lateinit var searchDetailTablayout: TabLayout
     private lateinit var searchDetailViewpager: ViewPager2
@@ -116,8 +111,8 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     }
 
     override fun initViews() {
-        isInitView = true
         dictViewModel = (activity as DictActivity).getDictViewModel()
+        dictViewModel.playSound = if (ShareUtils.getString(mContext, ShareConstant.DEF_VOICE, ShareConstant.MEI) == ShareConstant.MEI) 0 else 1
         (parentFragment as? DictSearchFragment)?.exitEditTextFocus()
         dictViewModel.dataLoadInfo.observe(this) {
             when (it) {
@@ -175,7 +170,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                         it.trs?.get(0)?.tran?.let { it1 -> tvTransTo.text = it1 }
                         it.trs?.get(0)?.`tran-roman`?.let { it1 ->
                             tvTransToRoman.visibility = View.VISIBLE
-                            tvTransToRoman.setExpandableText(it1)
+                            tvTransToRoman.originalText = it1
                         }
                     }
                 } else { // 单词短语
@@ -209,7 +204,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                     it.`return-phrase`?.word?.let { it1 -> tvTransFrom.text = it1 }
                     it.`return-phrase`?.`query-roman`?.let { it1 ->
                         tvTransFromRoman.visibility = View.VISIBLE
-                        tvTransFromRoman.setExpandableText(it1)
+                        tvTransFromRoman.originalText = it1
                     }
                 } else { // 单词短语
                     clWordHeader.visibility = View.VISIBLE
@@ -245,8 +240,6 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                 ivWordCollect.setImageResource(R.drawable.ic_collect1)
             }
         }
-        binding.appBarLayout.setExpanded(dictViewModel.detailFragmentAppBarExpanded.value == APPBAR_LAYOUT_EXPANDED, false)
-        isInitView = false
     }
 
     override fun addListener() {
@@ -254,8 +247,8 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
             view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
             insets
         }
-        tvTransFromRoman.setOnClickListener { tvTransFromRoman.toggleExpand() }
-        tvTransToRoman.setOnClickListener { tvTransToRoman.toggleExpand() }
+        tvTransFromRoman.setOnClickListener { tvTransFromRoman.toggle() }
+        tvTransToRoman.setOnClickListener { tvTransToRoman.toggle() }
         ivWdPic.setOnClickListener {
             val pictureList = ArrayList<String>()
             dictViewModel.picDictResponse.value?.pic?.get(0)?.url.let {
@@ -264,25 +257,17 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                 PhotoViewActivity.start(requireActivity(), pictureList, ivWdPic)
             }
         }
-        binding.appBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
-            if (!isInitView) {
-                dictViewModel.detailFragmentAppBarExpanded.value =
-                    if (verticalOffset == 0) APPBAR_LAYOUT_EXPANDED
-                    else if (abs(verticalOffset) >= binding.appBarLayout.totalScrollRange) APPBAR_LAYOUT_COLLAPSED
-                    else APPBAR_LAYOUT_INTERMEDIATE
-            }
-        }
         tvReload.setOnClickListener {
             mListener.onFragmentInteraction("toDetailFragment", dictViewModel.searchText.value?.editSearchText)
         }
         ivUkVoice.setOnClickListener {
-            dictViewModel.ehResponse.value?.usspeech?.let { it1 ->
-                dictViewModel.startPlaySound(VOICE_NORMAL, 0, it1, SEARCH_LE_EN)
+            dictViewModel.ehResponse.value?.ukspeech?.let { it1 ->
+                dictViewModel.startPlaySound(VOICE_NORMAL, 0, it1, SEARCH_LE_EN, -1)
             }
         }
         ivUsVoice.setOnClickListener {
-            dictViewModel.ehResponse.value?.ukspeech?.let { it1 ->
-                dictViewModel.startPlaySound(VOICE_NORMAL, 1, it1, SEARCH_LE_EN)
+            dictViewModel.ehResponse.value?.usspeech?.let { it1 ->
+                dictViewModel.startPlaySound(VOICE_NORMAL, 1, it1, SEARCH_LE_EN, -1)
             }
         }
         ivNormalVoice.setOnClickListener {
@@ -295,7 +280,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                 when (it) {
                     SEARCH_LE_ZH -> {
                         dictViewModel.heResponse.value?.`return-phrase`?.word?.let { it1 ->
-                            dictViewModel.startPlaySound(VOICE_NORMAL, 3, it1, SEARCH_LE_ZH)
+                            dictViewModel.startPlaySound(VOICE_NORMAL, 3, it1, SEARCH_LE_ZH, -1)
                         }
                     }
                     SEARCH_LE_EN -> {
@@ -317,7 +302,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                     }
                     SEARCH_LE_ZH -> {
                         dictViewModel.ehResponse.value?.trs?.get(0)?.tran?.let { it1 ->
-                            dictViewModel.startPlaySound(VOICE_NORMAL, 4, it1, SEARCH_LE_ZH)
+                            dictViewModel.startPlaySound(VOICE_NORMAL, 4, it1, SEARCH_LE_ZH, -1)
                         }
                     }
                     else -> showShortToast(getString(R.string.play_failure))
@@ -340,14 +325,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                 dictViewModel.removeSearchTextFromWordBook()
                 showShortToast(getString(R.string.remove_from_word_book))
             } else {
-                val res = dictViewModel.addSearchTextToWordBook()
-                if (res.first){
-                    showShortToast(String.format(getString(R.string.add_to_word_book), res.second[res.third!!]))
-                } else {
-                    if (res.second.size > 1 && res.third == null){
-                        mListener.onFragmentInteraction("showSelectWordBookDialog")
-                    } else showShortToast(getString(R.string.operation_failure))
-                }
+                mListener.onFragmentInteraction("showSelectWordBookDialog")
             }
         }
         ivTransCollect.setOnClickListener {
@@ -355,14 +333,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                 dictViewModel.removeSearchTextFromWordBook()
                 showShortToast(getString(R.string.remove_from_word_book))
             } else {
-                val res = dictViewModel.addSearchTextToWordBook()
-                if (res.first){
-                    showShortToast(String.format(getString(R.string.add_to_word_book), res.second[res.third!!]))
-                } else {
-                    if (res.second.size > 1 && res.third == null){
-                        mListener.onFragmentInteraction("showSelectWordBookDialog")
-                    } else showShortToast(getString(R.string.operation_failure))
-                }
+                mListener.onFragmentInteraction("showSelectWordBookDialog")
             }
         }
     }

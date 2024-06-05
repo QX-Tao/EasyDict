@@ -58,13 +58,23 @@ import com.qxtao.easydict.ui.activity.dict.WEB_TRANS_PART_MORE
 import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
+import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.common.SizeUtils
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_AUTH_SENTS
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_BAIKE_DIGEST
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_BLNG_SENTS
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_ETYM
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_EXTERNAL
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_PHRASE
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_REL_WORD
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SPECIAL
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_THESAURUS
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_TRANS
 import com.qxtao.easydict.utils.factory.appWidth
 
 
 class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentDictDetailJmBinding::inflate) {
     // define variable
-    private var isInitView = false
     private lateinit var dictViewModel: DictViewModel
     private lateinit var rvEhHeaderExplainAdapter: DictEhHeaderExplainAdapter
     private lateinit var rvEhHeaderInflectionAdapter: DictEhHeaderInflectionAdapter
@@ -234,7 +244,6 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
     }
 
     override fun initViews() {
-        isInitView = true
         dictViewModel = (activity as DictActivity).getDictViewModel()
 
         // 第一部分：英汉基础信息
@@ -298,7 +307,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
             } else rvBlngSentsPartClassification.visibility = View.GONE
         }
         dictViewModel.blngSents.observe(this) {
-            if (it?.isNotEmpty() == true) {
+            if (it?.isNotEmpty() == true && ShareUtils.getBoolean(mContext, IS_USE_BLNG_SENTS, true)) {
                 rvDictBlngSentsAdapter.setData(it[rvBlngSentsPartClassificationAdapter.getSelectedItemText()]?.take(3))
                 dictViewModel.hasSearchResult.value = false
                 clBlngSentsPart.visibility = View.VISIBLE
@@ -313,7 +322,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvAuthSentsPart.adapter = rvDictAuthSentsAdapter
         rvAuthSentsPart.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.authSentenceResponse.observe(this){
-            if ((it?.sent?.size ?: 0) > 0){
+            if ((it?.sent?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_AUTH_SENTS, true)){
                 dictViewModel.hasSearchResult.value = false
                 clAuthSentsPart.visibility = View.VISIBLE
                 rvDictAuthSentsAdapter.setData(it?.sent?.take(3))
@@ -327,7 +336,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvWebTransPartMean.adapter = rvDictWebTransOuterAdapter
         rvWebTransPartMean.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.webTransResponse.observe(this){
-            if((it?.`web-translation`?.size ?: 0) > 0) {
+            if((it?.`web-translation`?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_WEB_TRANS, true)) {
                 dictViewModel.hasSearchResult.value = false
                 clWebTransPart.visibility = View.VISIBLE
                 rvDictWebTransOuterAdapter.setData(it?.`web-translation`?.take(1))
@@ -341,7 +350,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvSpecialPartMean.adapter = rvDictSpecialOuterAdapter
         rvSpecialPartMean.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.specialResponse.observe(this){
-            if((it?.entries?.size ?: 0) > 0){
+            if((it?.entries?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_SPECIAL, true)){
                 dictViewModel.hasSearchResult.value = false
                 clSpecialPart.visibility = View.VISIBLE
                 rvDictSpecialOuterAdapter.setData(it?.entries?.filter { it1 ->
@@ -357,7 +366,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvThesaurusPartMean.adapter = rvDictThesurusOuterAdapter
         rvThesaurusPartMean.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.thesaurusResponse.observe(this){
-            if((it?.thesauruses?.size ?: 0) > 0){
+            if((it?.thesauruses?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_THESAURUS, true)){
                 dictViewModel.hasSearchResult.value = false
                 clThesaurusPart.visibility = View.VISIBLE
                 rvDictThesurusOuterAdapter.setData(it?.thesauruses?.filter { it1 ->
@@ -373,7 +382,8 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvSynonymPartMean.adapter = rvDictSynoAdapter
         rvSynonymPartMean.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.synoResponse.observe(this){
-            if ((it?.synos?.size ?: 0) > 0 && (dictViewModel.thesaurusResponse.value?.thesauruses?.size ?: 0) <= 0){
+            if ((it?.synos?.size ?: 0) > 0 && (dictViewModel.thesaurusResponse.value?.thesauruses?.size ?: 0) <= 0
+                && ShareUtils.getBoolean(mContext, IS_USE_THESAURUS, true)){
                 dictViewModel.hasSearchResult.value = false
                 clSynonymPart.visibility = View.VISIBLE
                 rvDictSynoAdapter.setData(it?.synos?.take(3))
@@ -387,7 +397,8 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvAntonymPartMean.adapter = rvDictAntoAdapter
         rvAntonymPartMean.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.antoResponse.observe(this){
-            if ((it?.antos?.size ?: 0) > 0 && (dictViewModel.thesaurusResponse.value?.thesauruses?.size ?: 0) <= 0){
+            if ((it?.antos?.size ?: 0) > 0 && (dictViewModel.thesaurusResponse.value?.thesauruses?.size ?: 0) <= 0
+                && ShareUtils.getBoolean(mContext, IS_USE_THESAURUS, true)){
                 dictViewModel.hasSearchResult.value = false
                 clAntonymPart.visibility = View.VISIBLE
                 rvDictAntoAdapter.setData(it?.antos?.take(3))
@@ -401,7 +412,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvPhrasePartMean.adapter = rvPhraseAdapter
         rvPhrasePartMean.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.phrsResponse.observe(this){
-            if ((it?.phrs?.size ?: 0) > 0){
+            if ((it?.phrs?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_PHRASE, true)){
                 dictViewModel.hasSearchResult.value = false
                 clPhrasePart.visibility = View.VISIBLE
                 rvPhraseAdapter.setData(it?.phrs?.take(3))
@@ -415,7 +426,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvRelWordPartMean.adapter = rvRelWordAdapter
         rvRelWordPartMean.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.relWordResponse.observe(this){
-            if ((it?.rels?.size ?: 0) > 0){
+            if ((it?.rels?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_REL_WORD, true)){
                 dictViewModel.hasSearchResult.value = false
                 tvRelWordPartInf.text = it?.stem
                 val rel = mutableListOf<RelInfo>()
@@ -432,7 +443,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvEtymPartMean.adapter = rvEtymAdapter
         rvEtymPartMean.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.etymResponse.observe(this){
-            if ((it?.etyms?.zh?.size ?: 0) > 0){
+            if ((it?.etyms?.zh?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_ETYM, true)){
                 dictViewModel.hasSearchResult.value = false
                 clEtymPart.visibility = View.VISIBLE
                 val etyms = mutableListOf<Etym>()
@@ -446,14 +457,14 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
 
         // 第十三部分：百科
         dictViewModel.baikeDigest.observe(this){
-            if ((it?.summarys?.size ?: 0) > 0){
+            if ((it?.summarys?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_BAIKE_DIGEST, true)){
                 dictViewModel.hasSearchResult.value = false
                 clBaikeDigestPart.visibility = View.VISIBLE
                 tvBaikeDigestPartWord.text = it?.summarys?.get(0)?.key
                 it?.summarys?.get(0)?.summary?.let { it1 ->
                     if (it1.isBlank()) tvBaikeDigestPartDesc.visibility = View.GONE
-                    tvBaikeDigestPartDesc.text = it1
-                    tvBaikeDigestPartDesc.setExpandableText(it1) }
+                    tvBaikeDigestPartDesc.originalText = it1
+                }
                 tvSourceBaike.text = it?.source?.name
             } else {
                 clBaikeDigestPart.visibility = View.GONE
@@ -484,7 +495,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvExternalDictPartMean.adapter = rvExternalDictAdapter
         rvExternalDictPartMean.layoutManager = FlexboxLayoutManager(requireActivity())
         dictViewModel.dictExternalDict.observe(this){
-            if ((it?.size ?: 0) > 0){
+            if ((it?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_EXTERNAL, true)){
                 clExternalDictPart.visibility = View.VISIBLE
                 rvExternalDictAdapter.setData(it?.take((requireActivity().appWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
             } else {
@@ -497,7 +508,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvExternalTransPartMean.adapter = rvExternalTransAdapter
         rvExternalTransPartMean.layoutManager = FlexboxLayoutManager(requireActivity())
         dictViewModel.dictExternalTrans.observe(this){
-            if ((it?.size ?: 0) > 0){
+            if ((it?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_EXTERNAL, true)){
                 clExternalTransPart.visibility = View.VISIBLE
                 rvExternalTransAdapter.setData(it?.take((requireActivity().appWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
             } else {
@@ -520,9 +531,6 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                 else rvHeHeaderExplainAdapter.resetPlaySound()
             }
         }
-
-        nsvContent.scrollY = dictViewModel.nsvOffset[JM_FRAGMENT] ?: 0
-        isInitView = false
     }
 
     override fun addListener() {
@@ -549,12 +557,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
             }
         })
         tvBaikeDigestPartDesc.setOnClickListener {
-            tvBaikeDigestPartDesc.toggleExpand()
-        }
-        nsvContent.viewTreeObserver.addOnScrollChangedListener {
-            if (!isInitView){
-                dictViewModel.setNsvScrollOffset(JM_FRAGMENT, nsvContent.scrollY)
-            }
+            tvBaikeDigestPartDesc.toggle()
         }
         tvRetype.setOnClickListener {
             mListener.onFragmentInteraction("toHasFragment")

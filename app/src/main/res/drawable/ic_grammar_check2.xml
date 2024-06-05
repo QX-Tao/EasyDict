@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="32dp" android:viewportHeight="1024" android:viewportWidth="1024" android:width="32dp">
+      
+    <path android:fillColor="?attr/colorOnSurface" android:pathData="M160,25.6h704A102.4,102.4 0,0 1,966.4 128v768a102.4,102.4 0,0 1,-102.4 102.4L160,998.4A102.4,102.4 0,0 1,57.6 896L57.6,128A102.4,102.4 0,0 1,160 25.6zM160,102.4a25.6,25.6 0,0 0,-25.6 25.6v768c0,14.1 11.5,25.6 25.6,25.6h704a25.6,25.6 0,0 0,25.6 -25.6L889.6,128a25.6,25.6 0,0 0,-25.6 -25.6L160,102.4z"
+        android:strokeColor="?attr/colorOnSurface" android:strokeWidth="2"/>
+      
+    <path android:fillColor="?attr/colorOnSurface" android:pathData="M608,800a160,160 0,1 0,0 -320,160 160,0 0,0 0,320zM608,736a96,96 0,1 1,0 -192,96 96,0 0,1 0,192z"
+        android:strokeColor="?attr/colorOnSurface" android:strokeWidth="2"/>
+      
+    <path android:fillColor="?attr/colorOnSurface" android:pathData="M681.3,758.7l64,64a32,32 0,0 0,45.3 -45.3l-64,-64a32,32 0,0 0,-45.3 45.3zM256,287.5H608a32,32 0,1 0,0 -64H256a32,32 0,0 0,0 64zM256,479.5h160.1a32,32 0,0 0,0 -64H256a32,32 0,0 0,0 64zM256,671.5h80a32,32 0,1 0,0 -64H256a32,32 0,1 0,0 64z"
+        android:strokeColor="?attr/colorOnSurface" android:strokeWidth="2"/>
+    
+</vector>

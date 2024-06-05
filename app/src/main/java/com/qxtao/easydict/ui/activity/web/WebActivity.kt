@@ -7,14 +7,13 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.content.res.TypedArray
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -26,6 +25,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -40,7 +40,6 @@ import com.qxtao.easydict.utils.common.NetworkUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_VIEW
 import me.jingbin.progress.WebProgress
-import rikka.core.util.ClipboardUtils
 
 
 class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate){
@@ -195,6 +194,18 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
         llLoadingFail.setOnClickListener {
             webView.loadUrl(webViewModel.currentUrl!!)
         }
+        webView.setDownloadListener { url, _, _, _, _ ->
+            AlertDialog.Builder(mContext)
+                .setTitle(getString(R.string.hint))
+                .setMessage(getString(R.string.web_request_download_file_desc))
+                .setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    mContext.startActivity(intent)
+                }
+                .setNegativeButton(getString(R.string.cancel), null)
+                .create()
+                .show()
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -221,10 +232,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             }
         }
         webView.webViewClient = object : WebViewClient(){
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest
-            ): Boolean {
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
                 val hitTestResult = view?.hitTestResult
                 if (hitTestResult == null || hitTestResult.extra == null){
                     return false
@@ -234,17 +242,9 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
                     view.context.startActivity(intent)
                     return true
                 } else{
-                    if (request.url.toString().startsWith("http://")){
-                        showShortToast(getString(R.string.cleartext_not_permitted))
-                        val intent = Intent(Intent.ACTION_VIEW, request.url)
-                        view.context.startActivity(intent)
-                        return true
-                    } else {
-                        webViewModel.currentUrl = request.url.toString()
-                        view.loadUrl(request.url.toString())
-                    }
+                    view.loadUrl(request.url.toString())
+                    return false
                 }
-                return false
             }
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 webViewModel.currentUrl = url
@@ -267,12 +267,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
                 }
                 lvLoading.visibility = View.GONE
             }
-
-            override fun onReceivedError(
-                view: WebView,
-                request: WebResourceRequest,
-                error: WebResourceError
-            ) {
+            override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
                 Log.d("WebView", "onReceivedError: ${error.errorCode}")
                 when (error.errorCode){
                     ERROR_TIMEOUT -> { }
@@ -283,18 +278,6 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
                         webView.loadUrl("about:blank")
                         llLoadingFail.visibility = View.VISIBLE
                     }
-                }
-            }
-
-            override fun shouldInterceptRequest(
-                view: WebView,
-                request: WebResourceRequest
-            ): WebResourceResponse? {
-                val url = request.url.toString().lowercase()
-                return if (url.contains("google.com") || url.contains("googleads.g")) {
-                    WebResourceResponse(null, null, null)
-                } else {
-                    super.shouldInterceptRequest(view, request)
                 }
             }
         }
@@ -314,6 +297,36 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
                     }
                 }
             }
+            override fun onJsAlert(view: WebView, url: String, message: String, result: JsResult): Boolean {
+                AlertDialog.Builder(view.context)
+                    .setTitle(getString(R.string.hint))
+                    .setMessage(message)
+                    .setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                        result.confirm()
+                    }
+                    .setNegativeButton(getString(R.string.cancel), null)
+                    .setOnDismissListener {
+                        result.cancel()
+                    }
+                    .create()
+                    .show()
+                return true
+            }
+            override fun onJsConfirm(view: WebView, url: String, message: String, result: JsResult): Boolean {
+                AlertDialog.Builder(view.context)
+                    .setTitle(getString(R.string.hint))
+                    .setMessage(message)
+                    .setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                        result.confirm()
+                    }
+                    .setNegativeButton(getString(R.string.cancel), null)
+                    .setOnDismissListener {
+                        result.cancel()
+                    }
+                    .create()
+                    .show()
+                return true
+            }
         }
         webView.setBackgroundColor(0)
         webView.background.alpha = 0
@@ -322,17 +335,9 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     private fun loadUrl(){
         if (isRestoreWebView) return
         val url = webViewModel.currentUrl ?: initUrl
-        if (url.isNullOrEmpty()) finish()
-        else {
-            if (url.startsWith("http://")){
-                showShortToast(getString(R.string.cleartext_not_permitted))
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                mContext.startActivity(intent)
-                finish()
-            } else {
-                webViewModel.currentUrl = url
-                webView.loadUrl(url)
-            }
+        if (url.isNullOrEmpty()) finish() else {
+            webViewModel.currentUrl = url
+            webView.loadUrl(url)
         }
     }
 
