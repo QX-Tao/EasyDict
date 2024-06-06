@@ -1,5 +1,7 @@
 package com.qxtao.easydict.ui.fragment.settings
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -25,14 +27,13 @@ import com.qxtao.easydict.ui.activity.settings.SettingsActivity
 import com.qxtao.easydict.ui.activity.settings.SettingsViewModel
 import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.ui.base.BaseFragment
+import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.factory.screenRotation
 
 class SettingsAboutFragment : BaseFragment<FragmentSettingsAboutBinding>(FragmentSettingsAboutBinding::inflate) {
     // define variable
     private lateinit var settingsViewModel: SettingsViewModel
     // define widget
-    private lateinit var vHolder: View
-    private lateinit var nsvContent: NestedScrollView
     private lateinit var clAppPackageInfo : ConstraintLayout
     private lateinit var clAppIconSource : ConstraintLayout
     private lateinit var clAppOpenSource : ConstraintLayout
@@ -42,8 +43,6 @@ class SettingsAboutFragment : BaseFragment<FragmentSettingsAboutBinding>(Fragmen
     private lateinit var rvOpenSource: RecyclerView
 
     override fun bindViews() {
-        vHolder = binding.vHolder
-        nsvContent = binding.nsvContent
         clAppPackageInfo = binding.clAppPackageInfo
         clAppIconSource = binding.clAppIconSource
         clAppOpenSource = binding.clAppOpenSource
@@ -67,30 +66,20 @@ class SettingsAboutFragment : BaseFragment<FragmentSettingsAboutBinding>(Fragmen
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            nsvContent.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (requireActivity().screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(
-                        WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(
-                        WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         binding.mtTitle.setNavigationOnClickListener{
             mListener.onFragmentInteraction("onBackPressed")
         }
+        clAppPackageInfo.setOnClickListener {
+            val url = "https://www.123pan.com/s/W1LKVv-Emo7A.html"
+            WebActivity.start(
+                requireActivity(), url,
+                allowOtherUrls = true,
+                useWebTitle = true
+            )
+            ClipboardUtils.copyTextToClipboard(mContext, "kDva", getString(R.string.copied_pwd))
+        }
         clAppOpenSource.setOnClickListener{
-            val url = "https://github.com/QX-Tao/EasyDict/"
+            val url = "https://github.com/QX-Tao/EasyDict"
             WebActivity.start(
                 requireActivity(), url,
                 allowOtherUrls = true,
@@ -98,7 +87,7 @@ class SettingsAboutFragment : BaseFragment<FragmentSettingsAboutBinding>(Fragmen
             )
         }
         clAppIconSource.setOnClickListener{
-            val url = "https://www.iconfont.cn/"
+            val url = "https://www.iconfont.cn"
             WebActivity.start(
                 requireActivity(), url,
                 allowOtherUrls = true,

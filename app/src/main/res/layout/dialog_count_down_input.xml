@@ -42,7 +42,7 @@
             android:clickable="true"
             android:hint="@string/please_input_count_down_name"
             android:maxLines="1"
-            android:maxEms="8"
+            android:maxLength="8"
             android:autofillHints="text"
             app:drawableStartCompat="@drawable/ic_edit2" />
 

@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -13,15 +12,10 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.materialswitch.MaterialSwitch
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentSettingsWelcomeScreenBinding
 import com.qxtao.easydict.ui.activity.settings.SettingsActivity
@@ -39,7 +33,6 @@ import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_GRAMMAR_CHECK
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SUGGEST_SEARCH
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WORD_BOOK
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WORD_LIST
-import com.qxtao.easydict.utils.factory.screenRotation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,9 +42,7 @@ class SettingsWelcomeScreenFragment : BaseFragment<FragmentSettingsWelcomeScreen
     // define variable
     private lateinit var settingsViewModel: SettingsViewModel
     // define widget
-    private lateinit var vHolder: View
     private lateinit var mtTitle: MaterialToolbar
-    private lateinit var nsvContent: NestedScrollView
     private lateinit var clCountDown: ConstraintLayout
     private lateinit var clSuggestSearch: ConstraintLayout
     private lateinit var clWordList: ConstraintLayout
@@ -66,9 +57,7 @@ class SettingsWelcomeScreenFragment : BaseFragment<FragmentSettingsWelcomeScreen
     private lateinit var swGrammarCheck: MaterialSwitch
 
     override fun bindViews() {
-        vHolder = binding.vHolder
         mtTitle = binding.mtTitle
-        nsvContent = binding.nsvContent
         clCountDown = binding.clCountDown
         clSuggestSearch = binding.clSuggestSearch
         clWordList = binding.clWordList
@@ -96,25 +85,6 @@ class SettingsWelcomeScreenFragment : BaseFragment<FragmentSettingsWelcomeScreen
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            nsvContent.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (requireActivity().screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(
-                        WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(
-                        WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         mtTitle.setNavigationOnClickListener{
             mListener.onFragmentInteraction("onBackPressed")
         }

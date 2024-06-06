@@ -1,17 +1,10 @@
 package com.qxtao.easydict.ui.fragment.wordbook
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,15 +19,12 @@ import com.qxtao.easydict.ui.activity.wordbook.WordBookActivity
 import com.qxtao.easydict.ui.activity.wordbook.WordBookViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.LoadingView
-import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.screenRotation
 
 class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(FragmentWordBookDetailBinding::inflate) {
     // define variable
     private lateinit var adapter: WordBookDetailAdapter
     private lateinit var wordBookViewModel: WordBookViewModel
     // define widget
-    private lateinit var vHolder: View
     private lateinit var lvLoading : LoadingView
     private lateinit var llLoadingFail : LinearLayout
     private lateinit var llListEmpty : LinearLayout
@@ -57,7 +47,6 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
 
     override fun bindViews() {
         mtTitle = binding.mtTitle
-        vHolder = binding.vHolder
         lvLoading = binding.lvLoading
         llLoadingFail = binding.llLoadingFail
         llListEmpty = binding.llListEmpty
@@ -116,23 +105,6 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            rvBookWord.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (requireActivity().screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         mtTitle.setNavigationOnClickListener{
             if (wordBookViewModel.detailMode.value == BOOK_WORD_MODE_CONTROL){
                 adapter.exitMultiSelectMode()

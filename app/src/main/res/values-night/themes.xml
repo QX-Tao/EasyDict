@@ -1,7 +1,8 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.EasyDict" parent="Theme.Material3.DynamicColors.Dark">
-        <item name="android:statusBarColor">?android:colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>

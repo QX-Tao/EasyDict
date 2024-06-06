@@ -2,8 +2,6 @@ package com.qxtao.easydict.ui.activity.web
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -17,7 +15,6 @@ import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -35,6 +32,7 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.ActivityWebBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.view.LoadingView
+import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.NetworkUtils
 import com.qxtao.easydict.utils.common.ShareUtils
@@ -60,7 +58,6 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     private lateinit var tvLoadingFail: TextView
     private lateinit var mtTitle: MaterialToolbar
     private lateinit var wpProgress: WebProgress
-    private lateinit var vHolder: View
 
     companion object{
         fun start(
@@ -153,7 +150,6 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     }
 
     override fun bindViews() {
-        vHolder = binding.vHolder
         webView = binding.webView
         llLoadingFail = binding.llLoadingFail
         lvLoading = binding.lvLoading
@@ -174,10 +170,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             when(it.itemId){
                 R.id.refresh -> { webView.reload() }
                 R.id.copy_url -> {
-                    val clipboard = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText(null, webViewModel.currentUrl)
-                    clipboard.setPrimaryClip(clip)
-                    showShortToast(getString(R.string.copied))
+                    ClipboardUtils.copyTextToClipboard(mContext, webViewModel.currentUrl, getString(R.string.copied))
                 }
                 R.id.open_in_browser -> {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webViewModel.currentUrl))

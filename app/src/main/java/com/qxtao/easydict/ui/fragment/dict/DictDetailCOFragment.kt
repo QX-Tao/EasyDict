@@ -20,11 +20,9 @@ class DictDetailCOFragment : BaseFragment<FragmentDictDetailCoBinding>(FragmentD
     private lateinit var rvDictCollinsOuterAdapter: DictCollinsOuterAdapter
 
     // define widget
-    private lateinit var nsvContent: NestedScrollView
     private lateinit var rvCollins: RecyclerView
 
     override fun bindViews() {
-        nsvContent = binding.nsvContent
         rvCollins = binding.rvCollins
     }
 
@@ -42,10 +40,6 @@ class DictDetailCOFragment : BaseFragment<FragmentDictDetailCoBinding>(FragmentD
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(nsvContent){ view, insets ->
-            view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            insets
-        }
     }
 
 }

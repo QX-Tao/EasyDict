@@ -1,18 +1,10 @@
 package com.qxtao.easydict.ui.fragment.dict
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,8 +47,7 @@ import com.qxtao.easydict.ui.activity.dict.VOICE_BLNG_PART
 import com.qxtao.easydict.ui.activity.dict.WEB_TRANS_PART_MORE
 import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.ui.base.BaseFragment
-import com.qxtao.easydict.utils.factory.isLandscape
-import com.qxtao.easydict.utils.factory.screenRotation
+import com.qxtao.easydict.utils.common.ClipboardUtils
 
 
 class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExtraBinding::inflate) {
@@ -76,7 +67,6 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     private lateinit var rvExternalDictAdapter: DictExternalDictTransAdapter
     private lateinit var rvExternalTransAdapter: DictExternalDictTransAdapter
     // define widget
-    private lateinit var vHolder: View
     private lateinit var mtTitle : MaterialToolbar
     private lateinit var rvRecycleView : RecyclerView
     private lateinit var rvBlngSentsPartClassification : RecyclerView
@@ -87,7 +77,6 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     private lateinit var nsvContent: NestedScrollView
 
     override fun bindViews() {
-        vHolder = binding.vHolder
         mtTitle = binding.mtTitle
         rvRecycleView = binding.rvRecycleView
         rvBlngSentsPartClassification = binding.rvBlngSentsPartClassification
@@ -104,23 +93,6 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            nsvContent.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (requireActivity().screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         llLoadingFail.setOnClickListener {
             initData(dictViewModel.extraFragmentStyle.value!!)
         }
@@ -251,12 +223,10 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 }
                 llLoadingFail.setOnClickListener { dictViewModel.onlineSearchBlng() }
                 dictViewModel.blngClassification.observe(this) {
-                    if (it.isNullOrEmpty()) {
-                        rvBlngSentsPartClassification.visibility = View.GONE
-                    } else {
-                        rvBlngSentsPartClassification.visibility = View.VISIBLE
+                    if ((it?.size ?: 0) > 1) {
                         rvBlngSentsPartClassificationAdapter.setData(it)
-                    }
+                        rvBlngSentsPartClassification.visibility = View.VISIBLE
+                    } else rvBlngSentsPartClassification.visibility = View.GONE
                 }
                 rvDictBlngSentsAdapter.setOnPlayButtonClickListener(object : DictBlngSentsAdapter.OnPlayButtonClickListener{
                     override fun onPlayButtonClick(position: Int) {
@@ -328,9 +298,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 rvExternalTransAdapter.setData(dictViewModel.dictExternalTrans.value)
                 rvExternalTransAdapter.setOnItemClickListener(object : DictExternalDictTransAdapter.OnItemClickListener {
                     override fun onItemClick(position: Int) {
-                        val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        cm.setPrimaryClip(ClipData.newPlainText(null, dictViewModel.searchText.value?.searchText))
-                        showShortToast(getString(R.string.copied_to_trans))
+                        ClipboardUtils.copyTextToClipboard(mContext, dictViewModel.searchText.value?.searchText, getString(R.string.copied_to_trans))
                     }
                 })
             }

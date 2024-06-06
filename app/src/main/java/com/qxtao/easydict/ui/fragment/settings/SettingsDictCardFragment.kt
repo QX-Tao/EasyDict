@@ -1,14 +1,9 @@
 package com.qxtao.easydict.ui.fragment.settings
 
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentSettingsDictCardBinding
@@ -26,14 +21,11 @@ import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_REL_WORD
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SPECIAL
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_THESAURUS
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_TRANS
-import com.qxtao.easydict.utils.factory.screenRotation
 
 class SettingsDictCardFragment : BaseFragment<FragmentSettingsDictCardBinding>(FragmentSettingsDictCardBinding::inflate) {
     // define variable
     private lateinit var settingsViewModel: SettingsViewModel
     // define widget
-    private lateinit var vHolder: View
-    private lateinit var nsvContent: NestedScrollView
     private lateinit var clBlngSents: ConstraintLayout
     private lateinit var clAuthSents: ConstraintLayout
     private lateinit var clWebTrans: ConstraintLayout
@@ -56,8 +48,6 @@ class SettingsDictCardFragment : BaseFragment<FragmentSettingsDictCardBinding>(F
     private lateinit var swExternal: MaterialSwitch
 
     override fun bindViews() {
-        vHolder = binding.vHolder
-        nsvContent = binding.nsvContent
         clBlngSents = binding.clBlngSents
         clAuthSents = binding.clAuthSents
         clWebTrans = binding.clWebTrans
@@ -95,25 +85,6 @@ class SettingsDictCardFragment : BaseFragment<FragmentSettingsDictCardBinding>(F
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            nsvContent.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (requireActivity().screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(
-                        WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(
-                        WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         binding.mtTitle.setNavigationOnClickListener{
             mListener.onFragmentInteraction("onBackPressed")
         }

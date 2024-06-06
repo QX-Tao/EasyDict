@@ -71,7 +71,8 @@ class DictThesurusInnerAdapter(private val mItemThesaurusList: ArrayList<Thesaur
             holder.textSyno.movementMethod = LinkMovementMethod.getInstance()
             holder.textSyno.text = spannable
         } else {
-            holder.layoutSyno.visibility = View.GONE
+            holder.textSyno.visibility = View.GONE
+            holder.textSynoTag.visibility = View.GONE
         }
         if ((item.anto?.size ?: 0) > 0){
             val  antoList = mutableListOf<String>()
@@ -100,7 +101,8 @@ class DictThesurusInnerAdapter(private val mItemThesaurusList: ArrayList<Thesaur
             holder.textAnto.movementMethod = LinkMovementMethod.getInstance()
             holder.textAnto.text = spannable
         } else {
-            holder.layoutAnto.visibility = View.GONE
+            holder.textAnto.visibility = View.GONE
+            holder.textAntoTag.visibility = View.GONE
         }
     }
 
@@ -126,8 +128,8 @@ class DictThesurusInnerAdapter(private val mItemThesaurusList: ArrayList<Thesaur
         var textExplain: TextView = itemView.findViewById(R.id.tv_item_explain)
         var textSyno: TextView = itemView.findViewById(R.id.tv_item_syno)
         var textAnto : TextView = itemView.findViewById(R.id.tv_item_anto)
-        var layoutAnto : LinearLayout = itemView.findViewById(R.id.ll_item_anto)
-        var layoutSyno : LinearLayout = itemView.findViewById(R.id.ll_item_syno)
+        var textSynoTag : TextView = itemView.findViewById(R.id.tv_item_syno_tag)
+        var textAntoTag : TextView = itemView.findViewById(R.id.tv_item_anto_tag)
     }
 
 }

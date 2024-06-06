@@ -101,7 +101,7 @@ class SettingsViewModel : ViewModel() {
         openSourceItems.add(
             OpenSourceItem(
                 "RxJava - ReactiveX",
-                "RxJava - Reactive Extensions for the JVM - a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
+                "A library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
                 "https://github.com/ReactiveX/RxJava",
                 "Apache-2.0 License"
             )
@@ -109,7 +109,7 @@ class SettingsViewModel : ViewModel() {
         openSourceItems.add(
             OpenSourceItem(
                 "RxAndroid - ReactiveX",
-                "RxJava bindings for Android.",
+                "RxJava bindings for Android, make writing reactive components in Android applications easy and hassle-free.",
                 "https://github.com/ReactiveX/RxAndroid",
                 "Apache-2.0 License"
             )
@@ -132,14 +132,6 @@ class SettingsViewModel : ViewModel() {
         )
         openSourceItems.add(
             OpenSourceItem(
-                "autofittextview - grantland",
-                "A TextView that automatically resizes text to fit perfectly within its bounds.",
-                "https://github.com/grantland/android-autofittextview",
-                "Apache-2.0 License"
-            )
-        )
-        openSourceItems.add(
-            OpenSourceItem(
                 "PermissionsDispatcher - Google",
                 "A declarative API to handle Android runtime permissions.",
                 "https://github.com/permissions-dispatcher/PermissionsDispatcher",
@@ -149,7 +141,7 @@ class SettingsViewModel : ViewModel() {
         openSourceItems.add(
             OpenSourceItem(
                 "AndRatingBar - wdsqjq",
-                "A RatingBar library for android, you can customize size ,color ,spacing and image easily!Support right to left.",
+                "A RatingBar library for android, you can customize size, color, spacing and image easily! Support right to left.",
                 "https://github.com/wdsqjq/AndRatingBar",
                 "Apache-2.0 License"
             )
@@ -165,7 +157,7 @@ class SettingsViewModel : ViewModel() {
         openSourceItems.add(
             OpenSourceItem(
                 "RikkaX - RikkaApps",
-                "Rikka's Android libraries.",
+                "Libraries used in Rikka apps.",
                 "https://github.com/RikkaApps/RikkaX",
                 "MIT License"
             )

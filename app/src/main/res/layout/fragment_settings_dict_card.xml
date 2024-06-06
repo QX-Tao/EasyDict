@@ -6,561 +6,548 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.settings.SettingsDictCardFragment">
 
-    <View
-        android:id="@+id/v_holder"
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/Widget.MaterialComponents.Toolbar"
+        android:id="@+id/mt_title"
+        app:fitsSystemWindowsInsets="top"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:navigationContentDescription="@string/back"
+        app:title="@string/dict_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        app:layout_constraintStart_toStartOf="@id/v_holder"
-        app:layout_constraintEnd_toEndOf="@id/v_holder"
-        app:layout_constraintTop_toTopOf="@id/v_holder"
-        app:layout_constraintBottom_toBottomOf="@id/v_holder"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_content"
+        android:clipToPadding="false"
+        app:fitsSystemWindowsInsets="bottom"
+        app:layout_constraintTop_toBottomOf="@id/mt_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            style="@style/Widget.MaterialComponents.Toolbar"
-            android:id="@+id/mt_title"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:navigationContentDescription="@string/back"
-            app:title="@string/dict_card"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nsv_content"
-            android:clipToPadding="false"
-            app:layout_constraintTop_toBottomOf="@id/mt_title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:orientation="vertical"
+            <!-- 功能管理 -->
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="6dp"
+                android:textColor="?attr/colorPrimary"
+                android:text="@string/function_setting"/>
 
-                <!-- 功能管理 -->
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
+            <!-- 双语例句 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_blng_sents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/iv_blng_sents"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_blng_sents"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_blng_sents"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_blng_sents"
+                    app:layout_constraintStart_toEndOf="@id/iv_blng_sents"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_blng_sents"
+                    android:text="@string/bilingual_example"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="0dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="6dp"
-                    android:textColor="?attr/colorPrimary"
-                    android:text="@string/function_setting"/>
+                    android:textSize="@dimen/text_size_normal"/>
 
-                <!-- 双语例句 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_blng_sents"
-                    android:layout_width="match_parent"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_blng_sents"
+                    android:background="@null"
+                    android:id="@+id/sw_blng_sents"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 权威例句 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_auth_sents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/iv_auth_sents"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_auth_sents"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_auth_sents"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_auth_sents"
+                    app:layout_constraintStart_toEndOf="@id/iv_auth_sents"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_auth_sents"
+                    android:text="@string/authoritative_example"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_blng_sents"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_blng_sents"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_blng_sents"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_auth_sents"
+                    android:background="@null"
+                    android:id="@+id/sw_auth_sents"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_blng_sents"
-                        app:layout_constraintStart_toEndOf="@id/iv_blng_sents"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_blng_sents"
-                        android:text="@string/bilingual_example"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_blng_sents"
-                        android:background="@null"
-                        android:id="@+id/sw_blng_sents"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <!-- 网络释义 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_web_trans"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_web_trans"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_web_trans"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_web_trans"
+                    android:scaleType="centerCrop" />
 
-                <!-- 权威例句 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_auth_sents"
-                    android:layout_width="match_parent"
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_web_trans"
+                    app:layout_constraintStart_toEndOf="@id/iv_web_trans"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_web_trans"
+                    android:text="@string/web_trans"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_auth_sents"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_auth_sents"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_auth_sents"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_web_trans"
+                    android:background="@null"
+                    android:id="@+id/sw_web_trans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_auth_sents"
-                        app:layout_constraintStart_toEndOf="@id/iv_auth_sents"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_auth_sents"
-                        android:text="@string/authoritative_example"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_auth_sents"
-                        android:background="@null"
-                        android:id="@+id/sw_auth_sents"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <!-- 专业释义 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_special"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_special"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_special"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_special"
+                    android:scaleType="centerCrop" />
 
-                <!-- 网络释义 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_web_trans"
-                    android:layout_width="match_parent"
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_special"
+                    app:layout_constraintStart_toEndOf="@id/iv_special"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_special"
+                    android:text="@string/special_trans"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_web_trans"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_web_trans"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_web_trans"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_special"
+                    android:background="@null"
+                    android:id="@+id/sw_special"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_web_trans"
-                        app:layout_constraintStart_toEndOf="@id/iv_web_trans"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_web_trans"
-                        android:text="@string/web_trans"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_web_trans"
-                        android:background="@null"
-                        android:id="@+id/sw_web_trans"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <!-- 同反义词 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_thesaurus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_thesaurus"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_thesaurus"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_thesaurus"
+                    android:scaleType="centerCrop" />
 
-                <!-- 专业释义 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_special"
-                    android:layout_width="match_parent"
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_thesaurus"
+                    app:layout_constraintStart_toEndOf="@id/iv_thesaurus"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_thesaurus"
+                    android:text="@string/thesaurus"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_special"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_special"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_special"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_thesaurus"
+                    android:background="@null"
+                    android:id="@+id/sw_thesaurus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_special"
-                        app:layout_constraintStart_toEndOf="@id/iv_special"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_special"
-                        android:text="@string/special_trans"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_special"
-                        android:background="@null"
-                        android:id="@+id/sw_special"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <!-- 词组 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_phrase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_phrase"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_phrase"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_phrase"
+                    android:scaleType="centerCrop" />
 
-                <!-- 同反义词 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_thesaurus"
-                    android:layout_width="match_parent"
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_phrase"
+                    app:layout_constraintStart_toEndOf="@id/iv_phrase"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_phrase"
+                    android:text="@string/phrase"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_thesaurus"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_thesaurus"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_thesaurus"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_phrase"
+                    android:background="@null"
+                    android:id="@+id/sw_phrase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_thesaurus"
-                        app:layout_constraintStart_toEndOf="@id/iv_thesaurus"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_thesaurus"
-                        android:text="@string/thesaurus"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_thesaurus"
-                        android:background="@null"
-                        android:id="@+id/sw_thesaurus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <!-- 同根词 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_rel_word"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_rel_word"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_rel_word"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_rel_word"
+                    android:scaleType="centerCrop" />
 
-                <!-- 词组 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_phrase"
-                    android:layout_width="match_parent"
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_rel_word"
+                    app:layout_constraintStart_toEndOf="@id/iv_rel_word"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_rel_word"
+                    android:text="@string/rel_word"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_phrase"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_phrase"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_phrase"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_rel_word"
+                    android:background="@null"
+                    android:id="@+id/sw_rel_word"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_phrase"
-                        app:layout_constraintStart_toEndOf="@id/iv_phrase"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_phrase"
-                        android:text="@string/phrase"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_phrase"
-                        android:background="@null"
-                        android:id="@+id/sw_phrase"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <!-- 词源 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_etym"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_etym"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_etym"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_etym"
+                    android:scaleType="centerCrop" />
 
-                <!-- 同根词 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_rel_word"
-                    android:layout_width="match_parent"
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_etym"
+                    app:layout_constraintStart_toEndOf="@id/iv_etym"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_etym"
+                    android:text="@string/etym"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_rel_word"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_rel_word"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_rel_word"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_etym"
+                    android:background="@null"
+                    android:id="@+id/sw_etym"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_rel_word"
-                        app:layout_constraintStart_toEndOf="@id/iv_rel_word"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_rel_word"
-                        android:text="@string/rel_word"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_rel_word"
-                        android:background="@null"
-                        android:id="@+id/sw_rel_word"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <!-- 百科 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_baike_digest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_baike_digest"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_baike_digest"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_baike_digest"
+                    android:scaleType="centerCrop" />
 
-                <!-- 词源 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_etym"
-                    android:layout_width="match_parent"
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_baike_digest"
+                    app:layout_constraintStart_toEndOf="@id/iv_baike_digest"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_baike_digest"
+                    android:text="@string/baike"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_etym"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_etym"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_etym"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_baike_digest"
+                    android:background="@null"
+                    android:id="@+id/sw_baike_digest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_etym"
-                        app:layout_constraintStart_toEndOf="@id/iv_etym"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_etym"
-                        android:text="@string/etym"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_etym"
-                        android:background="@null"
-                        android:id="@+id/sw_etym"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <!-- 词典翻译 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_external"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_external"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_external"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_external"
+                    android:scaleType="centerCrop" />
 
-                <!-- 百科 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_baike_digest"
-                    android:layout_width="match_parent"
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sw_external"
+                    app:layout_constraintStart_toEndOf="@id/iv_external"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_external"
+                    android:text="@string/dict_trans"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:textSize="@dimen/text_size_normal"/>
 
-                    <ImageView
-                        android:id="@+id/iv_baike_digest"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_baike_digest"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_baike_digest"
-                        android:scaleType="centerCrop" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_external"
+                    android:background="@null"
+                    android:id="@+id/sw_external"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_baike_digest"
-                        app:layout_constraintStart_toEndOf="@id/iv_baike_digest"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_baike_digest"
-                        android:text="@string/baike"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_baike_digest"
-                        android:background="@null"
-                        android:id="@+id/sw_baike_digest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!-- 词典翻译 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_external"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/iv_external"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_external"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@id/tv_external"
-                        android:scaleType="centerCrop" />
-
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/sw_external"
-                        app:layout_constraintStart_toEndOf="@id/iv_external"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/tv_external"
-                        android:text="@string/dict_trans"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_normal"/>
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_external"
-                        android:background="@null"
-                        android:id="@+id/sw_external"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </LinearLayout>
+        </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

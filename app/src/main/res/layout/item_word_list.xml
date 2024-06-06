@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:autofit="http://schemas.android.com/tools"
     android:layout_marginBottom="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -20,24 +19,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <me.grantland.widget.AutofitTextView
-                android:id="@+id/tv_list_word"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+            <TextView
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tv_list_mean"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_weight="1"
+                android:id="@+id/tv_list_word"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:gravity="center_vertical"
                 android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="@dimen/text_size_medium"
+                android:autoSizeMaxTextSize="@dimen/text_size_medium"
+                android:autoSizeMinTextSize="@dimen/text_size_extra_tiny"
+                android:autoSizeTextType="uniform"
                 android:padding="10dp"
-                android:singleLine="true"
                 android:text="@string/def_str"
                 android:textColor="?attr/colorOnSurface"
-                android:textStyle="bold"
-                autofit:minTextSize="10sp" />
+                android:textStyle="bold" />
 
             <TextView
                 android:paddingEnd="33dp"

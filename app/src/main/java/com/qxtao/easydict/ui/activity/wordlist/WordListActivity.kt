@@ -11,10 +11,7 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +34,6 @@ import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.constant.ShareConstant.DEF_VOICE
 import com.qxtao.easydict.utils.constant.ShareConstant.MEI
-import com.qxtao.easydict.utils.factory.screenRotation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +45,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
     private lateinit var lvLoading : LoadingView
     private lateinit var llLoadingFail : LinearLayout
     private lateinit var llListEmpty : LinearLayout
-    private lateinit var vHolder: View
     private lateinit var snackBar: Snackbar
     private lateinit var mtTitle: MaterialToolbar
     private lateinit var swList: View
@@ -302,29 +297,10 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
         lvLoading = binding.lvLoading
         llLoadingFail = binding.llLoadingFail
         llListEmpty = binding.llListEmpty
-        vHolder = binding.vHolder
         swList = findViewById(R.id.switch_list)
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            rvListWord.setPadding(SizeUtils.dp2px(16f), SizeUtils.dp2px(16f), SizeUtils.dp2px(16f),
-                SizeUtils.dp2px(16f) + insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         mtTitle.setNavigationOnClickListener{ finish() }
         swList.setOnClickListener { v ->
             showPopupMenu(v, wordListViewModel.clasPopWindowList).also {

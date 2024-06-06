@@ -14,6 +14,9 @@
     <dimen name="text_size_normal">16sp</dimen>
     <dimen name="text_size_medium">14sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_tiny">10sp</dimen>
+    <dimen name="text_size_extra_small">6sp</dimen>
+    <dimen name="text_size_extra_tiny">4sp</dimen>
 
 
 </resources>

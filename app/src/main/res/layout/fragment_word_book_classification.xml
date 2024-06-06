@@ -6,40 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.wordbook.WordBookClassificationFragment">
 
-    <View
-        android:id="@+id/v_holder"
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/Widget.MaterialComponents.Toolbar"
+        android:id="@+id/mt_title"
+        app:fitsSystemWindowsInsets="top"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationContentDescription="@string/back"
+        app:title="@string/my_word_book"
+        app:menu="@menu/word_book_menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        app:layout_constraintStart_toStartOf="@id/v_holder"
-        app:layout_constraintEnd_toEndOf="@id/v_holder"
-        app:layout_constraintTop_toTopOf="@id/v_holder"
-        app:layout_constraintBottom_toBottomOf="@id/v_holder"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
+    <androidx.recyclerview.widget.RecyclerView
+        app:layout_constraintTop_toBottomOf="@id/mt_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:fitsSystemWindowsInsets="bottom"
+        android:padding="16dp"
+        android:id="@+id/rv_word_book"
 
-        <com.google.android.material.appbar.MaterialToolbar
-            style="@style/Widget.MaterialComponents.Toolbar"
-            android:id="@+id/mt_title"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationContentDescription="@string/back"
-            app:title="@string/my_word_book"
-            app:menu="@menu/word_book_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            app:layout_constraintTop_toBottomOf="@id/mt_title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/rv_word_book"
-            android:clipToPadding="false"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

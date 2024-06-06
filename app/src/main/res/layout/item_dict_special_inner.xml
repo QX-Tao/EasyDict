@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="7dp"
-    android:layout_marginBottom="7dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
     android:orientation="vertical">
 
-    <com.google.android.flexbox.FlexboxLayout
-        app:flexWrap="wrap"
+    <ImageView
+        app:layout_constraintBaseline_toBaselineOf="@+id/fl_item_trans"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fl_item_trans"
+        android:src="@drawable/ic_bullist_dot"
+        android:layout_marginEnd="4dp"
+        android:id="@+id/iv_item_pos"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+        app:layout_constraintStart_toEndOf="@+id/iv_item_pos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/fl_item_trans"
+        app:flexWrap="wrap"
+        android:layout_width="0dp"
         android:layout_height="wrap_content">
 
         <TextView
+            android:textColorHighlight="?attr/colorSecondaryContainer"
+            android:textIsSelectable="true"
             android:id="@+id/tv_item_trans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,41 +37,50 @@
             android:textSize="@dimen/text_size_normal" />
 
         <TextView
-            app:layout_alignSelf="center"
+            app:layout_alignSelf="baseline"
             android:id="@+id/tv_item_trans_times"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="13sp" />
+            android:textSize="@dimen/text_size_medium" />
 
     </com.google.android.flexbox.FlexboxLayout>
 
     <TextView
+        app:layout_constraintStart_toStartOf="@+id/fl_item_trans"
+        app:layout_constraintEnd_toEndOf="@+id/fl_item_trans"
+        app:layout_constraintTop_toBottomOf="@+id/fl_item_trans"
         android:textColorHighlight="?attr/colorSecondaryContainer"
         android:textIsSelectable="true"
         android:id="@+id/tv_item_sents"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="?attr/colorOnSurface"
         android:textSize="@dimen/text_size_normal" />
 
     <TextView
+        app:layout_constraintStart_toStartOf="@+id/fl_item_trans"
+        app:layout_constraintEnd_toEndOf="@+id/fl_item_trans"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_sents"
         android:textColorHighlight="?attr/colorSecondaryContainer"
         android:textIsSelectable="true"
         android:id="@+id/tv_item_sents_trans"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
+        app:layout_constraintStart_toStartOf="@+id/fl_item_trans"
+        app:layout_constraintEnd_toEndOf="@+id/fl_item_trans"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_sents_trans"
         android:id="@+id/tv_item_source"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="@dimen/text_size_small" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

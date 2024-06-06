@@ -6,7 +6,6 @@
     <color name="colorIconInverse">#FFFFFF</color>
     <color name="colorLine">#FF333333</color>
     <color name="colorRipple">#14000000</color>
-    <color name="colorCover">#FF222222</color>
 
     <!--  normal  -->
     <color name="black">#FF000000</color>

@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/some_suggestion_eee"
-            android:textSize="13sp" />
+            android:textSize="@dimen/text_size_medium" />
 
         <TextView
             android:id="@+id/tv_gc_reason"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/reason_eee"
-            android:textSize="13sp" />
+            android:textSize="@dimen/text_size_medium" />
 
         <TextView
             android:id="@+id/tv_gc_cor_sent"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/correct_sentence_eee"
-            android:textSize="13sp" />
+            android:textSize="@dimen/text_size_medium" />
 
     </LinearLayout>
 

@@ -6,102 +6,99 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.wordbook.WordBookDetailFragment">
 
-    <View
-        android:id="@+id/v_holder"
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/Widget.MaterialComponents.Toolbar"
+        android:id="@+id/mt_title"
+        app:fitsSystemWindowsInsets="top"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationContentDescription="@string/back"
+        app:title="@string/def_str"
+        app:menu="@menu/word_book_menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        app:layout_constraintStart_toStartOf="@id/v_holder"
-        app:layout_constraintEnd_toEndOf="@id/v_holder"
-        app:layout_constraintTop_toTopOf="@id/v_holder"
-        app:layout_constraintBottom_toBottomOf="@id/v_holder"
-        android:layout_width="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_book_word"
+        app:layout_constraintTop_toBottomOf="@id/mt_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:fitsSystemWindowsInsets="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_list_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/word_book_empty_in_this_category"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/text_size_normal"
+            android:drawablePadding="16dp"
+            app:drawableTopCompat="@drawable/ic_no_data" />
+
+    </LinearLayout>
+
+    <com.qxtao.easydict.ui.view.LoadingView
+        android:id="@+id/lv_loading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?attr/colorSurface"
+        app:ballColor="?attr/colorSecondary"
+        app:internal="60"
+        app:duration="200"
+        app:max_radius="20"
+        app:layout_constraintTop_toBottomOf="@+id/mt_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_loading_fail"
+        android:background="?attr/colorSurface"
+        app:layout_constraintTop_toBottomOf="@+id/mt_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            style="@style/Widget.MaterialComponents.Toolbar"
-            android:id="@+id/mt_title"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationContentDescription="@string/back"
-            app:title="@string/def_str"
-            app:menu="@menu/word_book_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_book_word"
-            app:layout_constraintTop_toBottomOf="@id/mt_title"
+        <TextView
+            android:id="@+id/tv_loading_fail"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:padding="20dp"
+            android:drawablePadding="15dp"
+            android:textSize="@dimen/text_size_normal"
+            android:textColor="?attr/colorOnSurface"
+            android:text="@string/failed_to_load_click_the_screen_to_try_again"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:clipToPadding="false"/>
+            android:layout_height="wrap_content"
+            app:drawableTopCompat="@drawable/ic_loading_fail" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:fitsSystemWindows="true"
+        app:fitsSystemWindowsInsets="bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/ll_list_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/word_book_empty_in_this_category"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="@dimen/text_size_normal"
-                android:drawablePadding="16dp"
-                app:drawableTopCompat="@drawable/ic_no_data" />
-
-        </LinearLayout>
-
-        <com.qxtao.easydict.ui.view.LoadingView
-            android:id="@+id/lv_loading"
-            android:background="?attr/colorSurface"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:ballColor="?attr/colorSecondary"
-            app:internal="60"
-            app:duration="200"
-            app:max_radius="20"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/ll_loading_fail"
-            android:background="?attr/colorSurface"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:gravity="center"
-                android:padding="20dp"
-                android:drawablePadding="15dp"
-                android:textSize="@dimen/text_size_normal"
-                android:text="@string/failed_to_load_click_the_screen_to_try_again"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:drawableTopCompat="@drawable/ic_loading_fail" />
-
-        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_move"

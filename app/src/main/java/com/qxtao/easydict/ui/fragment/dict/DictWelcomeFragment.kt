@@ -1,13 +1,16 @@
 package com.qxtao.easydict.ui.fragment.dict
 
 import android.content.Intent
-import android.util.Log
+import android.os.Build
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -29,12 +32,17 @@ import com.qxtao.easydict.ui.view.LoadingView
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.common.TimeUtils
 import com.qxtao.easydict.utils.constant.ShareConstant
+import com.qxtao.easydict.utils.constant.ShareConstant.COUNT_DOWN_NAME
+import com.qxtao.easydict.utils.constant.ShareConstant.COUNT_DOWN_NAME_OFF
+import com.qxtao.easydict.utils.constant.ShareConstant.COUNT_DOWN_TIME
+import com.qxtao.easydict.utils.constant.ShareConstant.COUNT_DOWN_TIME_OFF
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_COUNT_DOWN
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_DAILY_SENTENCE
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_GRAMMAR_CHECK
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SUGGEST_SEARCH
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WORD_BOOK
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WORD_LIST
+import com.qxtao.easydict.utils.factory.screenRotation
 
 
 class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDictWelcomeBinding::inflate) {
@@ -43,7 +51,6 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
     private lateinit var rvSearchSugWordAdapter: DictSearchSugWordAdapter
 
     // define widget
-    private lateinit var mcvSearchBox : MaterialCardView
     private lateinit var mcvSuggestSearch : MaterialCardView
     private lateinit var mcvDaySentence : MaterialCardView
     private lateinit var mcvWordList : MaterialCardView
@@ -71,7 +78,6 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
     private lateinit var ivWordListRefresh : ImageView
 
     override fun bindViews() {
-        mcvSearchBox = binding.mcvSearchBox
         mcvSuggestSearch = binding.mcvSuggestSearch
         mcvDaySentence = binding.mcvDaySentence
         mcvWordList = binding.mcvWordList
@@ -196,11 +202,21 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
 
     private fun getMtTitle(): String{
         val isUseCountDown = ShareUtils.getBoolean(mContext, IS_USE_COUNT_DOWN, false)
-        val countDownName = ShareUtils.getString(mContext, ShareConstant.COUNT_DOWN_NAME, ShareConstant.COUNT_DOWN_NAME_OFF)
-        val countDownTime = ShareUtils.getLong(mContext, ShareConstant.COUNT_DOWN_TIME, ShareConstant.COUNT_DOWN_TIME_OFF)
+        val countDownName = ShareUtils.getString(mContext, COUNT_DOWN_NAME, COUNT_DOWN_NAME_OFF)
+        val countDownTime = ShareUtils.getLong(mContext, COUNT_DOWN_TIME, COUNT_DOWN_TIME_OFF)
         return if (isUseCountDown && countDownName.isNotEmpty() && countDownTime > 0){
-            val dateCountDown = TimeUtils.calculateDateDifference(countDownTime)
-            getString(R.string.mt_title_count_down, countDownName, dateCountDown)
+            if (countDownTime < System.currentTimeMillis()){
+                if (TimeUtils.isGivenTimeIn24Hours(countDownTime)){
+                    getString(R.string.mt_title_count_down_today, countDownName) } else {
+                    ShareUtils.putBoolean(mContext, IS_USE_COUNT_DOWN, false)
+                    ShareUtils.delShare(mContext, COUNT_DOWN_NAME)
+                    ShareUtils.delShare(mContext, COUNT_DOWN_TIME)
+                    getString(R.string.app_name)
+                }
+            } else {
+                val dateCountDown = TimeUtils.calculateDateDifference(countDownTime, false) + 1
+                if (dateCountDown == 1L) getString(R.string.mt_title_count_down_tomorrow, countDownName) else getString(R.string.mt_title_count_down, countDownName, dateCountDown)
+            }
         } else getString(R.string.app_name)
     }
 

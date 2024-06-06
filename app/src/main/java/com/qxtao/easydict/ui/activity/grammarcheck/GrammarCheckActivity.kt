@@ -1,19 +1,12 @@
 package com.qxtao.easydict.ui.activity.grammarcheck
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.res.Configuration
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
@@ -27,11 +20,8 @@ import com.qxtao.easydict.databinding.ActivityGrammarCheckBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.view.LimitEditText
 import com.qxtao.easydict.ui.view.PerformEdit
+import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.ColorUtils
-import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.isAppearanceLight
-import com.qxtao.easydict.utils.factory.isLandscape
-import com.qxtao.easydict.utils.factory.screenRotation
 import java.util.regex.Pattern
 
 class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityGrammarCheckBinding::inflate){
@@ -39,7 +29,6 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
     private lateinit var grammarCheckViewModel: GrammarCheckViewModel
     private lateinit var performEdit: PerformEdit
     private lateinit var grammarCheckAdapter: GrammarCheckAdapter
-    private var clipData: ClipData? = null
 
     // define widget
     private lateinit var mtTitle: MaterialToolbar
@@ -60,7 +49,6 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
     private lateinit var cvNoError: CardView
     private lateinit var cvPaste: CardView
     private lateinit var ivPaste: ImageView
-    private lateinit var vHolder: View
 
 
     override fun onCreate() {
@@ -85,7 +73,6 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
         cvNoError = binding.cvNoError
         cvPaste = binding.cvPaste
         ivPaste = binding.ivPaste
-        vHolder = binding.vHolder
         clGrammarCheck = binding.clGrammarCheck
     }
 
@@ -141,24 +128,6 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            nsvCheckResult.setPadding(SizeUtils.dp2px(16f), SizeUtils.dp2px(16f), SizeUtils.dp2px(16f),
-                SizeUtils.dp2px(16f) + insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         mtTitle.setNavigationOnClickListener { finish() }
         ivRedo.setOnClickListener { performEdit.redo() }
         ivUndo.setOnClickListener { performEdit.undo() }
@@ -206,9 +175,8 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
-            clipData = (getSystemService(CLIPBOARD_SERVICE) as ClipboardManager).primaryClip
-            grammarCheckViewModel.setPasteData(clipData != null && clipData!!.itemCount > 0,
-                clipData?.getItemAt(0)?.text?.let { textualize(it).toString() })
+            grammarCheckViewModel.setPasteData(ClipboardUtils.hasClipboardText(mContext),
+                ClipboardUtils.getClipboardText(mContext)?.let { textualize(it).toString() })
             if (grammarCheckViewModel.pageType.value == 0){
                 // 弹出软键盘
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -3,74 +3,70 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="7dp"
-    android:layout_marginBottom="7dp">
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp">
     
     <TextView
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/fl_item_trans"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/ll_item_content"
+        app:layout_constraintEnd_toStartOf="@id/fl_item_trans"
         android:id="@+id/tv_item_num"
+        android:textSize="@dimen/text_size_medium"
         android:layout_marginEnd="4dp"
-        android:minWidth="24dp"
-        android:minHeight="21dp"
+        android:minWidth="22dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"/>
+        android:layout_height="wrap_content"/>
 
-    <LinearLayout
-        android:id="@+id/ll_item_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_item_num"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.google.android.flexbox.FlexboxLayout
+        app:layout_constraintStart_toEndOf="@+id/tv_item_num"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:flexWrap="wrap"
+        android:id="@+id/fl_item_trans"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.google.android.flexbox.FlexboxLayout
-            app:flexWrap="wrap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:textStyle="bold"
-                android:id="@+id/tv_item_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="@dimen/text_size_normal" />
-
-            <TextView
-                android:layout_marginTop="4dp"
-                app:layout_alignSelf="baseline"
-                android:id="@+id/tv_item_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="@dimen/text_size_medium" />
-
-        </com.google.android.flexbox.FlexboxLayout>
+        android:layout_height="wrap_content">
 
         <TextView
-            android:textColorHighlight="?attr/colorSecondaryContainer"
-            android:textIsSelectable="true"
-            android:id="@+id/tv_item_content"
+            android:textStyle="bold"
+            android:id="@+id/tv_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:textColor="?attr/colorOnSurface"
+            android:layout_marginEnd="10dp"
+            android:textColor="?attr/colorPrimary"
             android:textSize="@dimen/text_size_normal" />
 
         <TextView
-            android:id="@+id/tv_item_from"
+            app:layout_alignSelf="baseline"
+            android:id="@+id/tv_item_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="@dimen/text_size_small" />
+            android:textSize="@dimen/text_size_medium" />
 
-    </LinearLayout>
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <TextView
+        app:layout_constraintStart_toStartOf="@+id/fl_item_trans"
+        app:layout_constraintEnd_toEndOf="@+id/fl_item_trans"
+        app:layout_constraintTop_toBottomOf="@+id/fl_item_trans"
+        android:textColorHighlight="?attr/colorSecondaryContainer"
+        android:textIsSelectable="true"
+        android:id="@+id/tv_item_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_size_normal" />
+
+    <TextView
+        app:layout_constraintStart_toStartOf="@+id/fl_item_trans"
+        app:layout_constraintEnd_toEndOf="@+id/fl_item_trans"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_content"
+        android:id="@+id/tv_item_from"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="@dimen/text_size_small" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,6 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_COMPACT
 import android.text.Spannable
@@ -33,13 +31,8 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictEEDictInnerAdapter(mItemList: ArrayList<EETranslationItem>) :
+class DictEEDictInnerAdapter(private val mItemList: ArrayList<EETranslationItem>) :
     RecyclerView.Adapter<DictEEDictInnerAdapter.ViewHolder>() {
-    private val mItemList: ArrayList<EETranslationItem>
-
-    init {
-        this.mItemList = mItemList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -20,11 +20,9 @@ class DictDetailEEFragment : BaseFragment<FragmentDictDetailEeBinding>(FragmentD
     private lateinit var rvDictEEDictOuterAdapter: DictEEDictOuterAdapter
 
     // define widget
-    private lateinit var nsvContent: NestedScrollView
     private lateinit var rvEEDict: RecyclerView
 
     override fun bindViews() {
-        nsvContent = binding.nsvContent
         rvEEDict = binding.rvEeDict
 
     }
@@ -42,12 +40,6 @@ class DictDetailEEFragment : BaseFragment<FragmentDictDetailEeBinding>(FragmentD
         }
     }
 
-    override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(nsvContent){ view, insets ->
-            view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            insets
-        }
-    }
-
+    override fun addListener() {}
 
 }

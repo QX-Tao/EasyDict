@@ -1,16 +1,10 @@
 package com.qxtao.easydict.ui.fragment.dict
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -42,7 +36,6 @@ import com.qxtao.easydict.ui.activity.dict.ETYM_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.EXTERNAL_DICT_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.EXTERNAL_TRANS_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.Etym
-import com.qxtao.easydict.ui.activity.dict.JM_FRAGMENT
 import com.qxtao.easydict.ui.activity.dict.PHRASE_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.REL_WORD_PART_MORE
 import com.qxtao.easydict.ui.activity.dict.RelInfo
@@ -58,6 +51,7 @@ import com.qxtao.easydict.ui.activity.dict.WEB_TRANS_PART_MORE
 import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
+import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_AUTH_SENTS
@@ -95,7 +89,6 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
     private lateinit var rvExternalTransAdapter: DictExternalDictTransAdapter
 
     // define widget
-    private lateinit var nsvContent: NestedScrollView
     // 第一部分：英汉基础信息
     private lateinit var llEhHeaderPart: LinearLayout
     private lateinit var rvEhHeaderExplain: RecyclerView
@@ -169,7 +162,6 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
     private lateinit var tvExternalTransPartMore: TextView
 
     override fun bindViews() {
-        nsvContent = binding.nsvContent
         // 第一部分：英汉基础信息
         llEhHeaderPart = binding.llEhHeaderPart
         rvEhHeaderExplain = binding.rvEhHeaderExplain
@@ -301,7 +293,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvBlngSentsPartSents.adapter = rvDictBlngSentsAdapter
         rvBlngSentsPartSents.layoutManager = LinearLayoutManager(requireActivity())
         dictViewModel.blngClassification.observe(this) {
-            if (it?.isNotEmpty() == true) {
+            if ((it?.size ?: 0) > 1) {
                 rvBlngSentsPartClassificationAdapter.setData(it)
                 rvBlngSentsPartClassification.visibility = View.VISIBLE
             } else rvBlngSentsPartClassification.visibility = View.GONE
@@ -534,10 +526,6 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(nsvContent){ view, insets ->
-            view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            insets
-        }
         rvDictAuthSentsAdapter.setOnPlayButtonClickListener(object : DictAuthSentsAdapter.OnPlayButtonClickListener{
             override fun onPlayButtonClick(position: Int) {
                 val item = rvDictAuthSentsAdapter.getItem(position)
@@ -556,9 +544,6 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                 dictViewModel.startPlaySound(VOICE_EH_PART, position, item.w!!, SEARCH_LE_EN)
             }
         })
-        tvBaikeDigestPartDesc.setOnClickListener {
-            tvBaikeDigestPartDesc.toggle()
-        }
         tvRetype.setOnClickListener {
             mListener.onFragmentInteraction("toHasFragment")
         }
@@ -582,11 +567,8 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         tvBaikeDigestPartMore.setOnClickListener {
             when (dictViewModel.baikeDigest.value?.source?.name){
                 getString(R.string.BaiduBaike) -> {
-                    val url = dictViewModel.baikeDigest.value?.source?.url.let {
-                        if (it.isNullOrBlank()) {
-                            "https://baike.baidu.com/item/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
-                        } else it.replace("http://", "https://")
-                    }
+                    val url = dictViewModel.baikeDigest.value?.source?.url
+                        ?: "https://baike.baidu.com/item/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
                     WebActivity.start(
                         requireActivity(), url,
                         allowOtherUrls = true,
@@ -594,11 +576,8 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                     )
                 }
                 getString(R.string.wikipedia), getString(R.string.wikipedia_en) -> {
-                    val url = dictViewModel.baikeDigest.value?.source?.url.let {
-                        if (it.isNullOrBlank()) {
-                            "https://en.wikipedia.org/wiki/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
-                        } else it.replace("http://", "https://")
-                    }
+                    val url = dictViewModel.baikeDigest.value?.source?.url
+                        ?: "https://en.wikipedia.org/wiki/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
                     WebActivity.start(
                         requireActivity(), url,
                         allowOtherUrls = true,
@@ -613,9 +592,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         }
         rvExternalTransAdapter.setOnItemClickListener(object : DictExternalDictTransAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                cm.setPrimaryClip(ClipData.newPlainText(null, dictViewModel.searchText.value?.searchText))
-                showShortToast(getString(R.string.copied_to_trans))
+                ClipboardUtils.copyTextToClipboard(mContext, dictViewModel.searchText.value?.searchText, getString(R.string.copied_to_trans))
             }
         })
         tvAuthSentsPartMore.setOnClickListener{

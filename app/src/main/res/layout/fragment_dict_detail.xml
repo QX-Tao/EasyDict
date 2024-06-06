@@ -17,12 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/trans"
-            app:liftOnScrollColor="@android:color/transparent"
-            app:layout_behavior="com.qxtao.easydict.ui.view.FixAppBarLayoutBehavior">
+            app:elevation="0dp"
+            app:liftOnScrollColor="@android:color/transparent">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:contentScrim="@color/trans"
                 android:layout_width="match_parent"
@@ -40,14 +39,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <me.grantland.widget.AutofitTextView
+                        <TextView
                             android:id="@+id/tv_word"
                             android:textSize="@dimen/text_size_extra_large"
                             android:textStyle="bold"
-                            android:maxLines="1"
+                            android:autoSizeMinTextSize="@dimen/text_size_normal"
+                            android:autoSizeMaxTextSize="@dimen/text_size_extra_large"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center_vertical"
                             android:paddingStart="3dp"
                             android:paddingEnd="3dp"
-                            android:ellipsize="end"
                             android:textColorHighlight="?attr/colorSecondaryContainer"
                             android:textIsSelectable="true"
                             android:textColor="?attr/colorOnSurface"
@@ -56,7 +57,7 @@
                             app:layout_constraintEnd_toStartOf="@+id/iv_word_collect"
                             app:layout_constraintStart_toStartOf="parent"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="45dp"/>
 
                         <ImageView
                             android:id="@+id/iv_word_collect"
@@ -153,11 +154,10 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <net.csdn.roundview.RoundImageView
+                        <ImageView
                             android:visibility="gone"
                             android:scaleType="centerCrop"
                             android:id="@+id/iv_wd_pic"
-                            app:rRadius="5dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="@id/cl_voice"
                             android:layout_width="64dp"
@@ -328,22 +328,10 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/search_detail_tablayout"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="8dp"
+                android:layout_height="wrap_content"
                 android:background="@color/trans"
-                app:tabMinWidth="0dp"
-                app:tabPaddingStart="10dp"
-                app:tabPaddingEnd="10dp"
-                app:tabPaddingBottom="4dp"
-                app:tabMode="scrollable"
-                app:tabIndicatorAnimationDuration="400"
-                app:tabBackground="@null"
-                app:tabRippleColor="@null"
-                app:tabIndicatorFullWidth="false"
-                app:tabIndicator="@drawable/bg_indicator_rectangle_shape" />
+                app:tabGravity="start"
+                app:tabMode="scrollable"  />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -357,6 +345,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:visibility="gone"
+        app:fitsSystemWindowsInsets="bottom"
         android:clipToPadding="false"
         android:id="@+id/nsv_offline_result"
         android:layout_width="match_parent"
@@ -378,14 +367,30 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent">
 
-                <me.grantland.widget.AutofitTextView
+                <TextView
                     android:id="@+id/tv_offline_word"
                     android:textSize="@dimen/text_size_extra_large"
                     android:textStyle="bold"
-                    android:maxLines="1"
+                    android:autoSizeMinTextSize="@dimen/text_size_normal"
+                    android:autoSizeMaxTextSize="@dimen/text_size_extra_large"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center_vertical"
                     android:paddingStart="3dp"
                     android:paddingEnd="3dp"
-                    android:ellipsize="end"
+                    android:textColorHighlight="?attr/colorSecondaryContainer"
+                    android:textIsSelectable="true"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"/>
+
+                <com.qxtao.easydict.ui.view.ExpandableTextView
+                    android:id="@+id/tv_offline_trans"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold"
+                    app:expandAction="@string/empty_string"
+                    app:limitedMaxLines="6"
+                    android:paddingStart="3dp"
+                    android:paddingEnd="3dp"
                     android:textColorHighlight="?attr/colorSecondaryContainer"
                     android:textIsSelectable="true"
                     android:textColor="?attr/colorOnSurface"

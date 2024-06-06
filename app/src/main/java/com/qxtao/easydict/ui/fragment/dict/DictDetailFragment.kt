@@ -1,8 +1,5 @@
 package com.qxtao.easydict.ui.fragment.dict
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -11,12 +8,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
@@ -32,6 +28,7 @@ import com.qxtao.easydict.ui.activity.dict.VOICE_NORMAL
 import com.qxtao.easydict.ui.activity.photoview.PhotoViewActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
+import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.constant.ShareConstant
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +68,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     private lateinit var ivTransCollect: ImageView
     private lateinit var ivWordCollect: ImageView
     private lateinit var tvOfflineWord: TextView
+    private lateinit var tvOfflineTrans: ExpandableTextView
     private lateinit var tvOfflineTranslation: TextView
     private lateinit var tvReload: TextView
     private lateinit var nsvOfflineResult: NestedScrollView
@@ -100,6 +98,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
         ivTransToVoice = binding.ivTransToVoice
         clLoading = binding.clLoading
         tvOfflineWord = binding.tvOfflineWord
+        tvOfflineTrans = binding.tvOfflineTrans
         tvOfflineTranslation = binding.tvOfflineTranslation
         nsvOfflineResult = binding.nsvOfflineResult
         clOnlineResult = binding.clOnlineResult
@@ -145,7 +144,15 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                     nsvOfflineResult.visibility = View.VISIBLE
                     clOnlineResult.visibility = View.GONE
                     dictViewModel.searchText.value?.editSearchText.let { it1 ->
-                        tvOfflineWord.text = it1!!
+                        if ((it1?.length ?: 0) > 40) {
+                            tvOfflineTrans.originalText = it1!!
+                            tvOfflineWord.visibility = View.GONE
+                            tvOfflineTrans.visibility = View.VISIBLE
+                        } else {
+                            tvOfflineWord.text = it1!!
+                            tvOfflineWord.visibility = View.VISIBLE
+                            tvOfflineTrans.visibility = View.GONE
+                        }
                         dictViewModel.offlineSearch(it1).let { it2 ->
                             tvOfflineTranslation.text = if (it2.isNullOrEmpty()) getString(R.string.no_result) else it2.replace("\\|", "\n")
                         }
@@ -217,8 +224,8 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
         dictViewModel.picDictResponse.observe(this) {
             if (it != null && (it.pic?.size ?: 0) > 0) {
                 ivWdPic.visibility = View.VISIBLE
-                ivWdPic.load(it.pic?.get(0)?.url?.replace("http://","https://"))
-            }
+                ivWdPic.load(it.pic?.get(0)?.url)
+            } else ivWdPic.visibility = View.GONE
         }
         dictViewModel.playPosition.observe(this){
             it[VOICE_NORMAL].let {it1 ->
@@ -243,17 +250,11 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(nsvOfflineResult){ view, insets ->
-            view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            insets
-        }
-        tvTransFromRoman.setOnClickListener { tvTransFromRoman.toggle() }
-        tvTransToRoman.setOnClickListener { tvTransToRoman.toggle() }
         ivWdPic.setOnClickListener {
             val pictureList = ArrayList<String>()
             dictViewModel.picDictResponse.value?.pic?.get(0)?.url.let {
                 if (it.isNullOrEmpty()) return@setOnClickListener
-                pictureList.add(it.replace("http://","https://"))
+                pictureList.add(it)
                 PhotoViewActivity.start(requireActivity(), pictureList, ivWdPic)
             }
         }
@@ -310,15 +311,10 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
             }
         }
         ivTransToCopy.setOnClickListener {
-            val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            cm.setPrimaryClip(
-                ClipData.newPlainText(null, tvTransTo.text))
-            showShortToast(getString(R.string.copied))
+            ClipboardUtils.copyTextToClipboard(mContext, tvTransTo.text, getString(R.string.copied))
         }
         ivTransFromCopy.setOnClickListener {
-            val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            cm.setPrimaryClip(ClipData.newPlainText(null, tvTransFrom.text))
-            showShortToast(getString(R.string.copied))
+            ClipboardUtils.copyTextToClipboard(mContext, tvTransFrom.text, getString(R.string.copied))
         }
         ivWordCollect.setOnClickListener {
             if (dictViewModel.isSearchTextFavorite.value == true){

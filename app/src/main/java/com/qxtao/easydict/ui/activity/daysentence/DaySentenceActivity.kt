@@ -88,10 +88,10 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
     private fun showDatePicker() {
         val builder = MaterialDatePicker.Builder.datePicker()
         val date = TimeUtils.getDateByPatternAndD(daySentenceViewPager.currentItem,"yyyy-MM-dd")
-        builder.setSelection(TimeUtils.getTimestampByFormatDate(date, "yyyy-MM-dd"))
+        builder.setSelection(TimeUtils.getTimestampByFormatDate(date, "yyyy-MM-dd") + TimeUtils.getTimeZoneOffset())
         builder.setCalendarConstraints(CalendarConstraints.Builder()
             .setValidator(CompositeDateValidator.allOf(listOf(
-                DateValidatorPointForward.from(TimeUtils.getTimestampByFormatDate(ORIGIN_DATE, "yyyy-MM-dd")),
+                DateValidatorPointForward.from(TimeUtils.getTimestampByFormatDate(ORIGIN_DATE, "yyyy-MM-dd") + TimeUtils.getTimeZoneOffset()),
                 DateValidatorPointBackward.now())))
             .build()
         )

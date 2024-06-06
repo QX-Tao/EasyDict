@@ -26,6 +26,7 @@
     <string name="enter_text_to_check">输入要检查的英文文本</string>
     <string name="search_in_dict">在词典中查询</string>
     <string name="copied">已将内容复制到剪贴板</string>
+    <string name="copied_pwd">已将提取码复制到剪贴板</string>
     <string name="copied_to_trans">已将文本复制到剪贴板，您可能需要手动输入以进行翻译</string>
     <string name="retype">重新输入</string>
     <string name="loading_2">加载中...</string>
@@ -221,5 +222,7 @@
     <string name="add_count_down">添加倒计时</string>
     <string name="please_input_count_down_name">请输入倒计时名称</string>
     <string name="mt_title_count_down">%1$s: %2$d天</string>
+    <string name="mt_title_count_down_today">%1$s: 今天</string>
+    <string name="mt_title_count_down_tomorrow">%1$s: 明天</string>
     <string name="dict_trans">词典/翻译</string>
 </resources>

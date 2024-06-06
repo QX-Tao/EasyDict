@@ -160,13 +160,11 @@ class WordBookClassificationFragment : BaseFragment<FragmentWordBookClassificati
     })
 
     // define widget
-    private lateinit var vHolder: View
     private lateinit var rvWordBook: RecyclerView
     private lateinit var mtTitle: MaterialToolbar
 
 
     override fun bindViews() {
-        vHolder = binding.vHolder
         rvWordBook = binding.rvWordBook
         mtTitle = binding.mtTitle
     }
@@ -187,24 +185,6 @@ class WordBookClassificationFragment : BaseFragment<FragmentWordBookClassificati
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            rvWordBook.setPadding(SizeUtils.dp2px(16f), SizeUtils.dp2px(16f),  SizeUtils.dp2px(16f),
-                SizeUtils.dp2px(16f) + insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (requireActivity().screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         adapter.setOnItemClickListener(object : WordBookClassificationAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
                 mListener.onFragmentInteraction("toDetailFragment", adapter.getBookName(position))

@@ -7,100 +7,84 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.web.WebActivity">
 
-    <View
-        android:id="@+id/v_holder"
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/Widget.MaterialComponents.Toolbar"
+        android:id="@+id/mt_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationContentDescription="@string/back"
+        app:title="@string/browser"
+        app:titleTextColor="?attr/colorOnSurface"
+        app:subtitleTextColor="?attr/colorOnSurfaceVariant"
+        app:menu="@menu/web_menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_content"
-        app:layout_constraintTop_toTopOf="@+id/v_holder"
-        app:layout_constraintBottom_toBottomOf="@+id/v_holder"
-        app:layout_constraintStart_toStartOf="@+id/v_holder"
-        app:layout_constraintEnd_toEndOf="@+id/v_holder"
+    <me.jingbin.progress.WebProgress
+        android:id="@+id/wp_progress"
+        app:layout_constraintBottom_toBottomOf="@+id/mt_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="0dp"
-        android:layout_height="0dp" >
+        android:layout_height="2dp"
+        android:visibility="gone" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            style="@style/Widget.MaterialComponents.Toolbar"
-            android:id="@+id/mt_title"
+    <WebView
+        android:id="@+id/webView"
+        app:layout_constraintTop_toBottomOf="@+id/mt_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/trans"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <com.qxtao.easydict.ui.view.LoadingView
+        android:id="@+id/lv_loading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?attr/colorSurface"
+        app:ballColor="?attr/colorSecondary"
+        app:internal="60"
+        app:duration="200"
+        app:max_radius="20"
+        app:layout_constraintTop_toBottomOf="@+id/mt_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_loading_fail"
+        android:background="?attr/colorSurface"
+        app:layout_constraintTop_toBottomOf="@+id/mt_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/tv_loading_fail"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationContentDescription="@string/back"
-            app:title="@string/browser"
-            app:titleTextColor="?attr/colorOnSurface"
-            app:subtitleTextColor="?attr/colorOnSurfaceVariant"
-            app:menu="@menu/web_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <me.jingbin.progress.WebProgress
-            android:id="@+id/wp_progress"
-            app:layout_constraintBottom_toBottomOf="@+id/mt_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:visibility="gone" />
-
-        <WebView
-            android:id="@+id/webView"
-            app:layout_constraintTop_toBottomOf="@+id/mt_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@color/trans"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-
-        <com.qxtao.easydict.ui.view.LoadingView
-            android:id="@+id/lv_loading"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="?attr/colorSurface"
-            app:ballColor="?attr/colorSecondary"
-            app:internal="60"
-            app:duration="200"
-            app:max_radius="20"
-            app:layout_constraintTop_toBottomOf="@+id/mt_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/ll_loading_fail"
-            android:background="?attr/colorSurface"
-            app:layout_constraintTop_toBottomOf="@+id/mt_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="center"
-            android:clickable="true"
-            android:focusable="true"
+            android:padding="20dp"
+            android:drawablePadding="15dp"
+            android:textSize="@dimen/text_size_normal"
+            android:textColor="?attr/colorOnSurface"
+            android:text="@string/failed_to_load_click_the_screen_to_try_again"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="wrap_content"
+            app:drawableTopCompat="@drawable/ic_loading_fail" />
 
-            <TextView
-                android:id="@+id/tv_loading_fail"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:gravity="center"
-                android:padding="20dp"
-                android:drawablePadding="15dp"
-                android:textSize="@dimen/text_size_normal"
-                android:textColor="?attr/colorOnSurface"
-                android:text="@string/failed_to_load_click_the_screen_to_try_again"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:drawableTopCompat="@drawable/ic_loading_fail" />
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,9 +7,6 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,11 +29,9 @@ import com.qxtao.easydict.utils.common.FileUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.common.ThemeUtils
 import com.qxtao.easydict.utils.constant.ShareConstant.DEF_VOICE
-import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_QUICK_SEARCH
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SYSTEM_THEME
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_VIEW
 import com.qxtao.easydict.utils.constant.ShareConstant.MEI
-import com.qxtao.easydict.utils.factory.screenRotation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -46,8 +41,6 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
     // define variable
     private lateinit var settingsViewModel: SettingsViewModel
     // define widget
-    private lateinit var vHolder: View
-    private lateinit var nsvContent: NestedScrollView
     private lateinit var clAbout: ConstraintLayout
     private lateinit var clAppBrowser: ConstraintLayout
     private lateinit var clClearCache: ConstraintLayout
@@ -69,8 +62,6 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
     private lateinit var clDefVoice: ConstraintLayout
 
     override fun bindViews() {
-        vHolder = binding.vHolder
-        nsvContent = binding.nsvContent
         clAbout = binding.clAbout
         swSystemThemeColor = binding.swSystemThemeColor
         swAppBrowser = binding.swAppBrowser
@@ -110,23 +101,6 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(vHolder){ view, insets ->
-            nsvContent.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            val displayCutout = insets.displayCutout
-            val params = view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            when (requireActivity().screenRotation){
-                90 -> {
-                    params.leftMargin = displayCutout?.safeInsetLeft ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                    params.rightMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                }
-                270 -> {
-                    params.rightMargin = displayCutout?.safeInsetRight ?: insets.getInsets(WindowInsetsCompat.Type.systemBars()).right
-                    params.leftMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left
-                }
-            }
-            insets
-        }
         mtTitle.setNavigationOnClickListener{
             mListener.onFragmentInteraction("onBackPressed")
         }

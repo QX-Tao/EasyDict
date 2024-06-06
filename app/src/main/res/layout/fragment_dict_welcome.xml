@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:edgeToEdge="true"
     tools:context=".ui.fragment.dict.DictWelcomeFragment" >
 
     <com.google.android.material.appbar.AppBarLayout
@@ -88,6 +87,7 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_content"
         android:clipToPadding="false"
+        android:fillViewport="true"
         app:fitsSystemWindowsInsets="bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
@@ -96,7 +96,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <!--  推荐搜索  -->
             <com.google.android.material.card.MaterialCardView
@@ -162,7 +162,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
 
             <!--  背单词  -->
             <com.google.android.material.card.MaterialCardView
@@ -359,7 +358,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-
             <!--  每日一句  -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/mcv_day_sentence"
@@ -408,6 +406,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="2dp"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:id="@+id/tv_ds_en"
@@ -422,7 +421,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginTop="4dp"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:layout_marginBottom="12dp"
@@ -492,7 +490,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
 
             <!--  单词本  -->
             <com.google.android.material.card.MaterialCardView
@@ -576,7 +573,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
 
             <!--  语法检查  -->
             <com.google.android.material.card.MaterialCardView

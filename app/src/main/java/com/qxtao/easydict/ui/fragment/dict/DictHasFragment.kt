@@ -217,14 +217,6 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
     }
 
     override fun addListener() {
-        ViewCompat.setOnApplyWindowInsetsListener(rvSearchHistory){ view, insets ->
-            view.setPadding(SizeUtils.dp2px(16f), 0, SizeUtils.dp2px(16f), insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            insets
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(rvSearchSuggestion){ view, insets ->
-            view.setPadding(SizeUtils.dp2px(16f), 0, SizeUtils.dp2px(16f), insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
-            insets
-        }
         rvSearchHistoryAdapter.setOnItemClickListener(object : DictWordLineAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
                 mListener.onFragmentInteraction("toDetailFragment", dictViewModel.dictSearchHistory.value!![position].origin)

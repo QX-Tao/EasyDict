@@ -3,61 +3,52 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="7dp"
-    android:layout_marginBottom="7dp">
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp">
     
     <TextView
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_item_sen_en"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/ll_item_content"
+        app:layout_constraintEnd_toStartOf="@id/tv_item_sen_en"
         android:id="@+id/tv_item_num"
+        android:textSize="@dimen/text_size_medium"
         android:layout_marginEnd="4dp"
-        android:minWidth="24dp"
-        android:minHeight="21dp"
+        android:minWidth="22dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"/>
+        android:layout_height="wrap_content"/>
 
-    <LinearLayout
-        android:id="@+id/ll_item_content"
+    <TextView
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/tv_item_num"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/iv_item_sen_voice"
-        android:layout_width="0dp"
+        app:layout_constraintStart_toEndOf="@id/tv_item_num"
+        app:layout_constraintEnd_toStartOf="@+id/iv_item_sen_voice"
+        android:textColorHighlight="?attr/colorSecondaryContainer"
+        android:textIsSelectable="true"
+        android:id="@+id/tv_item_sen_en"
         android:layout_marginEnd="4dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_size_normal" />
 
-        <TextView
-            android:textColorHighlight="?attr/colorSecondaryContainer"
-            android:textIsSelectable="true"
-            android:id="@+id/tv_item_sen_en"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="@dimen/text_size_normal" />
-
-        <TextView
-            android:id="@+id/tv_item_sen_source"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:textColor="?attr/colorTertiary"
-            android:textSize="@dimen/text_size_small" />
-
-    </LinearLayout>
+    <TextView
+        app:layout_constraintStart_toStartOf="@id/tv_item_sen_en"
+        app:layout_constraintEnd_toEndOf="@id/tv_item_sen_en"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_sen_en"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/tv_item_sen_source"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="@dimen/text_size_small" />
 
     <ImageView
-        app:layout_constraintLeft_toRightOf="@+id/ll_item_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/iv_item_sen_voice"
-        android:layout_marginEnd="5dp"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:padding="5dp"
-        android:layout_alignParentEnd="true"
         android:background="@drawable/bg_ripple_r30"
         android:src="@drawable/ic_voice" />
 

@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="7dp"
-    android:layout_marginBottom="7dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp">
 
     <TextView
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_item_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_item_content"
         android:id="@+id/tv_item_num"
         android:layout_marginEnd="4dp"
-        android:minWidth="24dp"
-        android:minHeight="21dp"
+        android:minWidth="22dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"/>
+        android:layout_height="wrap_content"/>
 
     <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_item_num"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColorHighlight="?attr/colorSecondaryContainer"
+        android:textIsSelectable="true"
         android:id="@+id/tv_item_content"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/text_size_normal" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
