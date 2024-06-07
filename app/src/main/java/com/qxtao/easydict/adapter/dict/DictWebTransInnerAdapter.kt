@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.WebTrans
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,6 +72,8 @@ class DictWebTransInnerAdapter(private val mItemList: ArrayList<WebTrans>) :
             }
         }
 
+        holder.textLine.fixTextSelection()
+        holder.textValue.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

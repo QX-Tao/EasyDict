@@ -20,6 +20,7 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.ThesaurusEntry
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -104,6 +105,9 @@ class DictThesurusInnerAdapter(private val mItemThesaurusList: ArrayList<Thesaur
             holder.textAnto.visibility = View.GONE
             holder.textAntoTag.visibility = View.GONE
         }
+
+        holder.textAnto.fixTextSelection()
+        holder.textSyno.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

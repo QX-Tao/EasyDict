@@ -21,6 +21,7 @@ import com.qxtao.easydict.ui.activity.dict.Antonym
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Synonym
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -100,6 +101,8 @@ class DictSynoAntoAdapter<T>(private val mItemData: ArrayList<T>) :
         }
         holder.textContent.movementMethod = LinkMovementMethod.getInstance()
         holder.textContent.text = spannable
+
+        holder.textContent.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

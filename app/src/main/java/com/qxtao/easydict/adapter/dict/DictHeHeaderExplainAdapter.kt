@@ -18,6 +18,7 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Trans
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -72,6 +73,9 @@ class DictHeHeaderExplainAdapter(private val mItemList: ArrayList<Trans>) :
             holder.imgVoice.setImageResource(imageResId)
             playButtonClickListener?.onPlayButtonClick(position)
         }
+
+        holder.textEn.fixTextSelection()
+        holder.textCn.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

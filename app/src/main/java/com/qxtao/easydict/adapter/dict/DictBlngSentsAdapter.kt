@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.SentencePair
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,15 +27,10 @@ import kotlinx.coroutines.withContext
 
 
 @SuppressLint("NotifyDataSetChanged")
-class DictBlngSentsAdapter(mItemSentenceList: ArrayList<SentencePair>) :
+class DictBlngSentsAdapter(private val mItemSentenceList: ArrayList<SentencePair>) :
     RecyclerView.Adapter<DictBlngSentsAdapter.ViewHolder>() {
-    private val mItemSentenceList: ArrayList<SentencePair>
     private var playButtonClickListener: OnPlayButtonClickListener? = null
     private var playPosition: Int = -1
-
-    init {
-        this.mItemSentenceList = mItemSentenceList
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -83,6 +79,9 @@ class DictBlngSentsAdapter(mItemSentenceList: ArrayList<SentencePair>) :
             holder.imgVoice.setImageResource(imageResId)
             playButtonClickListener?.onPlayButtonClick(position)
         }
+
+        holder.textEn.fixTextSelection()
+        holder.textCn.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

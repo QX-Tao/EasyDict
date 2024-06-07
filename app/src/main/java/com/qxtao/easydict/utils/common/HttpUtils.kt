@@ -1,15 +1,18 @@
 package com.qxtao.easydict.utils.common
 
+import android.content.Context
+import android.net.ConnectivityManager
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.net.URL
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 
-object HttpHelper {
+object HttpUtils {
     private const val MAX_RETRY_COUNT = 3
 
     // 发送普通Request请求，获得对应的response.body数据
@@ -75,6 +78,23 @@ object HttpHelper {
             }
         }
         throw lastException ?: IOException("Request failed after $MAX_RETRY_COUNT attempts")
+    }
+
+    // 判断字符串是否为URL
+    fun isHttpUrl(url: String): Boolean {
+        return try {
+            URL(url)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    // 网络是否连接
+    fun isConnected(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 }
 

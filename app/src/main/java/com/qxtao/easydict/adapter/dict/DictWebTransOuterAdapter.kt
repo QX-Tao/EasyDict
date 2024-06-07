@@ -20,6 +20,7 @@ import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.WebTrans
 import com.qxtao.easydict.ui.activity.dict.WebTranslation
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,6 +84,9 @@ class DictWebTransOuterAdapter(
             holder.textValue.text = span
         }
         holder.textValue.visibility = if (item.key.isNullOrBlank()) View.GONE else View.VISIBLE
+
+        holder.textLine.fixTextSelection()
+        holder.textValue.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

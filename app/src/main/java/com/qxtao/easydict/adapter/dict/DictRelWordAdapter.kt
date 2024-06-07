@@ -21,6 +21,7 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.RelInfo
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -72,6 +73,8 @@ class DictRelWordAdapter(private val relWordItems: ArrayList<RelInfo>) :
         }
         holder.textContent.movementMethod = LinkMovementMethod.getInstance()
         holder.textContent.text = spannable
+
+        holder.textContent.fixTextSelection()
     }
 
     fun setData(data: List<RelInfo>?) {

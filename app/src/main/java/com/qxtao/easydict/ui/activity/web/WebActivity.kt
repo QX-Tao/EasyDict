@@ -34,7 +34,7 @@ import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.view.LoadingView
 import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.ColorUtils
-import com.qxtao.easydict.utils.common.NetworkUtils
+import com.qxtao.easydict.utils.common.HttpUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_VIEW
 import me.jingbin.progress.WebProgress
@@ -246,7 +246,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
                 llLoadingFail.visibility = View.GONE
             }
             override fun onPageFinished(view: WebView?, url: String?) {
-                if (NetworkUtils.isConnected(mContext)){
+                if (HttpUtils.isConnected(mContext)){
                     webViewModel.currentUrl = url
                     wpProgress.hide()
                     setTitle()

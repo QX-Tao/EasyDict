@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.SpecialTrs
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -77,6 +78,10 @@ class DictSpecialInnerAdapter(private val mItemList: ArrayList<SpecialTrs>) :
 
         holder.textSource.text = String.format(holder.itemView.context.getString(R.string.source_from_eeee), item.tr?.docTitle)
         holder.textSource.visibility = if (item.tr?.docTitle.isNullOrBlank()) View.GONE else View.VISIBLE
+
+        holder.textTrans.fixTextSelection()
+        holder.textSents.fixTextSelection()
+        holder.textSentsTrans.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.Etym
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,6 +46,8 @@ class DictEtymAdapter(private val mItemList: ArrayList<Etym>) :
             it?.map { it1 -> it1.trim() }
         }?.joinToString("\n")
         holder.textContent.visibility = if (item.value.isNullOrBlank()) View.GONE else View.VISIBLE
+
+        holder.textContent.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

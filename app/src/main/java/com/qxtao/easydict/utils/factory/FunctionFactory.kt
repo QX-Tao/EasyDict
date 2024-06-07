@@ -11,6 +11,7 @@ import android.util.DisplayMetrics
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.core.view.WindowCompat
 
 
@@ -129,3 +130,11 @@ val Activity.screenRotation: Int
         Surface.ROTATION_270 -> 270
         else -> 0
     }
+
+/**
+ * 文本可选择
+ */
+fun TextView.fixTextSelection() {
+    setTextIsSelectable(false)
+    post { setTextIsSelectable(true) }
+}

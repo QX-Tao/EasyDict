@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.Trs
 import com.qxtao.easydict.utils.common.SizeUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,6 +63,8 @@ class DictEhHeaderExplainAdapter(private val trsItems: ArrayList<Trs>) :
             span.setSpan(TypefaceSpan(typeface), linesBeginIndexes[i], linesBeginIndexes[i] + (trsItems[i].pos?.length ?: 0), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         holder.textTranslation.setText(span, TextView.BufferType.SPANNABLE)
+
+        holder.textTranslation.fixTextSelection()
     }
 
     fun setData(data: List<Trs>?) {

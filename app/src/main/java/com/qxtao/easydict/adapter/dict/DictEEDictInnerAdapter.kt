@@ -24,6 +24,7 @@ import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.EETranslationItem
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -105,6 +106,9 @@ class DictEEDictInnerAdapter(private val mItemList: ArrayList<EETranslationItem>
         holder.tvWord.movementMethod = LinkMovementMethod.getInstance()
         holder.tvWord.text = spannable
 
+        holder.tvTran.fixTextSelection()
+        holder.tvExam.fixTextSelection()
+        holder.tvWord.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

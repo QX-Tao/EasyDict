@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.AuthSentence
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -82,6 +83,8 @@ class DictAuthSentsAdapter(private val mItemSentenceList: ArrayList<AuthSentence
         holder.source.setOnClickListener {
             sourceUrlClickListener?.onSourceUrlClick(position)
         }
+
+        holder.textEn.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

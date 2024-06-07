@@ -52,6 +52,7 @@ import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
 import com.qxtao.easydict.utils.common.ClipboardUtils
+import com.qxtao.easydict.utils.common.HttpUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_AUTH_SENTS
@@ -567,8 +568,10 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         tvBaikeDigestPartMore.setOnClickListener {
             when (dictViewModel.baikeDigest.value?.source?.name){
                 getString(R.string.BaiduBaike) -> {
-                    val url = dictViewModel.baikeDigest.value?.source?.url
-                        ?: "https://baike.baidu.com/item/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
+                    val url = dictViewModel.baikeDigest.value?.source?.url.let {
+                        if (it.isNullOrEmpty() || !HttpUtils.isHttpUrl(it)) "https://baike.baidu.com/item/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
+                        else it
+                    }
                     WebActivity.start(
                         requireActivity(), url,
                         allowOtherUrls = true,
@@ -576,8 +579,10 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                     )
                 }
                 getString(R.string.wikipedia), getString(R.string.wikipedia_en) -> {
-                    val url = dictViewModel.baikeDigest.value?.source?.url
-                        ?: "https://en.wikipedia.org/wiki/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
+                    val url = dictViewModel.baikeDigest.value?.source?.url.let{
+                        if (it.isNullOrEmpty() || !HttpUtils.isHttpUrl(it)) "https://en.wikipedia.org/wiki/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
+                        else it
+                    }
                     WebActivity.start(
                         requireActivity(), url,
                         allowOtherUrls = true,

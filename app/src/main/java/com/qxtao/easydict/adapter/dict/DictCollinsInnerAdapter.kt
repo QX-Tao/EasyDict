@@ -27,6 +27,7 @@ import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Entry
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -122,6 +123,9 @@ class DictCollinsInnerAdapter(private val mItemList: ArrayList<Entry>) :
                 holder.tvExam.setText(span, TextView.BufferType.SPANNABLE)
             } else holder.tvExam.visibility = View.GONE
         }
+
+        holder.tvTran.fixTextSelection()
+        holder.tvExam.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

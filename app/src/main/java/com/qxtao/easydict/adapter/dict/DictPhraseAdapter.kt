@@ -17,6 +17,7 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Phr
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,6 +54,8 @@ class DictPhraseAdapter(private val phrItems: ArrayList<Phr>) :
         span.setSpan(clickableSpan, 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         holder.textContent.movementMethod = LinkMovementMethod.getInstance()
         holder.textContent.text = span
+
+        holder.textContent.fixTextSelection()
     }
 
     fun setData(data: List<Phr>?) {

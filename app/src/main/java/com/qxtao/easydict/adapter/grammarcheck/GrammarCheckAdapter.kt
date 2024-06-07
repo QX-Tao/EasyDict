@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.grammarcheck.GrammarCheckViewModel
 import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,6 +66,11 @@ class GrammarCheckAdapter(private val sentFeedbackItems: ArrayList<GrammarCheckV
         }
         holder.tvRawSent.text = spannableString
         holder.tvRawSent.movementMethod = LinkMovementMethod.getInstance()
+
+        holder.tvSuggestion.fixTextSelection()
+        holder.tvCorrectSent.fixTextSelection()
+        holder.tvReason.fixTextSelection()
+        holder.tvRawSent.fixTextSelection()
     }
 
     override fun getItemCount(): Int = sentFeedbackItems.size

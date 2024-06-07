@@ -20,7 +20,7 @@ import com.qxtao.easydict.database.SearchHistoryData
 import com.qxtao.easydict.database.SimpleDictData
 import com.qxtao.easydict.database.WordBookData
 import com.qxtao.easydict.database.WordListData
-import com.qxtao.easydict.utils.common.HttpHelper
+import com.qxtao.easydict.utils.common.HttpUtils
 import com.qxtao.easydict.utils.common.TimeUtils
 import com.qxtao.easydict.utils.constant.NetConstant
 import com.xuexiang.xhttp2.XHttp
@@ -217,11 +217,11 @@ class DictViewModel(
                 Pair(true, DailySentenceData.DailySentence(tmp.date, tmp.enSentence, tmp.cnSentence, tmp.imageUrl, tmp.ttsUrl))
             } else {
                 try {
-                    val imgResponse = HttpHelper.requestDisableCertificateValidationResponse(
+                    val imgResponse = HttpUtils.requestDisableCertificateValidationResponse(
                         NetConstant.imgApi + TimeUtils.getFormatDateByPattern(date, "yyyy-MM-dd", "yyyyMMdd"))
                     val imageUrl = imgResponse.request.url.toString()
 
-                    val dailySentenceResponseJson = HttpHelper.requestResult(NetConstant.dailySentenceApi + date)
+                    val dailySentenceResponseJson = HttpUtils.requestResult(NetConstant.dailySentenceApi + date)
                     val dailySentenceJsonObject = JSONObject(dailySentenceResponseJson)
                     val enSentence: String = dailySentenceJsonObject.getString("content").trim()
                     val chSentence: String = dailySentenceJsonObject.getString("note").trim()
@@ -771,7 +771,7 @@ class DictViewModel(
                     onlineSearchMoreUrlBuilder.addQueryParameter("q", str.trim())
                     onlineSearchMoreUrlBuilder.addQueryParameter("jsonversion", "2")
                     onlineSearchMoreUrlBuilder.addQueryParameter("client", "mobile")
-                    val onlineSearchMoreJsonResponse = HttpHelper.requestResult(onlineSearchMoreUrlBuilder.build().toString())
+                    val onlineSearchMoreJsonResponse = HttpUtils.requestResult(onlineSearchMoreUrlBuilder.build().toString())
                     val res = JSONObject(onlineSearchMoreJsonResponse)
                     val gson = Gson()
                     withContext(Dispatchers.Main){
