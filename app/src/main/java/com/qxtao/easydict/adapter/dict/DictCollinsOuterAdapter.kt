@@ -138,9 +138,6 @@ class DictCollinsOuterAdapter(private val mItemList: ArrayList<CollinsEntry>) :
         if (textForm.isBlank()) holder.tvWordForm.visibility = View.GONE
         else holder.tvWordForm.text = "($textForm)"
         item.entries?.entry?.let { holder.setInnerData(it) }
-
-        holder.tvTran.fixTextSelection()
-        holder.tvExam.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

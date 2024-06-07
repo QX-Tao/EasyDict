@@ -70,7 +70,6 @@ class GrammarCheckAdapter(private val sentFeedbackItems: ArrayList<GrammarCheckV
         holder.tvSuggestion.fixTextSelection()
         holder.tvCorrectSent.fixTextSelection()
         holder.tvReason.fixTextSelection()
-        holder.tvRawSent.fixTextSelection()
     }
 
     override fun getItemCount(): Int = sentFeedbackItems.size

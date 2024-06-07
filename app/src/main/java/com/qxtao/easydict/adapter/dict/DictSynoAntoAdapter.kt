@@ -102,7 +102,6 @@ class DictSynoAntoAdapter<T>(private val mItemData: ArrayList<T>) :
         holder.textContent.movementMethod = LinkMovementMethod.getInstance()
         holder.textContent.text = spannable
 
-        holder.textContent.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

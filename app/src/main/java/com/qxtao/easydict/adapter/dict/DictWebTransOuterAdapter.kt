@@ -86,7 +86,6 @@ class DictWebTransOuterAdapter(
         holder.textValue.visibility = if (item.key.isNullOrBlank()) View.GONE else View.VISIBLE
 
         holder.textLine.fixTextSelection()
-        holder.textValue.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

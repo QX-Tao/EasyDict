@@ -105,10 +105,6 @@ class DictEEDictInnerAdapter(private val mItemList: ArrayList<EETranslationItem>
         }
         holder.tvWord.movementMethod = LinkMovementMethod.getInstance()
         holder.tvWord.text = spannable
-
-        holder.tvTran.fixTextSelection()
-        holder.tvExam.fixTextSelection()
-        holder.tvWord.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

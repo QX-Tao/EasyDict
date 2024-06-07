@@ -123,9 +123,6 @@ class DictCollinsInnerAdapter(private val mItemList: ArrayList<Entry>) :
                 holder.tvExam.setText(span, TextView.BufferType.SPANNABLE)
             } else holder.tvExam.visibility = View.GONE
         }
-
-        holder.tvTran.fixTextSelection()
-        holder.tvExam.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

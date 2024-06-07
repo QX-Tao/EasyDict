@@ -106,8 +106,6 @@ class DictThesurusInnerAdapter(private val mItemThesaurusList: ArrayList<Thesaur
             holder.textAntoTag.visibility = View.GONE
         }
 
-        holder.textAnto.fixTextSelection()
-        holder.textSyno.fixTextSelection()
     }
 
     override fun getItemCount(): Int {

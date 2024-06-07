@@ -54,8 +54,6 @@ class DictPhraseAdapter(private val phrItems: ArrayList<Phr>) :
         span.setSpan(clickableSpan, 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         holder.textContent.movementMethod = LinkMovementMethod.getInstance()
         holder.textContent.text = span
-
-        holder.textContent.fixTextSelection()
     }
 
     fun setData(data: List<Phr>?) {

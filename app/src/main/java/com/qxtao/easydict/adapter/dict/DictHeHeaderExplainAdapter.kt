@@ -74,7 +74,6 @@ class DictHeHeaderExplainAdapter(private val mItemList: ArrayList<Trans>) :
             playButtonClickListener?.onPlayButtonClick(position)
         }
 
-        holder.textEn.fixTextSelection()
         holder.textCn.fixTextSelection()
     }
 

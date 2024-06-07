@@ -15,8 +15,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:textColorHighlight="?attr/colorSecondaryContainer"
-            android:textIsSelectable="true"
             android:id="@+id/tv_gc_raw_sent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

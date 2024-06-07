@@ -74,7 +74,6 @@ class DictRelWordAdapter(private val relWordItems: ArrayList<RelInfo>) :
         holder.textContent.movementMethod = LinkMovementMethod.getInstance()
         holder.textContent.text = spannable
 
-        holder.textContent.fixTextSelection()
     }
 
     fun setData(data: List<RelInfo>?) {
