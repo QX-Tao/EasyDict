@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:fitsSystemWindowsInsets="top"
     tools:context=".ui.activity.wordlist.WordListActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        style="@style/Widget.MaterialComponents.Toolbar"
         android:id="@+id/mt_title"
-        app:fitsSystemWindowsInsets="top"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +19,7 @@
         app:subtitleTextColor="?attr/colorOnSurfaceVariant"
         app:menu="@menu/word_list_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/toolbar_height"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list_word"
@@ -59,44 +58,27 @@
     </LinearLayout>
 
     <com.qxtao.easydict.ui.view.LoadingView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mt_title"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/lv_loading"
         android:background="?attr/colorSurface"
-        app:ballColor="?attr/colorSecondary"
-        app:internal="60"
-        app:duration="200"
-        app:max_radius="20"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <com.qxtao.easydict.ui.view.LoadFailedView
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mt_title"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
-
-    <LinearLayout
+        app:loadFailedViewHintText="@string/failed_to_load_click_the_screen_to_try_again"
         android:visibility="gone"
-        android:id="@+id/ll_loading_fail"
-        android:background="?attr/colorSurfaceContainer"
-        android:gravity="center"
+        android:id="@+id/lv_load_failed"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mt_title"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="?attr/colorSurface"
         android:layout_width="0dp"
-        android:layout_height="0dp">
-
-        <TextView
-            android:gravity="center"
-            android:padding="20dp"
-            android:drawablePadding="15dp"
-            android:textSize="@dimen/text_size_normal"
-            android:textColor="?attr/colorOnSurface"
-            android:text="@string/failed_to_load_click_the_screen_to_try_again"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:drawableTopCompat="@drawable/ic_loading_fail" />
-
-    </LinearLayout>
+        android:layout_height="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

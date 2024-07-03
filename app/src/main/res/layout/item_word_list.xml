@@ -70,7 +70,7 @@
                 app:layout_constraintEnd_toEndOf="@id/tv_list_mean"
                 app:layout_constraintBottom_toBottomOf="@id/tv_list_mean"
                 app:layout_constraintTop_toTopOf="@id/tv_list_mean"
-                android:background="@drawable/bg_ripple_r24"
+                android:background="@drawable/bg_ripple_r12"
                 android:src="@drawable/ic_search"
                 android:padding="3dp"
                 android:layout_width="24dp"

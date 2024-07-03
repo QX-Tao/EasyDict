@@ -47,7 +47,7 @@ class DictEhHeaderExplainAdapter(private val trsItems: ArrayList<Trs>) :
         val trans = l.joinToString("\n\r")
 
         val typeface = Typeface.createFromAsset(holder.itemView.context.assets, "fonts/Georgia Italic.ttf")
-        val d = ContextCompat.getDrawable(holder.itemView.context, R.drawable.sp_paragraph_space)
+        val d = ContextCompat.getDrawable(holder.itemView.context, R.drawable.bg_shape_paragraph_space)
         d!!.setBounds(0, 0, 1, SizeUtils.dp2px(27f))
         val span = SpannableStringBuilder(trans)
         span.setSpan(TabStopSpan.Standard(SizeUtils.dp2px((posMaxCharNum * 10).toFloat())), 0, span.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="toolbar_height">64dp</dimen>
     <dimen name="card_view_radius_large">24dp</dimen>
     <dimen name="card_view_radius_medium">16dp</dimen>
     <dimen name="card_view_radius_small">8dp</dimen>

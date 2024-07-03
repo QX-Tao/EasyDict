@@ -21,9 +21,14 @@
         android:theme="@style/Theme.EasyDict"
         android:usesCleartextTraffic="true"
         tools:targetApi="34">
+        <activity
+            android:name=".ui.activity.bughandler.BugHandlerActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="android.app.WallpaperSupport"
             android:value="true" />
+
         <activity
             android:name=".ui.activity.settings.SettingsActivity"
             android:exported="false" />
@@ -33,10 +38,6 @@
         <activity
             android:name=".ui.activity.web.WebActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.activity.photoview.PhotoViewActivity"
-            android:exported="false"
-            android:theme="@style/Theme.EasyDict.PhotoViewTheme" />
         <activity
             android:name=".ui.activity.daysentence.DaySentenceActivity"
             android:exported="false" />

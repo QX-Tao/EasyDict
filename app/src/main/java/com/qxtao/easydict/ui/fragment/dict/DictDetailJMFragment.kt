@@ -559,9 +559,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
             override fun onSourceUrlClick(position: Int) {
                 WebActivity.start(
                     requireActivity(),
-                    rvDictAuthSentsAdapter.getItem(position).url!!,
-                    allowOtherUrls = true,
-                    useWebTitle = true
+                    rvDictAuthSentsAdapter.getItem(position).url!!
                 )
             }
         })
@@ -572,22 +570,14 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
                         if (it.isNullOrEmpty() || !HttpUtils.isHttpUrl(it)) "https://baike.baidu.com/item/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
                         else it
                     }
-                    WebActivity.start(
-                        requireActivity(), url,
-                        allowOtherUrls = true,
-                        useWebTitle = true
-                    )
+                    WebActivity.start(requireActivity(), url)
                 }
                 getString(R.string.wikipedia), getString(R.string.wikipedia_en) -> {
                     val url = dictViewModel.baikeDigest.value?.source?.url.let{
                         if (it.isNullOrEmpty() || !HttpUtils.isHttpUrl(it)) "https://en.wikipedia.org/wiki/${dictViewModel.baikeDigest.value?.summarys?.get(0)?.key}"
                         else it
                     }
-                    WebActivity.start(
-                        requireActivity(), url,
-                        allowOtherUrls = true,
-                        useWebTitle = true
-                    )
+                    WebActivity.start(requireActivity(), url)
                 }
                 else -> {
                     showShortToast(getString(R.string.nothing_to_access))

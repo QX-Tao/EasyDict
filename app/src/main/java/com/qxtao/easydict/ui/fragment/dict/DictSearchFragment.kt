@@ -1,7 +1,5 @@
 package com.qxtao.easydict.ui.fragment.dict
 
-import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.Animation
@@ -9,21 +7,16 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.card.MaterialCardView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentDictSearchBinding
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_HISTORY
-import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION_LM
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
-import com.qxtao.easydict.utils.factory.screenRotation
 
 
 class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictSearchBinding::inflate) {
@@ -100,6 +93,8 @@ class DictSearchFragment : BaseFragment<FragmentDictSearchBinding>(FragmentDictS
     }
 
     fun getSearchBoxText(): String = etSearchBox.text.toString()
+
+    fun getEditText(): EditText = etSearchBox
 
     fun getEditTextFocus(){
         val currentFragment = childFragmentManager.findFragmentById(R.id.dict_search_content_fragment)

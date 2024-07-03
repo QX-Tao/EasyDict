@@ -9,10 +9,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
 import com.qxtao.easydict.application.EasyDictApplication
 import com.qxtao.easydict.utils.common.ThemeUtils
+import com.qxtao.easydict.utils.factory.edgeToEdge
 import com.qxtao.easydict.utils.factory.isNotSystemInDarkMode
 import rikka.material.app.MaterialActivity
 
@@ -24,6 +26,7 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
     protected val mContext get() = _context
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        edgeToEdge()
         super.onCreate(savedInstanceState)
         _context = this
         setContentView(binding.root)
@@ -69,12 +72,25 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
     }
     override fun computeUserThemeKey(): String = ThemeUtils.getColorTheme(this)
 
+    /**
+     * @param appCompatDelegate AppCompatDelegate
+     * @param themeModeType Int
+     * 为单activity设置主题模式
+     */
+    protected open fun setActivityDarkTheme(appCompatDelegate: AppCompatDelegate, themeModeType: Int) {
+        when(themeModeType){
+            -1 -> appCompatDelegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            1 -> appCompatDelegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
+            2 -> appCompatDelegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+        }
+    }
+
 
     /**
      * Callback [onCreate] method
      * 回调 [onCreate] 方法
      */
-    abstract fun onCreate()
+    protected open fun onCreate() {}
 
     /**
      * Callback [bindViews] method
@@ -86,13 +102,13 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
      * Callback [initViews] method
      * 回调 [initViews] 方法
      */
-    protected abstract fun initViews()
+    protected open fun initViews() {}
 
     /**
      * Callback [addListener] method
      * 回调 [addListener] 方法
      */
-    protected abstract fun addListener()
+    protected open fun addListener() {}
 
     /**
      * show short toast

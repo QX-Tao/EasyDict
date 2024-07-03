@@ -1,6 +1,5 @@
 package com.qxtao.easydict.ui.activity.web
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -9,7 +8,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
@@ -18,8 +16,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AlertDialog
@@ -31,13 +27,10 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.ActivityWebBinding
 import com.qxtao.easydict.ui.base.BaseActivity
-import com.qxtao.easydict.ui.view.LoadingView
+import com.qxtao.easydict.ui.view.ProgressView
 import com.qxtao.easydict.utils.common.ClipboardUtils
-import com.qxtao.easydict.utils.common.ColorUtils
-import com.qxtao.easydict.utils.common.HttpUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_VIEW
-import me.jingbin.progress.WebProgress
 
 
 class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate){
@@ -45,63 +38,45 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     private lateinit var dispatcher: OnBackPressedDispatcher
     private lateinit var callback: OnBackPressedCallback
     private lateinit var webViewModel: WebViewModel
-    private var isRestoreWebView = false
-    private val initUrl by lazy { intent?.getStringExtra("extra_url") }
-    private val title by lazy { intent?.getStringExtra("extra_title") }
-    private val allowOtherUrls by lazy { intent?.getBooleanExtra("extra_allowOtherUrls", false) }
-    private val useWebTitle by lazy { intent?.getBooleanExtra("extra_useWebTitle", false) }
-    private val useCache by lazy { intent?.getBooleanExtra("extra_useCache", true) }
+    private var needLoadUrl = true
+    private val initUrl by lazy { intent.getStringExtra("extra_initUrl") }
+    private val fixedTitle by lazy { intent.getStringExtra("extra_fixedTitle") }
+    private val allowOtherUrls by lazy { intent.getBooleanExtra("extra_allowOtherUrls", true) }
+    private val useCache by lazy { intent.getBooleanExtra("extra_useCache", true) }
     // define widget
     private lateinit var webView: WebView
-    private lateinit var llLoadingFail: LinearLayout
-    private lateinit var lvLoading: LoadingView
-    private lateinit var tvLoadingFail: TextView
     private lateinit var mtTitle: MaterialToolbar
-    private lateinit var wpProgress: WebProgress
+    private lateinit var pvProgress: ProgressView
 
     companion object{
-        fun start(
-            activity: Activity,
-            url: String,
-            title: String? = null,
-            allowOtherUrls: Boolean = false,
-            useWebTitle: Boolean = false,
-            useCache: Boolean =  true
-        ){
-            val intent = Intent(activity, WebActivity::class.java)
-            intent.putExtra("extra_url", url)
-            intent.putExtra("extra_title", title)
-            intent.putExtra("extra_allowOtherUrls", allowOtherUrls)
-            intent.putExtra("extra_useWebTitle", useWebTitle)
-            intent.putExtra("extra_useCache", useCache)
-            activity.startActivity(intent)
+        fun start(activity: Activity, initUrl: String, fixedTitle: String? = null,
+            allowOtherUrls: Boolean = true, useCache: Boolean = true){
+            start(context = activity, initUrl, fixedTitle, allowOtherUrls, useCache)
         }
-        fun start(
-            context: Context,
-            url: String,
-            title: String? = null,
-            allowOtherUrls: Boolean = false,
-            useWebTitle: Boolean = false,
-            useCache: Boolean =  true
-        ){
+        fun start(context: Context, initUrl: String, fixedTitle: String? = null,
+            allowOtherUrls: Boolean = true, useCache: Boolean = true){
             val intent = Intent(context, WebActivity::class.java)
-            intent.putExtra("extra_url", url)
-            intent.putExtra("extra_title", title)
+            intent.putExtra("extra_initUrl", initUrl)
+            intent.putExtra("extra_fixedTitle", fixedTitle)
             intent.putExtra("extra_allowOtherUrls", allowOtherUrls)
-            intent.putExtra("extra_useWebTitle", useWebTitle)
             intent.putExtra("extra_useCache", useCache)
             context.startActivity(intent)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        webView.saveState(outState)
         super.onSaveInstanceState(outState)
+        webView.saveState(outState)
     }
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         webView.restoreState(savedInstanceState)
-        isRestoreWebView = true
+    }
+
+    override fun onCreate1(savedInstanceState: Bundle?) {
+        super.onCreate1(savedInstanceState)
+        webViewModel = ViewModelProvider(this)[WebViewModel::class.java]
+        needLoadUrl = savedInstanceState == null || webViewModel.currentUrl.isNullOrEmpty()
     }
 
     override fun onCreate() {
@@ -111,39 +86,10 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             mContext.startActivity(intent)
             finish()
         }
-        webViewModel = ViewModelProvider(this)[WebViewModel::class.java]
         dispatcher = onBackPressedDispatcher
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val history = webView.copyBackForwardList()
-                var index = -1
-                var url: String? = null
-                val curUrl = webView.url
-                if (curUrl.equals("about:blank")){ // 当前页面加载不出来
-                    while (webView.canGoBackOrForward(index)){
-                        val curIndex = history.currentIndex
-                        val lastUrl = history.getItemAtIndex( curIndex + index ).url
-                        if (!lastUrl.equals("about:blank") && index != -1){
-                            webView.goBackOrForward(index)
-                            url = lastUrl
-                            break
-                        }
-                        index--
-                    }
-                } else { // 当前页面加载得出来
-                    while (webView.canGoBackOrForward(index)){
-                        val curIndex = history.currentIndex
-                        val lastUrl = history.getItemAtIndex( curIndex + index ).url
-                        if (lastUrl != "about:blank" && !curUrl.equals(lastUrl)){
-                            webView.goBackOrForward(index)
-                            url = lastUrl
-                            break
-                        }
-                        index--
-                    }
-                }
-                if (url == null) finish()
-                if (history.size == 2 && curUrl.equals("about:blank")) finish()
+                if (webView.canGoBack()) webView.goBack() else finish()
             }
         }
         dispatcher.addCallback(callback)
@@ -151,15 +97,11 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
 
     override fun bindViews() {
         webView = binding.webView
-        llLoadingFail = binding.llLoadingFail
-        lvLoading = binding.lvLoading
-        tvLoadingFail = binding.tvLoadingFail
         mtTitle = binding.mtTitle
-        wpProgress = binding.wpProgress
+        pvProgress = binding.pvProgress
     }
 
     override fun initViews() {
-        wpProgress.setColor(ColorUtils.colorPrimary(mContext))
         initWebView()
         loadUrl()
     }
@@ -184,16 +126,15 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             }
             true
         }
-        llLoadingFail.setOnClickListener {
-            webView.loadUrl(webViewModel.currentUrl!!)
-        }
         webView.setDownloadListener { url, _, _, _, _ ->
             AlertDialog.Builder(mContext)
                 .setTitle(getString(R.string.hint))
                 .setMessage(getString(R.string.web_request_download_file_desc))
                 .setPositiveButton(getString(R.string.confirm)) { _, _ ->
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    mContext.startActivity(intent)
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        mContext.startActivity(intent)
+                    } catch (_: Exception) { }
                 }
                 .setNegativeButton(getString(R.string.cancel), null)
                 .create()
@@ -201,8 +142,10 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @Suppress("SetJavaScriptEnabled", "DEPRECATION")
     private fun initWebView() {
+        webView.setBackgroundColor(0)
+        webView.background.alpha = 0
         webView.isVerticalScrollBarEnabled = false
         webView.isHorizontalScrollBarEnabled = false
         webView.settings.apply {
@@ -211,7 +154,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             useWideViewPort = true
             blockNetworkImage = false
             mixedContentMode =  WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            cacheMode = if (useCache == true) WebSettings.LOAD_DEFAULT else WebSettings.LOAD_NO_CACHE
+            cacheMode = if (useCache) WebSettings.LOAD_DEFAULT else WebSettings.LOAD_NO_CACHE
             loadsImagesAutomatically = true
             builtInZoomControls = false
             setSupportZoom(false)
@@ -219,74 +162,57 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
                 if (isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
                     WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.settings, true)
                 } else if (isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                    @Suppress("DEPRECATION")
                     WebSettingsCompat.setForceDark(webView.settings, WebSettingsCompat.FORCE_DARK_ON)
                 }
             }
         }
         webView.webViewClient = object : WebViewClient(){
-            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
-                val hitTestResult = view?.hitTestResult
-                if (hitTestResult == null || hitTestResult.extra == null){
-                    return false
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                if (request.url.toString().startsWith("http")){
+                    if (!allowOtherUrls && request.url.toString() != initUrl){
+                        val intent = Intent(Intent.ACTION_VIEW, request.url)
+                        view.context.startActivity(intent)
+                    } else{
+                        return super.shouldOverrideUrlLoading(view, request)
+                    }
+                } else {
+                    AlertDialog.Builder(mContext)
+                        .setTitle(getString(R.string.hint))
+                        .setMessage(getString(R.string.web_request_open_app))
+                        .setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                            try {
+                                val intent = Intent(Intent.ACTION_VIEW, request.url)
+                                view.context.startActivity(intent)
+                            } catch (_: Exception) { }
+                        }
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .create()
+                        .show()
                 }
-                if (allowOtherUrls == false && request.url.toString() != initUrl){
-                    val intent = Intent(Intent.ACTION_VIEW, request.url)
-                    view.context.startActivity(intent)
-                    return true
-                } else{
-                    view.loadUrl(request.url.toString())
-                    return false
-                }
+                return true
             }
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 webViewModel.currentUrl = url
-                setTitle(getString(R.string.loading_3))
-                lvLoading.visibility = View.VISIBLE
-                llLoadingFail.visibility = View.GONE
+                setTitle(getString(R.string.page_loading))
             }
             override fun onPageFinished(view: WebView?, url: String?) {
-                if (HttpUtils.isConnected(mContext)){
-                    webViewModel.currentUrl = url
-                    wpProgress.hide()
-                    setTitle()
-                } else {
-                    if (url != "about:blank") {
-                        webView.loadUrl("about:blank")
-                    }
-                }
-                if (url == "about:blank"){
-                    llLoadingFail.visibility = View.VISIBLE
-                }
-                lvLoading.visibility = View.GONE
+                pvProgress.hide()
+                setTitle()
             }
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
                 Log.d("WebView", "onReceivedError: ${error.errorCode}")
-                when (error.errorCode){
-                    ERROR_TIMEOUT -> { }
-                    ERROR_HOST_LOOKUP -> { }
-                    ERROR_UNKNOWN -> { }
-                    ERROR_CONNECT -> { }
-                    else -> {
-                        webView.loadUrl("about:blank")
-                        llLoadingFail.visibility = View.VISIBLE
-                    }
-                }
             }
         }
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
-                wpProgress.setWebProgress(newProgress)
+                pvProgress.setWebProgress(newProgress)
                 when (newProgress){
                     in 0.. 94 ->{
-                        setTitle(getString(R.string.loading_3))
-                        lvLoading.visibility = View.VISIBLE
-                        llLoadingFail.visibility = View.GONE
+                        setTitle(getString(R.string.page_loading))
                     }
                     else -> {
                         setTitle()
-                        lvLoading.visibility = View.GONE
                     }
                 }
             }
@@ -321,31 +247,16 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
                 return true
             }
         }
-        webView.setBackgroundColor(0)
-        webView.background.alpha = 0
     }
 
     private fun loadUrl(){
-        if (isRestoreWebView) return
-        val url = webViewModel.currentUrl ?: initUrl
-        if (url.isNullOrEmpty()) finish() else {
-            webViewModel.currentUrl = url
-            webView.loadUrl(url)
-        }
+        if (!needLoadUrl) return
+        val url = webViewModel.currentUrl ?: initUrl ?: return
+        webView.loadUrl(url)
     }
 
-    private fun setTitle(){
-        mtTitle.title =
-            if (useWebTitle == false && title.isNullOrEmpty()) getString(R.string.empty_string)
-            else if (useWebTitle == true && title.isNullOrEmpty())
-                if (webView.title == "about:blank") getString(R.string.web_page_cannot_be_opened)
-                else webView.title
-            else title.toString()
-    }
-    private fun setTitle(title: String){
-        mtTitle.title =
-            if (useWebTitle == false || title.isBlank()) getString(R.string.empty_string)
-            else title
+    private fun setTitle(title: String? = webView.title){
+        mtTitle.title = fixedTitle ?: title
     }
 
     override fun onDestroy1() {

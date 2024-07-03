@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.Etym
+import com.qxtao.easydict.ui.view.ExpandableTextView
 import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,15 +37,15 @@ class DictEtymAdapter(private val mItemList: ArrayList<Etym>) :
         holder.textTitle.text = item.word
         holder.textTitle.visibility = if (item.word.isNullOrBlank()) View.GONE else View.VISIBLE
 
-        holder.textFrom.text = String.format( holder.itemView.context.getString(R.string.source_from_eeee), item.source)
+        holder.textFrom.text = holder.itemView.context.getString(R.string.source_from_eeee, item.source)
         holder.textFrom.visibility = if (item.source.isNullOrBlank()) View.GONE else View.VISIBLE
 
         holder.textDesc.text = item.desc
         holder.textDesc.visibility = if (item.desc.isNullOrBlank()) View.GONE else View.VISIBLE
 
-        holder.textContent.text = item.value?.split("\u000a").let{
+        holder.textContent.originalText = item.value?.split("\u000a").let{
             it?.map { it1 -> it1.trim() }
-        }?.joinToString("\n")
+        }?.joinToString("\n") ?: ""
         holder.textContent.visibility = if (item.value.isNullOrBlank()) View.GONE else View.VISIBLE
 
         holder.textContent.fixTextSelection()
@@ -72,7 +73,7 @@ class DictEtymAdapter(private val mItemList: ArrayList<Etym>) :
         val textNum: TextView = itemView.findViewById(R.id.tv_item_num)
         val textTitle: TextView = itemView.findViewById(R.id.tv_item_title)
         val textDesc : TextView = itemView.findViewById(R.id.tv_item_desc)
-        val textContent: TextView = itemView.findViewById(R.id.tv_item_content)
+        val textContent: ExpandableTextView = itemView.findViewById(R.id.tv_item_content)
         val textFrom : TextView = itemView.findViewById(R.id.tv_item_from)
     }
 

@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:fitsSystemWindowsInsets="top"
     tools:context=".ui.fragment.dict.DictWelcomeFragment" >
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
-        app:fitsSystemWindowsInsets="top"
         app:liftOnScrollColor="@color/trans"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/trans"
+        app:elevation="0dp"
         app:liftOnScroll="false"
         android:fitsSystemWindows="false">
 
@@ -22,13 +24,12 @@
             android:layout_height="?collapsingToolbarLayoutLargeSize"
             android:fitsSystemWindows="false"
             app:expandedTitleTextAppearance="@style/Widget.MaterialComponents.Toolbar"
-            app:expandedTitleMarginBottom="16dp"
+            app:expandedTitleMarginBottom="20dp"
             app:expandedTitleMarginStart="24dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleCollapseMode="scale">
 
             <com.google.android.material.appbar.MaterialToolbar
-                style="@style/Widget.MaterialComponents.Toolbar"
                 android:id="@+id/mt_title"
                 app:title="@string/app_name"
                 app:menu="@menu/main_menu"
@@ -74,7 +75,7 @@
                 android:focusable="true"
                 android:layout_gravity="center_vertical|end"
                 android:src="@drawable/ic_voice2"
-                android:background="@drawable/bg_ripple_r30"
+                android:background="@drawable/bg_ripple_r15"
                 android:layout_marginEnd="13dp"
                 android:padding="4dp"
                 android:layout_height="30dp"
@@ -134,19 +135,19 @@
 
                     <ImageView
                         android:id="@+id/iv_suggest_search_refresh"
-                        android:background="@drawable/bg_ripple_r24"
+                        android:background="@drawable/bg_ripple_r15"
                         android:contentDescription="@string/refresh"
                         android:scaleType="centerCrop"
-                        android:layout_marginEnd="14dp"
+                        android:layout_marginEnd="13dp"
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintTop_toTopOf="@+id/tv_suggest_search_title"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_suggest_search_title"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:src="@drawable/ic_refresh"
-                        android:padding="3dp"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"/>
+                        android:padding="6dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
 
                     <com.qxtao.easydict.ui.view.MaxHeightRecyclerView
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -193,23 +194,10 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@+id/cl_word_list_learned"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_word_list_select"
                         android:text="@string/recite_word"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:drawableStartCompat="@drawable/ic_word_list" />
-
-                    <TextView
-                        android:id="@+id/tv_word_list_select"
-                        app:layout_constraintTop_toTopOf="@+id/tv_word_list_title"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_word_list_title"
-                        app:layout_constraintStart_toEndOf="@+id/tv_word_list_title"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_word_list_refresh"
-                        android:layout_marginEnd="10dp"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:padding="12dp"
@@ -338,21 +326,19 @@
 
                     <ImageView
                         android:id="@+id/iv_word_list_refresh"
-                        android:background="@drawable/bg_ripple_r24"
+                        android:background="@drawable/bg_ripple_r15"
                         android:contentDescription="@string/refresh"
                         android:scaleType="centerCrop"
-                        android:layout_marginEnd="14dp"
+                        android:layout_marginEnd="13dp"
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintTop_toTopOf="@+id/tv_word_list_title"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_word_list_title"
-                        app:layout_constraintStart_toEndOf="@+id/tv_word_list_select"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:src="@drawable/ic_refresh"
-                        android:padding="3dp"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"/>
-
+                        android:padding="6dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -429,6 +415,18 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
 
+                    <com.qxtao.easydict.ui.view.LoadingView
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:loadingViewProgressBarSize="32dp"
+                        android:id="@+id/lv_ds_loading"
+                        android:background="?attr/colorSurfaceContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"/>
+
                     <View
                         android:id="@+id/v_day_sentence"
                         android:clickable="true"
@@ -441,51 +439,20 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"/>
 
-                    <com.qxtao.easydict.ui.view.LoadingView
+                    <com.qxtao.easydict.ui.view.LoadFailedView
                         android:visibility="gone"
-                        android:id="@+id/lv_ds_loading"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:background="?attr/colorSurfaceContainer"
-                        app:ballColor="?attr/colorSecondary"
-                        app:internal="60"
-                        app:duration="200"
-                        app:max_radius="20"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/ll_ds_loading_fail"
-                        android:background="?attr/colorSurfaceContainer"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:gravity="center"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:loadFailedViewHintText="@string/failed_to_load_click_here_to_try_again"
+                        app:loadFailedViewHintDrawableSize="32dp"
+                        android:id="@+id/lv_ds_load_failed"
                         android:clickable="true"
                         android:focusable="true"
+                        android:background="?attr/colorSurfaceContainer"
                         android:layout_width="0dp"
-                        android:layout_height="0dp">
-
-                        <TextView
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:gravity="center"
-                            android:padding="20dp"
-                            android:drawablePadding="15dp"
-                            android:textSize="@dimen/text_size_normal"
-                            android:textColor="?attr/colorOnSurface"
-                            android:text="@string/failed_to_load_click_here_to_try_again"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:drawableTopCompat="@drawable/ic_loading_fail" />
-
-                    </LinearLayout>
+                        android:layout_height="0dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

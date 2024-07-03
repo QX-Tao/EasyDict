@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:fitsSystemWindowsInsets="top"
     tools:context=".ui.fragment.dict.DictDefinitionFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
-        style="@style/Widget.MaterialComponents.Toolbar"
         android:id="@+id/mt_title"
-        app:fitsSystemWindowsInsets="top"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,7 +16,7 @@
         app:navigationContentDescription="@string/back"
         app:title="@string/definition"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/toolbar_height"/>
 
     <androidx.fragment.app.FragmentContainerView
         app:layout_constraintTop_toBottomOf="@id/mt_title"

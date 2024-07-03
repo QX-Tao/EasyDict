@@ -1,12 +1,8 @@
 package com.qxtao.easydict.ui.fragment.daysentence
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import coil.load
@@ -15,9 +11,10 @@ import com.qxtao.easydict.database.DailySentenceData
 import com.qxtao.easydict.databinding.FragmentDaySentenceBinding
 import com.qxtao.easydict.ui.activity.daysentence.DaySentenceActivity
 import com.qxtao.easydict.ui.activity.daysentence.DaySentenceViewModel
-import com.qxtao.easydict.ui.activity.photoview.PhotoViewActivity
 import com.qxtao.easydict.ui.base.BaseFragment
+import com.qxtao.easydict.ui.view.LoadFailedView
 import com.qxtao.easydict.ui.view.LoadingView
+import com.qxtao.easydict.ui.view.imageviewer.PhotoView
 import com.qxtao.easydict.utils.common.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,6 +29,7 @@ class DaySentenceFragment : BaseFragment<FragmentDaySentenceBinding>(FragmentDay
     private var d: Int = -1
     private var dailySentenceItem: DailySentenceData.DailySentence? = null
     private lateinit var daySentenceViewModel: DaySentenceViewModel
+    private lateinit var photoView: PhotoView
     // define widget
     private lateinit var lvLoading: LoadingView
     private lateinit var ivDsImage: ImageView
@@ -42,7 +40,7 @@ class DaySentenceFragment : BaseFragment<FragmentDaySentenceBinding>(FragmentDay
     private lateinit var tvDsYear: TextView
     private lateinit var tvDsMonth: TextView
     private lateinit var tvDsDate: TextView
-    private lateinit var llLoadingFail: LinearLayout
+    private lateinit var lvLoadFailed: LoadFailedView
 
     fun newInstance(date: String): DaySentenceFragment {
         val args = Bundle()
@@ -66,11 +64,12 @@ class DaySentenceFragment : BaseFragment<FragmentDaySentenceBinding>(FragmentDay
         tvDsYear = binding.tvDsYear
         tvDsMonth = binding.tvDsMonth
         tvDsDate = binding.tvDsDate
-        llLoadingFail = binding.llLoadingFail
+        lvLoadFailed = binding.lvLoadFailed
     }
 
     override fun initViews() {
         daySentenceViewModel = (activity as DaySentenceActivity).getDaySentenceViewModel()
+        photoView = (activity as DaySentenceActivity).photoView
         date = getDate()
         d = TimeUtils.calculateDateDifference(date,"yyyy-MM-dd").toInt()
         prepareDailyData()
@@ -89,13 +88,11 @@ class DaySentenceFragment : BaseFragment<FragmentDaySentenceBinding>(FragmentDay
     override fun addListener() {
         ivDsSound.setOnClickListener {daySentenceViewModel.startPlaySound(d, dailySentenceItem!!.ttsUrl) }
         ivDsUnfold.setOnClickListener {
-            val pictureList = ArrayList<String>()
-            pictureList.add(dailySentenceItem!!.imageUrl)
-            PhotoViewActivity.start(requireActivity(), pictureList, 0)
+            photoView.show(dailySentenceItem!!.imageUrl, ivDsImage)
         }
-        llLoadingFail.setOnClickListener {
+        lvLoadFailed.setOnClickListener {
             prepareDailyData()
-            llLoadingFail.visibility = View.GONE
+            lvLoadFailed.visibility = View.GONE
         }
     }
 
@@ -105,15 +102,11 @@ class DaySentenceFragment : BaseFragment<FragmentDaySentenceBinding>(FragmentDay
             dailySentenceItem = daySentenceViewModel.getData(date, reload)
             withContext(Dispatchers.Main) {
                 if (dailySentenceItem == null) {
-                    llLoadingFail.visibility = View.VISIBLE
+                    lvLoadFailed.visibility = View.VISIBLE
                 } else {
                     tvSentenceEn.text = dailySentenceItem!!.enSentence
                     tvSentenceCn.text = dailySentenceItem!!.cnSentence
-                    withContext(Dispatchers.IO){
-                        ivDsImage.load(dailySentenceItem!!.imageUrl){
-                            crossfade(true)
-                        }
-                    }
+                    ivDsImage.load(dailySentenceItem!!.imageUrl)
                     lvLoading.visibility = View.GONE
                 }
             }

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.EasyDict" parent="Theme.Material3.DynamicColors.Dark">
@@ -10,5 +11,4 @@
         <item name="windowNoTitle">true</item>
         <item name="dialogCornerRadius">@dimen/dialog_radius</item>
     </style>
-
 </resources>

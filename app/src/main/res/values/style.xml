@@ -14,14 +14,6 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <declare-styleable name="LoadingView">
-        <attr name="min_radius" format="integer" />
-        <attr name="max_radius" format="integer" />
-        <attr name="ballColor" format="color" />
-        <attr name="duration" format="integer" />
-        <attr name="internal" format="integer" />
-    </declare-styleable>
-
     <declare-styleable name="ExpandableTextView">
         <attr name="limitedMaxLines" format="integer" />
         <attr name="originalText" format="string" />
@@ -29,6 +21,25 @@
         <attr name="expandActionColor" format="string" />
     </declare-styleable>
 
+    <declare-styleable name="LoadingView">
+        <attr name="loadingViewProgressBarSize" format="dimension" />
+        <attr name="loadingViewProgressBarColor" format="color" />
+        <attr name="loadingViewHintText" format="string" />
+        <attr name="loadingViewHintTextColor" format="color" />
+        <attr name="loadingViewHintTextSize" format="dimension" />
+        <attr name="showLoadingViewHintText" format="boolean" />
+        <attr name="showLoadingViewProgressBar" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="LoadFailedView">
+        <attr name="loadFailedViewHintDrawable" format="reference" />
+        <attr name="loadFailedViewHintDrawableSize" format="dimension" />
+        <attr name="loadFailedViewHintText" format="string" />
+        <attr name="loadFailedViewHintTextColor" format="color" />
+        <attr name="loadFailedViewHintTextSize" format="dimension" />
+        <attr name="showLoadFailedViewHintText" format="boolean" />
+        <attr name="showLoadFailedViewHintDrawable" format="boolean" />
+    </declare-styleable>
 
     <declare-styleable name="AlignTextView">
         <attr name="alignOnlyOneLine" format="boolean"/>
@@ -36,6 +47,18 @@
 
     <declare-styleable name="MaxHeightRecyclerView">
         <attr name="maxHeight" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="AndRatingBar">
+        <attr format="color|reference" name="starColor"/>
+        <attr format="color|reference" name="subStarColor"/>
+        <attr format="color|reference" name="bgColor"/>
+        <attr format="reference" name="starDrawable"/>
+        <attr format="reference" name="bgDrawable"/>
+        <attr format="boolean" name="keepOriginColor"/>
+        <attr format="float" name="scaleFactor"/>
+        <attr format="dimension" name="starSpacing"/>
+        <attr format="boolean" name="right2Left"/>
     </declare-styleable>
 
 </resources>

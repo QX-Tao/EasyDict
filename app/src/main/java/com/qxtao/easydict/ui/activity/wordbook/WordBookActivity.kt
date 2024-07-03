@@ -112,7 +112,7 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
             if (wordBookName.isNotBlank()){
                 val res = wordBookViewModel.addWordBook(wordBookName)
                 if (res.first) {
-                    showShortToast(String.format(getString(R.string.add_word_book_success_eee), res.second))
+                    showShortToast(getString(R.string.add_word_book_success_eee, res.second))
                     wordBookViewModel.getWordBookList()
                     dialog.dismiss()
                 } else showShortToast(res.second)
@@ -141,7 +141,7 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
                 if (res.first) {
                     val ress = wordBookViewModel.moveWordBook(words, oldName, wordBookName)
                     if (ress.first){
-                        showShortToast(String.format(getString(R.string.move_word_book), res.second))
+                        showShortToast(getString(R.string.move_word_book, res.second))
                         wordBookViewModel.getWordList(oldName)
                         wordBookViewModel.detailMode.value = BOOK_WORD_MODE_NORMAL
                     } else showShortToast(getString(R.string.operation_failure))
@@ -180,7 +180,7 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
                 }
                 val res = wordBookViewModel.renameWordBook(oldName, wordBookName)
                 if (res.first) {
-                    showShortToast(String.format(getString(R.string.rename_word_book_success_eee), res.second))
+                    showShortToast(getString(R.string.rename_word_book_success_eee, res.second))
                     wordBookViewModel.getWordBookList()
                     dialog.dismiss()
                 } else showShortToast(res.second)
@@ -240,7 +240,7 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
                     val res = wordBookViewModel.moveWordBook(wordList, oldName, getBookName(position))
                     dialog.dismiss()
                     if (res.first){
-                        showShortToast(String.format(getString(R.string.move_word_book), res.second))
+                        showShortToast(getString(R.string.move_word_book, res.second))
                         wordBookViewModel.getWordList(oldName)
                         wordBookViewModel.detailMode.value = BOOK_WORD_MODE_NORMAL
                     } else showShortToast(getString(R.string.operation_failure))

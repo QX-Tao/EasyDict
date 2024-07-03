@@ -42,7 +42,7 @@ class DictSpecialInnerAdapter(private val mItemList: ArrayList<SpecialTrs>) :
         holder.textTrans.text = item.tr?.nat
         holder.textTrans.visibility = if (item.tr?.nat.isNullOrBlank()) View.GONE else View.VISIBLE
 
-        holder.textTransTimes.text = String.format(holder.itemView.context.getString(R.string.cited_times_eee), item.tr?.cite)
+        holder.textTransTimes.text = holder.itemView.context.getString(R.string.cited_times_eee, item.tr?.cite)
         holder.textTransTimes.visibility = if (item.tr?.cite.isNullOrBlank() || item.tr?.cite == "0") View.GONE else View.VISIBLE
 
         val engSentence = item.tr?.engSent?.also {
@@ -76,7 +76,7 @@ class DictSpecialInnerAdapter(private val mItemList: ArrayList<SpecialTrs>) :
         }
         holder.textSentsTrans.visibility = if (chnSentence.isNullOrBlank()) View.GONE else View.VISIBLE
 
-        holder.textSource.text = String.format(holder.itemView.context.getString(R.string.source_from_eeee), item.tr?.docTitle)
+        holder.textSource.text = holder.itemView.context.getString(R.string.source_from_eeee, item.tr?.docTitle)
         holder.textSource.visibility = if (item.tr?.docTitle.isNullOrBlank()) View.GONE else View.VISIBLE
 
         holder.textTrans.fixTextSelection()

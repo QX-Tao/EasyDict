@@ -141,6 +141,7 @@ class SettingsWelcomeScreenFragment : BaseFragment<FragmentSettingsWelcomeScreen
                 ShareUtils.putString(mContext, COUNT_DOWN_NAME, countDownName)
                 ShareUtils.putLong(mContext, COUNT_DOWN_TIME, countDownTime)
                 dialog.dismiss()
+                showShortToast(getString(R.string.count_down_set_success))
             } else {
                 etInput.error = getString(R.string.invalid_input)
             }

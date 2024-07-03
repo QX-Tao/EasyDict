@@ -146,5 +146,4 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsB
     }
 
 
-
 }

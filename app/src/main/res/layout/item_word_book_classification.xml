@@ -27,6 +27,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
+            android:maxLines="3"
+            android:ellipsize="end"
             android:text="@string/def_str"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

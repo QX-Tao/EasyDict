@@ -1,16 +1,12 @@
 package com.qxtao.easydict.ui.fragment.dict
 
 import android.content.Intent
-import android.os.Build
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -28,10 +24,10 @@ import com.qxtao.easydict.ui.activity.settings.SettingsActivity
 import com.qxtao.easydict.ui.activity.wordbook.WordBookActivity
 import com.qxtao.easydict.ui.activity.wordlist.WordListActivity
 import com.qxtao.easydict.ui.base.BaseFragment
+import com.qxtao.easydict.ui.view.LoadFailedView
 import com.qxtao.easydict.ui.view.LoadingView
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.common.TimeUtils
-import com.qxtao.easydict.utils.constant.ShareConstant
 import com.qxtao.easydict.utils.constant.ShareConstant.COUNT_DOWN_NAME
 import com.qxtao.easydict.utils.constant.ShareConstant.COUNT_DOWN_NAME_OFF
 import com.qxtao.easydict.utils.constant.ShareConstant.COUNT_DOWN_TIME
@@ -42,7 +38,6 @@ import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_GRAMMAR_CHECK
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SUGGEST_SEARCH
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WORD_BOOK
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WORD_LIST
-import com.qxtao.easydict.utils.factory.screenRotation
 
 
 class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDictWelcomeBinding::inflate) {
@@ -69,12 +64,12 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
     private lateinit var tvDsDate : TextView
     private lateinit var tvDsCn : TextView
     private lateinit var tvDsEn : TextView
-    private lateinit var llDsLoadingFail : LinearLayout
+    private lateinit var lvDsLoadFailed : LoadFailedView
     private lateinit var lvDsLoading : LoadingView
     private lateinit var tvWordListLearned : TextView
     private lateinit var tvWordListProgress : TextView
     private lateinit var tvWordListNoBookSelected : TextView
-    private lateinit var tvWordListSelect : TextView
+    private lateinit var tvWordListTitle : TextView
     private lateinit var ivWordListRefresh : ImageView
 
     override fun bindViews() {
@@ -96,12 +91,12 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
         tvDsDate = binding.tvDsDate
         tvDsCn = binding.tvDsCn
         tvDsEn = binding.tvDsEn
-        llDsLoadingFail = binding.llDsLoadingFail
+        lvDsLoadFailed = binding.lvDsLoadFailed
         lvDsLoading = binding.lvDsLoading
         tvWordListLearned = binding.tvWordListLearned
         tvWordListProgress = binding.tvWordListProgress
         tvWordListNoBookSelected = binding.tvWordListNoBookSelected
-        tvWordListSelect = binding.tvWordListSelect
+        tvWordListTitle = binding.tvWordListTitle
         ivWordListRefresh = binding.ivWordListRefresh
     }
 
@@ -132,11 +127,11 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
                 }
                 false -> {
                     lvDsLoading.visibility = View.GONE
-                    llDsLoadingFail.visibility = View.VISIBLE
+                    lvDsLoadFailed.visibility = View.VISIBLE
                 }
                 else -> {
                     lvDsLoading.visibility = View.VISIBLE
-                    llDsLoadingFail.visibility = View.GONE
+                    lvDsLoadFailed.visibility = View.GONE
                 }
             }
         }
@@ -146,10 +141,10 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
                     tvWordListLearned.text = it.second?.third.toString()
                     tvWordListProgress.text = (it.second?.third!! * 100 / it.second?.second!!).toString()
                     tvWordListNoBookSelected.visibility = View.GONE
-                    tvWordListSelect.text = dictViewModel.wordNameMap[it.second?.first]
+                    tvWordListTitle.text = dictViewModel.wordNameMap[it.second?.first]
                 }
                 false -> {
-                    tvWordListSelect.text = getString(R.string.empty_string)
+                    tvWordListTitle.text = getString(R.string.recite_word)
                     tvWordListNoBookSelected.visibility = View.VISIBLE
                 }
                 else -> {}
@@ -170,7 +165,7 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
             startActivity(Intent(mContext, SettingsActivity::class.java))
             true
         }
-        llDsLoadingFail.setOnClickListener {
+        lvDsLoadFailed.setOnClickListener {
             dictViewModel.getDailySentence()
         }
         ivSuggestSearchRefresh.setOnClickListener {

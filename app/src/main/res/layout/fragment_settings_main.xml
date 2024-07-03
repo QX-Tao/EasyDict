@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:fitsSystemWindowsInsets="top"
     tools:context=".ui.fragment.settings.SettingsMainFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
-        style="@style/Widget.MaterialComponents.Toolbar"
-        app:fitsSystemWindowsInsets="top"
         android:id="@+id/mt_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,7 +16,7 @@
         app:navigationContentDescription="@string/back"
         app:title="@string/settings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/toolbar_height"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_content"

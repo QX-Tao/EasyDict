@@ -12,7 +12,6 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
@@ -25,9 +24,11 @@ import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.dict.SEARCH_LE_EN
 import com.qxtao.easydict.ui.activity.dict.SEARCH_LE_ZH
 import com.qxtao.easydict.ui.activity.dict.VOICE_NORMAL
-import com.qxtao.easydict.ui.activity.photoview.PhotoViewActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
+import com.qxtao.easydict.ui.view.LoadingView
+import com.qxtao.easydict.ui.view.imageviewer.ImageViewer
+import com.qxtao.easydict.ui.view.imageviewer.PhotoView
 import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.constant.ShareConstant
@@ -43,6 +44,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     private lateinit var dictDetailPagerAdapter : DictDetailPagerAdapter
     private val tabLayoutMap = mapOf(0 to "简明", 1 to "柯林斯", 2 to "英英")
     private lateinit var dictViewModel: DictViewModel
+    private lateinit var photoView: PhotoView
     // define widget
     private lateinit var searchDetailTablayout: TabLayout
     private lateinit var searchDetailViewpager: ViewPager2
@@ -53,7 +55,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     private lateinit var llHeader: LinearLayout
     private lateinit var clWordHeader: ConstraintLayout
     private lateinit var clTransHeader: ConstraintLayout
-    private lateinit var clLoading: ConstraintLayout
+    private lateinit var lvLoading: LoadingView
     private lateinit var tvWord: TextView
     private lateinit var tvUkVoice: TextView
     private lateinit var tvUsVoice: TextView
@@ -96,7 +98,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
         ivTransToCopy = binding.ivTransToCopy
         ivTransFromVoice = binding.ivTransFromVoice
         ivTransToVoice = binding.ivTransToVoice
-        clLoading = binding.clLoading
+        lvLoading = binding.lvLoading
         tvOfflineWord = binding.tvOfflineWord
         tvOfflineTrans = binding.tvOfflineTrans
         tvOfflineTranslation = binding.tvOfflineTranslation
@@ -111,12 +113,13 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
+        photoView = (activity as DictActivity).photoView
         dictViewModel.playSound = if (ShareUtils.getString(mContext, ShareConstant.DEF_VOICE, ShareConstant.MEI) == ShareConstant.MEI) 0 else 1
         (parentFragment as? DictSearchFragment)?.exitEditTextFocus()
         dictViewModel.dataLoadInfo.observe(this) {
             when (it) {
                 0 -> {
-                    clLoading.visibility = View.VISIBLE
+                    lvLoading.visibility = View.VISIBLE
                     clOnlineResult.visibility = View.GONE
                     nsvOfflineResult.visibility = View.GONE
                 }
@@ -128,7 +131,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                     CoroutineScope(Dispatchers.IO).launch{
                         delay(50)
                         withContext(Dispatchers.Main){
-                            clLoading.visibility = View.GONE
+                            lvLoading.visibility = View.GONE
                         } }
                     searchDetailViewpager.offscreenPageLimit = 2
                     searchDetailViewpager.adapter = dictDetailPagerAdapter
@@ -160,7 +163,7 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                     CoroutineScope(Dispatchers.IO).launch{
                         delay(50)
                         withContext(Dispatchers.Main){
-                            clLoading.visibility = View.GONE
+                            lvLoading.visibility = View.GONE
                         }
                     }
                 }
@@ -185,10 +188,10 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                     clTransHeader.visibility = View.GONE
                     it.`return-phrase`?.let { it1 -> tvWord.text = it1 }
                     it.ukphone?.let { it1 ->
-                        tvUkVoice.text = String.format(getString(R.string.uk_voice), it1)
+                        tvUkVoice.text = getString(R.string.uk_voice, it1)
                     }
                     it.usphone?.let { it1 ->
-                        tvUsVoice.text = String.format(getString(R.string.us_voice), it1)
+                        tvUsVoice.text = getString(R.string.us_voice, it1)
                     }
                     clVoice.visibility = View.VISIBLE
                     tvUkVoice.visibility = if (it.ukphone.isNullOrEmpty()) View.GONE else View.VISIBLE
@@ -251,11 +254,8 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
 
     override fun addListener() {
         ivWdPic.setOnClickListener {
-            val pictureList = ArrayList<String>()
-            dictViewModel.picDictResponse.value?.pic?.get(0)?.url.let {
-                if (it.isNullOrEmpty()) return@setOnClickListener
-                pictureList.add(it)
-                PhotoViewActivity.start(requireActivity(), pictureList, ivWdPic)
+            dictViewModel.picDictResponse.value?.pic?.get(0)?.url?.let {
+                photoView.show(it, ivWdPic)
             }
         }
         tvReload.setOnClickListener {

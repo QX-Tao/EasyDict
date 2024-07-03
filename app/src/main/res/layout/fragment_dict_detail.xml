@@ -70,7 +70,7 @@
                             app:layout_constraintStart_toEndOf="@+id/tv_word"
                             app:layout_constraintEnd_toEndOf="parent"
                             android:src="@drawable/ic_collect1"
-                            android:background="@drawable/bg_ripple_r30"
+                            android:background="@drawable/bg_ripple_r15"
                             android:padding="5dp"
                             android:layout_height="30dp"
                             android:layout_width="30dp" />
@@ -93,7 +93,7 @@
                                 android:id="@+id/iv_uk_voice"
                                 android:clickable="true"
                                 android:focusable="true"
-                                android:background="@drawable/bg_ripple_r30"
+                                android:background="@drawable/bg_ripple_r15"
                                 android:src="@drawable/ic_voice"
                                 android:padding="5dp"
                                 android:layout_height="30dp"
@@ -119,7 +119,7 @@
                                 android:id="@+id/iv_us_voice"
                                 android:clickable="true"
                                 android:focusable="true"
-                                android:background="@drawable/bg_ripple_r30"
+                                android:background="@drawable/bg_ripple_r15"
                                 android:src="@drawable/ic_voice"
                                 android:padding="5dp"
                                 android:layout_height="30dp"
@@ -146,7 +146,7 @@
                                 android:id="@+id/iv_normal_voice"
                                 android:clickable="true"
                                 android:focusable="true"
-                                android:background="@drawable/bg_ripple_r30"
+                                android:background="@drawable/bg_ripple_r15"
                                 android:src="@drawable/ic_voice"
                                 android:padding="5dp"
                                 android:layout_height="30dp"
@@ -210,7 +210,7 @@
                                 app:layout_constraintTop_toBottomOf="@+id/tv_trans_from_roman"
                                 app:layout_constraintRight_toLeftOf="@+id/iv_trans_from_copy"
                                 android:src="@drawable/ic_voice"
-                                android:background="@drawable/bg_ripple_r30"
+                                android:background="@drawable/bg_ripple_r15"
                                 android:padding="3dp"
                                 android:layout_height="30dp"
                                 android:layout_width="30dp" />
@@ -224,7 +224,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/iv_trans_from_voice"
                                 app:layout_constraintLeft_toRightOf="@+id/iv_trans_from_voice"
                                 android:src="@drawable/ic_copy"
-                                android:background="@drawable/bg_ripple_r30"
+                                android:background="@drawable/bg_ripple_r15"
                                 android:padding="3dp"
                                 android:layout_height="30dp"
                                 android:layout_width="30dp" />
@@ -238,7 +238,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/iv_trans_from_voice"
                                 app:layout_constraintLeft_toRightOf="@+id/iv_trans_from_copy"
                                 android:src="@drawable/ic_collect1"
-                                android:background="@drawable/bg_ripple_r30"
+                                android:background="@drawable/bg_ripple_r15"
                                 android:padding="5dp"
                                 android:layout_height="30dp"
                                 android:layout_width="30dp" />
@@ -293,7 +293,7 @@
                                 app:layout_constraintTop_toBottomOf="@+id/tv_trans_to_roman"
                                 app:layout_constraintRight_toLeftOf="@+id/iv_trans_to_copy"
                                 android:src="@drawable/ic_voice"
-                                android:background="@drawable/bg_ripple_r30"
+                                android:background="@drawable/bg_ripple_r15"
                                 android:padding="3dp"
                                 android:layout_height="30dp"
                                 android:layout_width="30dp" />
@@ -307,7 +307,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/iv_trans_to_voice"
                                 app:layout_constraintLeft_toRightOf="@+id/iv_trans_to_voice"
                                 android:src="@drawable/ic_copy"
-                                android:background="@drawable/bg_ripple_r30"
+                                android:background="@drawable/bg_ripple_r15"
                                 android:padding="3dp"
                                 android:layout_height="30dp"
                                 android:layout_width="30dp"/>
@@ -339,7 +339,7 @@
             android:id="@+id/search_detail_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="com.qxtao.easydict.ui.view.FixScrollingBehavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -461,36 +461,11 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.qxtao.easydict.ui.view.LoadingView
         android:visibility="gone"
-        android:id="@+id/cl_loading"
+        android:id="@+id/lv_loading"
         android:background="?attr/colorSurface"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tv_loading"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/tv_loading"
-            app:layout_constraintTop_toBottomOf="@+id/pb_loading"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="@dimen/text_size_normal"
-            android:layout_marginTop="10dp"
-            android:text="@string/loading"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

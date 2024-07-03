@@ -12,7 +12,7 @@
         app:layout_constraintEnd_toStartOf="@id/tv_item_tv_en"
         android:id="@+id/iv_item_voice"
         android:layout_marginEnd="4dp"
-        android:background="@drawable/bg_ripple_r24"
+        android:background="@drawable/bg_ripple_r12"
         android:padding="3dp"
         android:src="@drawable/ic_voice"
         android:layout_width="24dp"

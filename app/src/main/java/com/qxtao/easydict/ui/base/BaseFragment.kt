@@ -51,8 +51,8 @@ abstract class BaseFragment<VB : ViewBinding>(val bindingBlock:(LayoutInflater, 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onViewCreated1(view, savedInstanceState)
         bindViews()
+        onViewCreated1(view, savedInstanceState)
         initViews()
         addListener()
     }

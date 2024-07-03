@@ -3,12 +3,8 @@
     android:color="@color/colorRipple">
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
-            <corners
-                android:bottomLeftRadius="8dp"
-                android:bottomRightRadius="8dp"
-                android:topLeftRadius="8dp"
-                android:topRightRadius="8dp" />
-            <solid android:color="#000000" />
+            <corners android:radius="8dp" />
+            <solid android:color="@android:color/black" />
         </shape>
     </item>
 </ripple>

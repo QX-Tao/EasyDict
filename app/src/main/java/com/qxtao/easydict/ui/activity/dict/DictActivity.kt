@@ -44,12 +44,11 @@ import com.qxtao.easydict.ui.fragment.dict.DictHasFragment
 import com.qxtao.easydict.ui.fragment.dict.DictSearchFragment
 import com.qxtao.easydict.ui.fragment.dict.DictWelcomeFragment
 import com.qxtao.easydict.ui.view.LoadingView
+import com.qxtao.easydict.ui.view.imageviewer.PhotoView
 import com.qxtao.easydict.utils.common.AssetsUtils
 import com.qxtao.easydict.utils.common.EncryptUtils
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
@@ -58,7 +57,6 @@ import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 import java.util.Locale
-import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
 
@@ -76,6 +74,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     private lateinit var callback: OnBackPressedCallback
     private val recognitionHelper: RecognitionHelper by lazy { RecognitionHelper(this) }
     private val searchStr by lazy { intent?.getStringExtra("onSearch") }
+    val photoView by lazy { PhotoView(this@DictActivity) }
 
     // define widget
     private lateinit var speechDialog: AlertDialog
@@ -156,10 +155,14 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         dispatcher = onBackPressedDispatcher
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val currentFragment = supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
+                if (photoView.imageViewer.handleBackPressed()) return
+                val currentFragment = if (this@DictActivity::dictViewModel.isInitialized){
+                        supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
+                    } else null
                 when(currentFragment){
                     is DictWelcomeFragment, is DictDefinitionFragment -> finish()
                     is DictSearchFragment, is DictExtraFragment -> backFragment()
+                    null -> finish()
                 }
             }
         }
@@ -242,7 +245,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         }
         tvConfirm.setOnClickListener {
             if (etInput.text.isNullOrBlank()) {
-                showShortToast(getString(R.string.invalid_input))
+                etInput.error = getString(R.string.invalid_input)
                 return@setOnClickListener
             }
             recognitionHelper.releaseRecognition()
@@ -335,7 +338,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                 val res = dictViewModel.addWordBook(wordBookName)
                 if (res.first) {
                     dictViewModel.addSearchTextToWordBook(res.second)
-                    showShortToast(String.format(getString(R.string.add_to_word_book), res.second))
+                    showShortToast(getString(R.string.add_to_word_book, res.second))
                     dialog.dismiss()
                 } else showShortToast(res.second)
             } else {
@@ -364,7 +367,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                     val res = dictViewModel.addSearchTextToWordBook(position)
                     dialog.dismiss()
                     if (res.first){
-                        showShortToast(String.format(getString(R.string.add_to_word_book), res.second[res.third!!]))
+                        showShortToast(getString(R.string.add_to_word_book, res.second[res.third!!]))
                     } else {
                         if (res.second.size > 1 && res.third == null){
                             showSelectWordBookDialog()

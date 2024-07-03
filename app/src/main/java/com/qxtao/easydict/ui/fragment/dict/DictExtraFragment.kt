@@ -47,6 +47,8 @@ import com.qxtao.easydict.ui.activity.dict.VOICE_BLNG_PART
 import com.qxtao.easydict.ui.activity.dict.WEB_TRANS_PART_MORE
 import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.ui.base.BaseFragment
+import com.qxtao.easydict.ui.view.LoadFailedView
+import com.qxtao.easydict.ui.view.LoadingView
 import com.qxtao.easydict.utils.common.ClipboardUtils
 
 
@@ -72,8 +74,8 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     private lateinit var rvBlngSentsPartClassification : RecyclerView
     private lateinit var llRelWordPartWord : LinearLayout
     private lateinit var tvRelWordPartInf : TextView
-    private lateinit var llLoading: LinearLayout
-    private lateinit var llLoadingFail: LinearLayout
+    private lateinit var lvLoading: LoadingView
+    private lateinit var lvLoadFailed: LoadFailedView
     private lateinit var nsvContent: NestedScrollView
 
     override fun bindViews() {
@@ -82,8 +84,8 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
         rvBlngSentsPartClassification = binding.rvBlngSentsPartClassification
         llRelWordPartWord = binding.llRelWordPartWord
         tvRelWordPartInf = binding.tvRelWordPartInf
-        llLoading = binding.llLoading
-        llLoadingFail = binding.llLoadingFail
+        lvLoading = binding.lvLoading
+        lvLoadFailed = binding.lvLoadFailed
         nsvContent = binding.nsvContent
     }
 
@@ -93,7 +95,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
     }
 
     override fun addListener() {
-        llLoadingFail.setOnClickListener {
+        lvLoadFailed.setOnClickListener {
             initData(dictViewModel.extraFragmentStyle.value!!)
         }
         mtTitle.setNavigationOnClickListener{
@@ -114,9 +116,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                     override fun onSourceUrlClick(position: Int) {
                         WebActivity.start(
                             requireActivity(),
-                            rvDictAuthSentsAdapter.getItem(position).url!!,
-                            allowOtherUrls = true,
-                            useWebTitle = true
+                            rvDictAuthSentsAdapter.getItem(position).url!!
                         )
                     }
                 })
@@ -127,17 +127,17 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 dictViewModel.dataMoreAuthLoadInfo.observe(this){
                     when(it) {
                         0 -> {
-                            llLoading.visibility = View.VISIBLE
-                            llLoadingFail.visibility = View.GONE
+                            lvLoading.visibility = View.VISIBLE
+                            lvLoadFailed.visibility = View.GONE
                         }
                         1 -> {
-                            llLoading.visibility = View.GONE
-                            llLoadingFail.visibility = View.GONE
+                            lvLoading.visibility = View.GONE
+                            lvLoadFailed.visibility = View.GONE
                         }
                         2 -> {
                             showShortToast(getString(R.string.loading_failure))
-                            llLoading.visibility = View.GONE
-                            llLoadingFail.visibility = View.VISIBLE
+                            lvLoading.visibility = View.GONE
+                            lvLoadFailed.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -153,7 +153,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                         dictViewModel.startPlaySound(VOICE_AUTH_PART, position, item.speech!!, SEARCH_LE_EN)
                     }
                 })
-                llLoadingFail.setOnClickListener { dictViewModel.onlineSearchSent() }
+                lvLoadFailed.setOnClickListener { dictViewModel.onlineSearchSent() }
             }
             ANTONYM_PART_MORE -> {
                 mtTitle.title = getString(R.string.antonym)
@@ -201,17 +201,17 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                 dictViewModel.dataMoreBlngLoadInfo.observe(this){
                     when(it) {
                         0 -> {
-                            llLoading.visibility = View.VISIBLE
-                            llLoadingFail.visibility = View.GONE
+                            lvLoading.visibility = View.VISIBLE
+                            lvLoadFailed.visibility = View.GONE
                         }
                         1 -> {
-                            llLoading.visibility = View.GONE
-                            llLoadingFail.visibility = View.GONE
+                            lvLoading.visibility = View.GONE
+                            lvLoadFailed.visibility = View.GONE
                         }
                         2 -> {
                             showShortToast(getString(R.string.loading_failure))
-                            llLoading.visibility = View.GONE
-                            llLoadingFail.visibility = View.VISIBLE
+                            lvLoading.visibility = View.GONE
+                            lvLoadFailed.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -221,7 +221,7 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                         else rvDictBlngSentsAdapter.resetPlaySound()
                     }
                 }
-                llLoadingFail.setOnClickListener { dictViewModel.onlineSearchBlng() }
+                lvLoadFailed.setOnClickListener { dictViewModel.onlineSearchBlng() }
                 dictViewModel.blngClassification.observe(this) {
                     if ((it?.size ?: 0) > 1) {
                         rvBlngSentsPartClassificationAdapter.setData(it)

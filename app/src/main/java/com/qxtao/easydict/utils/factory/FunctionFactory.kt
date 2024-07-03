@@ -5,11 +5,14 @@ package com.qxtao.easydict.utils.factory
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.Point
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Surface
 import android.view.View
+import android.view.Window
+import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.view.WindowCompat
@@ -104,6 +107,45 @@ var Activity.isAppearanceLight: Boolean
             isAppearanceLightNavigationBars = value
         }
     }
+
+fun Activity.edgeToEdge() {
+    requestWindowFeature(Window.FEATURE_NO_TITLE)
+    window.attributes.layoutInDisplayCutoutMode = WindowManager
+        .LayoutParams
+        .LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+    setWindowEdgeToEdge(this.window)
+}
+
+private fun setWindowEdgeToEdge(window: Window) {
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    window.statusBarColor = Color.TRANSPARENT
+    window.navigationBarColor = Color.TRANSPARENT
+}
+
+fun Activity.hideSystemBars(){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        val controller = window.decorView.windowInsetsController
+        controller?.hide(WindowInsets.Type.systemBars())
+    } else {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+    }
+}
+
+fun Activity.showSystemBars(){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val controller = window.decorView.windowInsetsController
+        controller?.show(WindowInsets.Type.systemBars())
+    } else {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+    }
+}
 
 
 /**

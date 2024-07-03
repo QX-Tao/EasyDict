@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="20dp">
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_publish_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/tv_app_version_name"
+        android:layout_width="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_size_large" />
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/tv_app_version_name"
+        app:layout_constraintBottom_toTopOf="@+id/tv_update_log"
+        app:layout_constraintStart_toStartOf="@+id/tv_app_version_name"
+        app:layout_constraintEnd_toEndOf="@id/tv_app_version_name"
+        android:id="@+id/tv_publish_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="@dimen/text_size_medium" />
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/tv_publish_time"
+        app:layout_constraintBottom_toTopOf="@+id/tv_update_log_desc"
+        app:layout_constraintStart_toStartOf="@+id/tv_app_version_name"
+        app:layout_constraintEnd_toEndOf="@id/tv_app_version_name"
+        android:id="@+id/tv_update_log"
+        android:text="@string/update_log"
+        android:textStyle="bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="@dimen/text_size_large" />
+
+    <TextView
+        android:textColorHighlight="?attr/colorSecondaryContainer"
+        android:textIsSelectable="true"
+        app:layout_constraintTop_toBottomOf="@+id/tv_update_log"
+        app:layout_constraintBottom_toTopOf="@id/cv_view_in_website"
+        app:layout_constraintStart_toStartOf="@+id/tv_app_version_name"
+        app:layout_constraintEnd_toEndOf="@id/tv_app_version_name"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/tv_update_log_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="@dimen/text_size_normal" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_view_in_website"
+        app:cardCornerRadius="@dimen/card_view_radius_medium"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainer"
+        app:layout_constraintStart_toStartOf="@id/tv_app_version_name"
+        app:layout_constraintEnd_toStartOf="@id/v_divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_update_log_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_view_in_website"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="?android:selectableItemBackground"
+            android:padding="5dp"
+            android:src="@drawable/ic_app_browser"
+            android:layout_width="32dp"
+            android:layout_height="32dp"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:id="@+id/v_divider"
+        android:background="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="@id/cv_view_in_website"
+        app:layout_constraintTop_toTopOf="@id/cv_view_in_website"
+        app:layout_constraintStart_toEndOf="@id/cv_view_in_website"
+        app:layout_constraintEnd_toStartOf="@id/cv_download_in_github"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_width="2dp"
+        android:layout_height="0dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_download_in_github"
+        app:cardCornerRadius="@dimen/card_view_radius_medium"
+        app:cardElevation="0dp"
+        android:layout_marginStart="8dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainer"
+        app:layout_constraintStart_toEndOf="@id/v_divider"
+        app:layout_constraintEnd_toStartOf="@id/cv_download_in_netdisk"
+        app:layout_constraintBottom_toBottomOf="@id/cv_view_in_website"
+        app:layout_constraintTop_toTopOf="@id/cv_view_in_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:padding="4dp"
+            android:src="@drawable/ic_github"
+            android:layout_width="32dp"
+            android:layout_height="32dp"/>
+
+        <TextView
+            android:id="@+id/tv_download_in_github"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="?android:selectableItemBackground"
+            android:paddingStart="32dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:minHeight="32dp"
+            android:text="@string/github"
+            android:drawablePadding="6dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_download_in_netdisk"
+        app:cardCornerRadius="@dimen/card_view_radius_medium"
+        app:cardElevation="0dp"
+        android:layout_marginStart="8dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainer"
+        app:layout_constraintStart_toEndOf="@id/cv_download_in_github"
+        app:layout_constraintBottom_toBottomOf="@id/cv_view_in_website"
+        app:layout_constraintTop_toTopOf="@id/cv_view_in_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:padding="4dp"
+            android:src="@drawable/ic_netdisk"
+            android:layout_width="32dp"
+            android:layout_height="32dp"/>
+
+        <TextView
+            android:id="@+id/tv_download_in_netdisk"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="?android:selectableItemBackground"
+            android:paddingStart="32dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:minHeight="32dp"
+            android:text="@string/netdisk"
+            android:drawablePadding="6dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

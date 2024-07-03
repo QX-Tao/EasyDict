@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:fitsSystemWindowsInsets="top"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/mt_title"
+        app:navigationIcon="@drawable/ic_back"
+        app:menu="@menu/photo_view_menu"
+        app:navigationContentDescription="@string/back"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"/>
+
+</FrameLayout>

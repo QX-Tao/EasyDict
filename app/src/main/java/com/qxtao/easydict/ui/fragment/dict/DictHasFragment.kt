@@ -8,12 +8,11 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
+import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +28,7 @@ import com.qxtao.easydict.databinding.FragmentDictHasBinding
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_HISTORY
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION
 import com.qxtao.easydict.ui.activity.dict.DICT_RV_SUGGESTION_LM
+import com.qxtao.easydict.ui.activity.dict.DICT_SEARCH_FRAGMENT_TAG
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
@@ -75,7 +75,7 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
                             SizeUtils.dp2px(24f))
                         layout.setBackgroundColor(Color.TRANSPARENT)
                         contentLayout.setPadding(SizeUtils.dp2px(12f), SizeUtils.dp2px(2f), SizeUtils.dp2px(12f),SizeUtils.dp2px(2f))
-                        contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r16)
+                        contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.bg_shape_r16)
                         contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurfaceInverse(mContext))
                     }
                     snackBar.setAction(getString(R.string.undo_delete)) { dictViewModel.undoDeleteWord() }
@@ -172,8 +172,9 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
-
-        (parentFragment as DictSearchFragment).getEditTextFocus()
+        if (dictViewModel.currentFragmentTag == DICT_SEARCH_FRAGMENT_TAG){
+            (parentFragment as DictSearchFragment).getEditTextFocus()
+        }
         rvSearchHistoryAdapter = DictWordLineAdapter(ArrayList())
         rvSearchSuggestionAdapter = DictWordLineAdapter(ArrayList())
         rvSearchHistory.adapter = rvSearchHistoryAdapter

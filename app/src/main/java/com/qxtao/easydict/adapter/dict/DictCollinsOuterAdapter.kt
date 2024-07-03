@@ -26,14 +26,13 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.CollinsEntry
 import com.qxtao.easydict.ui.activity.dict.Entry
 import com.qxtao.easydict.ui.activity.dict.DictActivity
+import com.qxtao.easydict.ui.view.ratingbar.AndRatingBar
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import per.wsj.library.AndRatingBar
 
 
 @SuppressLint("NotifyDataSetChanged")

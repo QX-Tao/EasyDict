@@ -7,7 +7,7 @@
     android:layout_marginBottom="12dp"
     app:cardBackgroundColor="?attr/colorSurface"
     android:layout_width="wrap_content"
-    android:layout_height="32dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:textSize="@dimen/text_size_medium"
@@ -19,7 +19,8 @@
         android:paddingEnd="12dp"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="32dp"
         android:id="@+id/tv_word"
         android:textStyle="bold"
         android:maxLines="1"

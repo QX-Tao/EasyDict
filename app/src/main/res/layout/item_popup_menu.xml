@@ -30,7 +30,7 @@
         android:textSize="@dimen/text_size_normal"
         android:layout_width="0dp"
         android:layout_weight="1"
-        app:layout_constraintWidth_min="96dp"
+        app:layout_constraintWidth_min="108dp"
         android:layout_height="wrap_content"
         android:textColor="?attr/colorOnSurface"
         android:text="@string/def_str" />

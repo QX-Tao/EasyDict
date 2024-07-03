@@ -39,9 +39,9 @@ class GrammarCheckAdapter(private val sentFeedbackItems: ArrayList<GrammarCheckV
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val itemFeedback: GrammarCheckViewModel.SentFeedback = sentFeedbackItems[position]
 
-        holder.tvCorrectSent.text = String.format(holder.itemView.context.getString(R.string.correct_sentence_eee), itemFeedback.correctedSent)
-        holder.tvReason.text = String.format(holder.itemView.context.getString(R.string.reason_eee), itemFeedback.errorPosInfos[0].reason)
-        holder.tvSuggestion.text = String.format(holder.itemView.context.getString(R.string.some_suggestion_eee), itemFeedback.errorPosInfos[0].orgChunk, itemFeedback.errorPosInfos[0].correctChunk)
+        holder.tvCorrectSent.text = holder.itemView.context.getString(R.string.correct_sentence_eee, itemFeedback.correctedSent)
+        holder.tvReason.text = holder.itemView.context.getString(R.string.reason_eee, itemFeedback.errorPosInfos[0].reason)
+        holder.tvSuggestion.text = holder.itemView.context.getString(R.string.some_suggestion_eee, itemFeedback.errorPosInfos[0].orgChunk, itemFeedback.errorPosInfos[0].correctChunk)
 
         val spannableString = SpannableString(itemFeedback.rawSent)
         itemFeedback.errorPosInfos.forEach { errorPosInfo ->
@@ -49,13 +49,13 @@ class GrammarCheckAdapter(private val sentFeedbackItems: ArrayList<GrammarCheckV
             val end = errorPosInfo.endPos
             val clickableSpan = object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    holder.tvReason.text = String.format(holder.itemView.context.getString(R.string.reason_eee), errorPosInfo.reason)
+                    holder.tvReason.text = holder.itemView.context.getString(R.string.reason_eee, errorPosInfo.reason)
                     if (errorPosInfo.reason.contains("冗余") && errorPosInfo.reason.contains("建议删除")){
-                        val delSpannableString = SpannableString(String.format(holder.itemView.context.getString(R.string.some_suggestion_eee), errorPosInfo.orgChunk, errorPosInfo.orgChunk))
+                        val delSpannableString = SpannableString(holder.itemView.context.getString(R.string.some_suggestion_eee, errorPosInfo.orgChunk, errorPosInfo.correctChunk))
                         // 添加删除线
                         delSpannableString.setSpan(StrikethroughSpan(), delSpannableString.lastIndexOf(errorPosInfo.orgChunk), delSpannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         holder.tvSuggestion.text = delSpannableString
-                    } else holder.tvSuggestion.text = String.format(holder.itemView.context.getString(R.string.some_suggestion_eee), errorPosInfo.orgChunk, errorPosInfo.correctChunk)
+                    } else holder.tvSuggestion.text = holder.itemView.context.getString(R.string.some_suggestion_eee, errorPosInfo.orgChunk, errorPosInfo.correctChunk)
                 }
                 override fun updateDrawState(ds: TextPaint) {
                     ds.isUnderlineText = false

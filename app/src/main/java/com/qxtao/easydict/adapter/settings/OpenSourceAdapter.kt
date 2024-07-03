@@ -29,11 +29,7 @@ class OpenSourceAdapter(private val openSourceItems: List<OpenSourceItem>) :
 
         holder.itemView.setOnClickListener {
             val url = item.link
-            WebActivity.start(
-                holder.itemView.context, url,
-                allowOtherUrls = true,
-                useWebTitle = true
-            )
+            WebActivity.start(holder.itemView.context, url)
         }
     }
 

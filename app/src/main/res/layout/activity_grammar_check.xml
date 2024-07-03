@@ -6,21 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.grammarcheck.GrammarCheckActivity">
 
-
-    <com.google.android.material.appbar.MaterialToolbar
-        style="@style/Widget.MaterialComponents.Toolbar"
+    <FrameLayout
+        android:id="@+id/fl_title"
+        android:orientation="horizontal"
         app:fitsSystemWindowsInsets="top"
-        android:id="@+id/mt_title"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:navigationIcon="@drawable/ic_back"
-        app:navigationContentDescription="@string/back"
-        app:title="@string/grammar_check"
-        app:titleTextColor="?attr/colorOnSurface"
-        app:subtitleTextColor="?attr/colorOnSurfaceVariant"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/mt_title"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationContentDescription="@string/back"
+            app:title="@string/grammar_check"
+            app:titleTextColor="?attr/colorOnSurface"
+            app:subtitleTextColor="?attr/colorOnSurfaceVariant"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"/>
+
+    </FrameLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_check_result"
@@ -32,7 +36,7 @@
         android:clipToPadding="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mt_title"
+        app:layout_constraintTop_toBottomOf="@id/fl_title"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
@@ -134,13 +138,12 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:visibility="invisible"
-            style="@style/Widget.MaterialComponents.Toolbar"
             android:id="@+id/mt_holder"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="@dimen/toolbar_height"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_grammar_check"
@@ -327,13 +330,19 @@
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_loading"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mt_holder"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/cl_loading"
             android:layout_width="0dp"
             android:layout_height="0dp">
+
+            <FrameLayout
+                android:background="?attr/colorSurface"
+                android:alpha="0.5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <ProgressBar
                 android:id="@+id/pb_loading"

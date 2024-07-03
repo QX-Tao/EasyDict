@@ -8,7 +8,6 @@
     tools:context=".ui.activity.web.WebActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        style="@style/Widget.MaterialComponents.Toolbar"
         android:id="@+id/mt_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,10 +19,10 @@
         app:subtitleTextColor="?attr/colorOnSurfaceVariant"
         app:menu="@menu/web_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/toolbar_height"/>
 
-    <me.jingbin.progress.WebProgress
-        android:id="@+id/wp_progress"
+    <com.qxtao.easydict.ui.view.ProgressView
+        android:id="@+id/pv_progress"
         app:layout_constraintBottom_toBottomOf="@+id/mt_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,51 +39,5 @@
         android:background="@color/trans"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
-
-    <com.qxtao.easydict.ui.view.LoadingView
-        android:id="@+id/lv_loading"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="?attr/colorSurface"
-        app:ballColor="?attr/colorSecondary"
-        app:internal="60"
-        app:duration="200"
-        app:max_radius="20"
-        app:layout_constraintTop_toBottomOf="@+id/mt_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/ll_loading_fail"
-        android:background="?attr/colorSurface"
-        app:layout_constraintTop_toBottomOf="@+id/mt_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-
-        <TextView
-            android:id="@+id/tv_loading_fail"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center"
-            android:padding="20dp"
-            android:drawablePadding="15dp"
-            android:textSize="@dimen/text_size_normal"
-            android:textColor="?attr/colorOnSurface"
-            android:text="@string/failed_to_load_click_the_screen_to_try_again"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:drawableTopCompat="@drawable/ic_loading_fail" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,7 +44,7 @@ class DictThesurusInnerAdapter(private val mItemThesaurusList: ArrayList<Thesaur
         val item: ThesaurusEntry = mItemThesaurusList[position]
         val num = position + 1
         holder.textNum.text = num.toString()
-        holder.textExplain.text = String.format(holder.itemView.context.getString(R.string.explain_with_eee), item.tran)
+        holder.textExplain.text = holder.itemView.context.getString(R.string.explain_with_eee, item.tran)
         if ((item.syno?.size ?: 0) > 0){
             val synoList = mutableListOf<String>()
             for (i in 0 until item.syno!!.size){

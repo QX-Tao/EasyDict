@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -28,6 +29,7 @@ import com.qxtao.easydict.database.WordListData
 import com.qxtao.easydict.databinding.ActivityWordListBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.view.CustomPopWindow
+import com.qxtao.easydict.ui.view.LoadFailedView
 import com.qxtao.easydict.ui.view.LoadingView
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.ShareUtils
@@ -38,12 +40,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListBinding::inflate){
     // define weight
     private lateinit var rvListWord: RecyclerView
     private lateinit var lvLoading : LoadingView
-    private lateinit var llLoadingFail : LinearLayout
+    private lateinit var lvLoadFailed : LoadFailedView
     private lateinit var llListEmpty : LinearLayout
     private lateinit var snackBar: Snackbar
     private lateinit var mtTitle: MaterialToolbar
@@ -95,7 +96,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                                         SizeUtils.dp2px(24f))
                                     layout.setBackgroundColor(Color.TRANSPARENT)
                                     contentLayout.setPadding(SizeUtils.dp2px(12f), SizeUtils.dp2px(2f), SizeUtils.dp2px(12f),SizeUtils.dp2px(2f))
-                                    contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r16)
+                                    contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.bg_shape_r16)
                                     contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurfaceInverse(mContext))
                                 }
                                 snackBar.setAction(getString(R.string.undo_operate)) { wordListViewModel.undoDeleteWord() }
@@ -127,7 +128,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                                     SizeUtils.dp2px(24f))
                                 layout.setBackgroundColor(Color.TRANSPARENT)
                                 contentLayout.setPadding(SizeUtils.dp2px(12f), SizeUtils.dp2px(2f), SizeUtils.dp2px(12f),SizeUtils.dp2px(2f))
-                                contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.sp_radius_r16)
+                                contentLayout.background = ContextCompat.getDrawable(mContext, R.drawable.bg_shape_r16)
                                 contentLayout.backgroundTintList = ColorStateList.valueOf(ColorUtils.colorSurfaceInverse(mContext))
                             }
                             snackBar.setTextColor(ColorUtils.colorOnSurfaceInverse(mContext))
@@ -248,7 +249,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
         itemTouchHelper.attachToRecyclerView(rvListWord)
         wordListViewModel.wordListItems.observe(this){ itemList ->
             adapter.setData(itemList)
-            mtTitle.subtitle = String.format(getString(R.string.word_clas_num_eee),
+            mtTitle.subtitle = getString(R.string.word_clas_num_eee,
                 wordListViewModel.clasPopWindowList.find { it.isMenuItemSelected }?.menuItemText ?: getString(R.string.learning_words),
                 itemList?.size)
         }
@@ -257,7 +258,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
             rvListWord.scrollToPosition(0)
         }
         wordListViewModel.clasSelected.observe(this){
-            mtTitle.subtitle = String.format(getString(R.string.word_clas_num_eee),
+            mtTitle.subtitle = getString(R.string.word_clas_num_eee,
                 wordListViewModel.clasPopWindowList.find { it.isMenuItemSelected }?.menuItemText ?: getString(R.string.learning_words),
                 wordListViewModel.wordListItems.value?.size)
             rvListWord.scrollToPosition(0)
@@ -275,7 +276,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                 }
                 2 -> {
                     swList.visibility = View.GONE
-                    llLoadingFail.visibility = View.VISIBLE
+                    lvLoadFailed.visibility = View.VISIBLE
                 }
                 3 -> {
                     lvLoading.visibility = View.GONE
@@ -295,7 +296,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
         mtTitle = binding.mtTitle
         rvListWord = binding.rvListWord
         lvLoading = binding.lvLoading
-        llLoadingFail = binding.llLoadingFail
+        lvLoadFailed = binding.lvLoadFailed
         llListEmpty = binding.llListEmpty
         swList = findViewById(R.id.switch_list)
     }
@@ -303,37 +304,50 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
     override fun addListener() {
         mtTitle.setNavigationOnClickListener{ finish() }
         swList.setOnClickListener { v ->
-            showPopupMenu(v, wordListViewModel.clasPopWindowList).also {
-                it.second.setOnMenuItemClickListener(object : PopupMenuAdapter.OnMenuItemClickListener{
-                    override fun onMenuItemClick(position: Int) {
-                        wordListViewModel.deleteWordRecord()
-                        if (this@WordListActivity::snackBar.isInitialized) if (snackBar.isShown) snackBar.dismiss()
-                        mtTitle.subtitle = String.format(getString(R.string.word_clas_num_eee),
-                            wordListViewModel.clasPopWindowList[position].menuItemText,
-                            wordListViewModel.wordListItems.value?.size)
-                        wordListViewModel.setClasSelected(position)
-                        it.first.dissmiss()
+            when(wordListViewModel.dataLoadInfo.value){
+                1, 3 -> {
+                    showPopupMenu(v, wordListViewModel.clasPopWindowList).also {
+                        it.second.setOnMenuItemClickListener(object : PopupMenuAdapter.OnMenuItemClickListener{
+                            override fun onMenuItemClick(position: Int) {
+                                wordListViewModel.deleteWordRecord()
+                                if (this@WordListActivity::snackBar.isInitialized) if (snackBar.isShown) snackBar.dismiss()
+                                mtTitle.subtitle = getString(R.string.word_clas_num_eee,
+                                    wordListViewModel.clasPopWindowList[position].menuItemText,
+                                    wordListViewModel.wordListItems.value?.size)
+                                wordListViewModel.setClasSelected(position)
+                                it.first.dissmiss()
+                            }
+                        })
                     }
-                })
+                }
+                else -> {
+                    showShortToast(getString(R.string.data_not_load))
+                    return@setOnClickListener
+                }
             }
         }
         swList.setOnLongClickListener { v ->
-            showPopupMenu(v, wordListViewModel.wordPopWindowList).also {
-                it.second.setOnMenuItemClickListener(object : PopupMenuAdapter.OnMenuItemClickListener{
-                    override fun onMenuItemClick(position: Int) {
-                        wordListViewModel.deleteWordRecord()
-                        if (this@WordListActivity::snackBar.isInitialized) if (snackBar.isShown) snackBar.dismiss()
-                        wordListViewModel.setWordSelected(position)
-                        wordListViewModel.setClasSelected(1)
-                        it.first.dissmiss()
+            when(wordListViewModel.dataLoadInfo.value){
+                1, 3 -> {
+                    showPopupMenu(v, wordListViewModel.wordPopWindowList).also {
+                        it.second.setOnMenuItemClickListener(object : PopupMenuAdapter.OnMenuItemClickListener{
+                            override fun onMenuItemClick(position: Int) {
+                                wordListViewModel.deleteWordRecord()
+                                if (this@WordListActivity::snackBar.isInitialized) if (snackBar.isShown) snackBar.dismiss()
+                                wordListViewModel.setWordSelected(position)
+                                wordListViewModel.setClasSelected(1)
+                                it.first.dissmiss()
+                            }
+                        })
                     }
-                })
+                }
+                else -> showShortToast(getString(R.string.data_not_load))
             }
             true
         }
-        llLoadingFail.setOnClickListener {
+        lvLoadFailed.setOnClickListener {
             wordListViewModel.initData()
-            llLoadingFail.visibility = View.GONE
+            lvLoadFailed.visibility = View.GONE
         }
         adapter.setOnTextMeanClickListener(object : WordListAdapter.OnTextMeanClickListener{
             override fun onTextMeanClick(position: Int) {

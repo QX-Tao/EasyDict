@@ -18,6 +18,7 @@
 
     <com.google.android.flexbox.FlexboxLayout
         app:flexWrap="wrap"
+        app:alignItems="center"
         android:layout_marginBottom="7dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -30,7 +31,7 @@
             android:textColor="?attr/colorPrimary"
             android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"/>
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tv_phonetic"
@@ -39,17 +40,15 @@
             android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"/>
+            android:layout_height="wrap_content"/>
 
-        <per.wsj.library.AndRatingBar
+        <com.qxtao.easydict.ui.view.ratingbar.AndRatingBar
             android:id="@+id/rb_star"
             android:isIndicator="true"
             app:scaleFactor="0.7"
             app:keepOriginColor="true"
-            app:starDrawable="@drawable/ic_star"
+            app:starDrawable="@drawable/ic_star_solid"
             app:starColor="?attr/colorPrimary"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
             android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
             android:layout_height="24dp"/>
@@ -60,7 +59,7 @@
             android:gravity="center"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"/>
+            android:layout_height="wrap_content"/>
 
     </com.google.android.flexbox.FlexboxLayout>
 

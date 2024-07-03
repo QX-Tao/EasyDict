@@ -17,4 +17,7 @@ object NetConstant {
     const val dictVoice = "https://dict.youdao.com/dictvoice"
     const val voiceUk = "https://dict.youdao.com/dictvoice?type=1&audio="
     const val voiceUs = "https://dict.youdao.com/dictvoice?type=0&audio="
+
+    // 应用更新
+    const val appUpdate = "https://api.github.com/repos/QX-Tao/EasyDict/releases"
 }

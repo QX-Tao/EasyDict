@@ -18,6 +18,7 @@ import com.qxtao.easydict.ui.activity.wordbook.BOOK_WORD_MODE_NORMAL
 import com.qxtao.easydict.ui.activity.wordbook.WordBookActivity
 import com.qxtao.easydict.ui.activity.wordbook.WordBookViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
+import com.qxtao.easydict.ui.view.LoadFailedView
 import com.qxtao.easydict.ui.view.LoadingView
 
 class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(FragmentWordBookDetailBinding::inflate) {
@@ -26,7 +27,7 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
     private lateinit var wordBookViewModel: WordBookViewModel
     // define widget
     private lateinit var lvLoading : LoadingView
-    private lateinit var llLoadingFail : LinearLayout
+    private lateinit var lvLoadFailed : LoadFailedView
     private lateinit var llListEmpty : LinearLayout
     private lateinit var rvBookWord: RecyclerView
     private lateinit var fabDelete: FloatingActionButton
@@ -48,7 +49,7 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
     override fun bindViews() {
         mtTitle = binding.mtTitle
         lvLoading = binding.lvLoading
-        llLoadingFail = binding.llLoadingFail
+        lvLoadFailed = binding.lvLoadFailed
         llListEmpty = binding.llListEmpty
         rvBookWord = binding.rvBookWord
         fabDelete = binding.fabDelete
@@ -75,7 +76,7 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
                 }
                 2 -> {
                     hideAllMenuItem()
-                    llLoadingFail.visibility = View.VISIBLE
+                    lvLoadFailed.visibility = View.VISIBLE
                 }
                 3 -> {
                     lvLoading.visibility = View.GONE
@@ -122,7 +123,7 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
                 R.id.select_all, R.id.unselect_all -> {
                     displayMenuItem(if (it.itemId == R.id.select_all) R.id.unselect_all else R.id.select_all)
                     adapter.selectOrUnselectAll()
-                    mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
+                    mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else getString(R.string.select_item_eee, adapter.getSelectedCount())
                     fabDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
                     fabMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
                 }
@@ -131,7 +132,7 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
         }
         adapter.setOnItemClickListener(object : WordBookDetailAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
-                mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
+                mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else getString(R.string.select_item_eee, adapter.getSelectedCount())
                 displayMenuItem(if (adapter.isSelectedAll()) R.id.unselect_all else R.id.select_all)
                 fabDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
                 fabMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
@@ -143,7 +144,7 @@ class WordBookDetailFragment : BaseFragment<FragmentWordBookDetailBinding>(Fragm
                     wordBookViewModel.detailMode.value = BOOK_WORD_MODE_CONTROL
                     adapter.joinMultiSelectMode()
                 }
-                mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else String.format(getString(R.string.select_item_eee), adapter.getSelectedCount())
+                mtTitle.title = if (adapter.multiSelectedList.isEmpty()) getString(R.string.please_select_item) else getString(R.string.select_item_eee, adapter.getSelectedCount())
                 displayMenuItem(if (adapter.isSelectedAll()) R.id.unselect_all else R.id.select_all)
                 fabDelete.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE
                 fabMove.visibility = if (adapter.multiSelectedList.isEmpty()) View.GONE else View.VISIBLE

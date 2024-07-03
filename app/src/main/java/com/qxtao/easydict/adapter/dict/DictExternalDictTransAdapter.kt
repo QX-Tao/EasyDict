@@ -15,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import per.wsj.library.AndRatingBar
 
 @SuppressLint("NotifyDataSetChanged")
 class DictExternalDictTransAdapter(private val mItemList: ArrayList<ExternalDictTransItem>) :
@@ -37,11 +36,7 @@ class DictExternalDictTransAdapter(private val mItemList: ArrayList<ExternalDict
         holder.ivIcon.setImageDrawable(drawable)
         holder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(position)
-            WebActivity.start(
-                holder.itemView.context, mItemList[position].url,
-                allowOtherUrls = true,
-                useWebTitle = true
-            )
+            WebActivity.start(holder.itemView.context, mItemList[position].url)
         }
     }
 

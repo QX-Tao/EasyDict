@@ -3,18 +3,25 @@ package com.qxtao.easydict.ui.activity.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.qxtao.easydict.adapter.popupmenu.PopupMenuItem
+import com.qxtao.easydict.adapter.settings.AppUpdateDataItem
 import com.qxtao.easydict.adapter.settings.OpenSourceItem
 import com.qxtao.easydict.ui.fragment.settings.SettingsAboutFragment
+import com.qxtao.easydict.ui.fragment.settings.SettingsAppUpdateFragment
 import com.qxtao.easydict.ui.fragment.settings.SettingsDictCardFragment
 import com.qxtao.easydict.ui.fragment.settings.SettingsWelcomeScreenFragment
+import com.qxtao.easydict.utils.common.HttpUtils
+import com.qxtao.easydict.utils.constant.NetConstant
 import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_AMBER_GOLD
+import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_DODGER_BLUE
 import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_HAWTHORN_RED
 import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_LIME_GREEN
 import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_PERU_BROWN
 import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_SAKURA_PINK
 import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_SKY_BLUE
-import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_DODGER_BLUE
 import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_TEAL_GREEN
 import com.qxtao.easydict.utils.constant.ShareConstant.MATERIAL_VIOLET_PURPLE
 import com.qxtao.easydict.utils.constant.ShareConstant.MEI
@@ -22,11 +29,18 @@ import com.qxtao.easydict.utils.constant.ShareConstant.MODE_NIGHT_FOLLOW_SYSTEM
 import com.qxtao.easydict.utils.constant.ShareConstant.MODE_NIGHT_NO
 import com.qxtao.easydict.utils.constant.ShareConstant.MODE_NIGHT_YES
 import com.qxtao.easydict.utils.constant.ShareConstant.YING
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class SettingsViewModel : ViewModel() {
     val detailFragmentMap = mapOf(SETTINGS_ABOUT to SettingsAboutFragment::class.java,
         SETTINGS_DICT_CARD to SettingsDictCardFragment::class.java,
-        SETTINGS_WELCOME_SCREEN to SettingsWelcomeScreenFragment::class.java)
+        SETTINGS_WELCOME_SCREEN to SettingsWelcomeScreenFragment::class.java,
+        SETTINGS_APP_UPDATE to SettingsAppUpdateFragment::class.java)
     val defVoiceMap = linkedMapOf(MEI to "美", YING to "英")
     var defVoiceList = mutableListOf(
         PopupMenuItem(0, defVoiceMap[MEI]!!, true),
@@ -55,7 +69,14 @@ class SettingsViewModel : ViewModel() {
 
     private val _openSourceItems = MutableLiveData<List<OpenSourceItem>>()
     val openSourceItems: LiveData<List<OpenSourceItem>> = _openSourceItems
+    private val _appUpdateDataItems = MutableLiveData<List<AppUpdateDataItem>>()
+    val appUpdateDataItems: LiveData<List<AppUpdateDataItem>> = _appUpdateDataItems
 
+    var appUpdateDataLoadInfo = MutableLiveData<Int>() //初始化-1 加载中0 已加载1 加载失败2
+
+    init {
+        appUpdateDataLoadInfo.value = -1
+    }
 
     fun getOpenSourceItems() {
         val openSourceItems = mutableListOf<OpenSourceItem>()
@@ -165,6 +186,37 @@ class SettingsViewModel : ViewModel() {
         _openSourceItems.value = openSourceItems
     }
 
+    fun getAppUpdateData(reload: Boolean = false) {
+        if (appUpdateDataLoadInfo.value == 1 && !reload) return
+        appUpdateDataLoadInfo.value = 0
+        viewModelScope.launch(Dispatchers.IO) {
+            val res = async {
+                try {
+                    val result = CompletableDeferred<Boolean>()
+                    val urlBuilder : HttpUrl.Builder = NetConstant.appUpdate.toHttpUrlOrNull()!!.newBuilder()
+                    val jsonResponse = HttpUtils.requestResult(urlBuilder.build().toString())
+                    val responseJonArray = Gson().fromJson(jsonResponse, JsonArray::class.java)
+                    val itemList = mutableListOf<AppUpdateDataItem>()
+                    for (responseJsonElement in responseJonArray){
+                        val publishedAt = responseJsonElement.asJsonObject.get("published_at").asString
+                        val htmlUrl = responseJsonElement.asJsonObject.get("html_url").asString
+                        val name = responseJsonElement.asJsonObject.get("name").asString
+                        val assets = responseJsonElement.asJsonObject.get("assets").asJsonArray.get(0)
+                        val browserDownloadUrl = assets.asJsonObject.get("browser_download_url").asString
+                        val body = responseJsonElement.asJsonObject.get("body").asString
+                        itemList.add(AppUpdateDataItem(publishedAt, htmlUrl, name, browserDownloadUrl, body))
+                    }
+                    _appUpdateDataItems.postValue(itemList)
+                    result.complete(true)
+                    result.await()
+                } catch (e: Exception){
+                    false
+                }
+            }
+            appUpdateDataLoadInfo.postValue(if (res.await()) 1 else 2)
+        }
+    }
+
     fun selectPopupMenuList(list: List<PopupMenuItem>, position: Int): Boolean {
         if (list.find { it.isMenuItemSelected }!!.position == position) return false
         for (element in list) element.isMenuItemSelected = false
@@ -178,7 +230,5 @@ class SettingsViewModel : ViewModel() {
         list.find { it.menuItemText == menuItemText }!!.isMenuItemSelected = true
         return true
     }
-
-
 
 }

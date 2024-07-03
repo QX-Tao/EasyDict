@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 object TimeUtils {
-    fun getTimeZone(): TimeZone = TimeZone.getDefault()
+    private fun getTimeZone(): TimeZone = TimeZone.getDefault()
     fun getTimeZoneOffset(): Int = getTimeZone().getOffset(System.currentTimeMillis())
 
     fun getCurrentDateByPattern(pattern: String): String {
@@ -41,7 +41,7 @@ object TimeUtils {
     }
 
     fun getFormatDateByPattern(givenDate: String, pattern: String, format: String): String {
-        val inputFormat =SimpleDateFormat(pattern, Locale.getDefault(Locale.Category.FORMAT))
+        val inputFormat = SimpleDateFormat(pattern, Locale.getDefault(Locale.Category.FORMAT))
         val outputFormat = SimpleDateFormat(format, Locale.getDefault(Locale.Category.FORMAT))
         val date = inputFormat.parse(givenDate)
         return outputFormat.format(date!!)

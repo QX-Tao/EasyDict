@@ -35,7 +35,7 @@ class WordListViewModel(private val wordListData: WordListData) : ViewModel() {
     private var _mediaPlayer: MediaPlayer?= null
     var firstVisibleItemPosition = -1
     var topOffset = -1
-    var dataLoadInfo =  MutableLiveData<Int>() // 初始化-1 加载中0 已加载1 加载失败2 列表为空3
+    var dataLoadInfo = MutableLiveData<Int>() // 初始化-1 加载中0 已加载1 加载失败2 列表为空3
     var playSound = MutableLiveData<Int>()
     var wordSelected = MutableLiveData<String?>()
     var clasSelected = MutableLiveData<String?>()

@@ -19,6 +19,7 @@ import com.qxtao.easydict.databinding.ActivityDaySentenceBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.fragment.daysentence.DaySentenceFragment
+import com.qxtao.easydict.ui.view.imageviewer.PhotoView
 import com.qxtao.easydict.utils.common.TimeUtils
 
 
@@ -26,19 +27,24 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
     BaseFragment.OnFragmentInteractionListener  {
     // define variable
     private val daySentencePagerAdapter by lazy { DaySentencePagerAdapter(this) }
+    private val dailySentenceData by lazy { DailySentenceData(mContext) }
+    val photoView by lazy { PhotoView(this@DaySentenceActivity) }
     private lateinit var daySentenceViewModel: DaySentenceViewModel
-    private lateinit var dailySentenceData: DailySentenceData
-    private val dispatcher: OnBackPressedDispatcher = onBackPressedDispatcher
-    private val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() { finish() }
-    }
+    private lateinit var dispatcher: OnBackPressedDispatcher
+    private lateinit var callback: OnBackPressedCallback
     // define widget
     private lateinit var mtTitle : MaterialToolbar
     private lateinit var daySentenceViewPager : ViewPager2
 
     override fun onCreate() {
-        dailySentenceData = DailySentenceData(mContext)
         daySentenceViewModel = ViewModelProvider(this, DaySentenceViewModel.Factory(dailySentenceData))[DaySentenceViewModel::class.java]
+        dispatcher = onBackPressedDispatcher
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (photoView.imageViewer.handleBackPressed()) return
+                finish()
+            }
+        }
         dispatcher.addCallback(callback)
     }
 
@@ -81,7 +87,7 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
 
     override fun onDestroy1() {
         super.onDestroy1()
-        if (this::dailySentenceData.isInitialized) dailySentenceData.close()
+        dailySentenceData.close()
         if (this::daySentenceViewModel.isInitialized) daySentenceViewModel.stopPlaySound()
     }
 
@@ -97,8 +103,8 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
         )
         val picker = builder.build()
         picker.addOnPositiveButtonClickListener {
-            val datee = TimeUtils.getFormatDateByTimeStamp(it,"yyyy-MM-dd")
-            daySentenceViewPager.setCurrentItem(TimeUtils.calculateDateDifference(datee, "yyyy-MM-dd").toInt(), false)
+            val datE = TimeUtils.getFormatDateByTimeStamp(it,"yyyy-MM-dd")
+            daySentenceViewPager.setCurrentItem(TimeUtils.calculateDateDifference(datE, "yyyy-MM-dd").toInt(), false)
         }
         picker.show(supportFragmentManager, picker.toString())
     }

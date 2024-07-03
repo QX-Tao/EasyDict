@@ -1,142 +1,69 @@
 package com.qxtao.easydict.ui.view
 
-import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
-import android.view.View
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import com.qxtao.easydict.R
+import com.qxtao.easydict.utils.common.ColorUtils
+import com.qxtao.easydict.utils.common.SizeUtils
+
 
 class LoadingView @JvmOverloads constructor(
     context: Context,
-    private val attrs: AttributeSet? = null,
+    attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var maxRadius = 30        //最大半径
-
-    private var minRadius = 5        //最小半径
-
-    private var leftRadius = 5        //左边小球当前半径
-
-    private var midRadius = 5        //中间小球当前半径
-
-    private var rightRadius = 5        //右边小球当前半径
-
-    private var duration = 1000        //小球由最小半径变为最大半径的时间
-
-    private var color = Color.BLUE     //小球颜色
-
-    private var internal = 100          //两球间距
-
-    //三个属性动画分别控制左中右三个小球半径
-    private val leftRadiusAnimator = ValueAnimator()
-
-    private val midRadiusAnimator = ValueAnimator()
-
-    private val rightRadiusAnimator = ValueAnimator()
-
-    private lateinit var mPaint: Paint
+    private val progressBar: ProgressBar
+    private val hintTextView: TextView
 
     init {
-        initParams()
-    }
+        LayoutInflater.from(context).inflate(R.layout.layout_loading_view, this, true)
 
-    //初始化各种属性
-    private fun initParams() {
-        val a = this.context.obtainStyledAttributes(attrs, R.styleable.LoadingView)
-        //获取自定义属性
-        a.apply {
-            maxRadius = getInt(R.styleable.LoadingView_max_radius, 30)
-            if (maxRadius > 100) maxRadius = 100       //最大半径不超过100
-            minRadius = getInt(R.styleable.LoadingView_min_radius, 5)
-            if (minRadius < 1) minRadius = 1         //最小半径不小于1
-            duration = getInt(R.styleable.LoadingView_duration, 1000)
-            color = getColor(R.styleable.LoadingView_ballColor, Color.BLUE)
-            internal = getInt(R.styleable.LoadingView_internal, internal)
-        }
-        a.recycle()		//需要将TypedArray进行回收
+        progressBar = findViewById(R.id.progressBar)
+        hintTextView = findViewById(R.id.textView)
 
-        leftRadiusAnimator.run {
-            setIntValues(minRadius, maxRadius)
-            repeatCount = ValueAnimator.INFINITE	//动画无限循环
-            repeatMode = ValueAnimator.REVERSE		//小球变到最大后再逐渐变为最小
-            duration = 1000
-            addUpdateListener {
-                leftRadius = it.animatedValue as Int
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.LoadingView,
+            0, 0
+        ).apply {
+            try {
+                val progressBarSize = getDimensionPixelSize(R.styleable.LoadingView_loadingViewProgressBarSize, SizeUtils.dp2px(48f))
+                val progressBarColor = getColor(R.styleable.LoadingView_loadingViewProgressBarColor, ColorUtils.colorSecondary(context))
+                val hintText = getText(R.styleable.LoadingView_loadingViewHintText) ?: context.getString(R.string.loading)
+                val hintTextColor = getColor(R.styleable.LoadingView_loadingViewHintTextColor, ColorUtils.colorOnSurface(context))
+                val hintTextSize = getDimensionPixelSize(R.styleable.LoadingView_loadingViewHintTextSize, resources.getDimensionPixelSize(R.dimen.text_size_normal))
+                val showHintText = getBoolean(R.styleable.LoadingView_showLoadingViewHintText, true)
+                val showProgressBar = getBoolean(R.styleable.LoadingView_showLoadingViewProgressBar, true)
+
+                progressBar.layoutParams.width = progressBarSize
+                progressBar.layoutParams.height = progressBarSize
+                progressBar.indeterminateDrawable.setTint(progressBarColor)
+                hintTextView.text = hintText
+                hintTextView.setTextColor(hintTextColor)
+                hintTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, hintTextSize.toFloat())
+                hintTextView.visibility = if (showHintText) VISIBLE else GONE
+                progressBar.visibility = if (showProgressBar) VISIBLE else GONE
+            } finally {
+                recycle()
             }
         }
-
-        midRadiusAnimator.run {
-            setIntValues(minRadius, maxRadius)
-            repeatCount = ValueAnimator.INFINITE
-            repeatMode = ValueAnimator.REVERSE
-            duration = 1000
-            startDelay = duration * 2 / 3	//延迟动画开始时间，这样就实现了三个小球不同步的变化
-            addUpdateListener {
-                midRadius = it.animatedValue as Int
-            }
-        }
-
-        rightRadiusAnimator.run {
-            setIntValues(minRadius, maxRadius)
-            repeatCount = ValueAnimator.INFINITE
-            repeatMode = ValueAnimator.REVERSE
-            duration = 1000
-            startDelay = duration * 4 / 3
-            addUpdateListener {
-                rightRadius = it.animatedValue as Int
-            }
-        }
-
-        leftRadiusAnimator.start()
-        midRadiusAnimator.start()
-        rightRadiusAnimator.start()
-
-        mPaint = Paint()
-        mPaint.style = Paint.Style.FILL
-        mPaint.color = color
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        //val widthSpecMode = MeasureSpec.getMode(widthMeasureSpec)
-        val widthSpecSize = MeasureSpec.getSize(widthMeasureSpec)
-        val heightSpecMode = MeasureSpec.getMode(heightMeasureSpec)
-        val heightSpecSize = MeasureSpec.getSize(heightMeasureSpec)
-
-        //处理高度为wrap_content的情况，宽度如果为wrap_content时默认为屏幕宽度
-        if (heightSpecMode == MeasureSpec.AT_MOST) {
-            setMeasuredDimension(widthSpecSize, maxRadius * 2)
-        } else {
-            setMeasuredDimension(widthSpecSize, heightSpecSize)
-        }
+    fun setHintText(text: String) {
+        hintTextView.text = text
     }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        val pivotX = width / 2      //中心小球横坐标
-        val pivotY = height / 2     //中心小球纵坐标
-
-        canvas.apply {
-            //绘制三个小球
-            drawCircle(pivotX.toFloat(), pivotY.toFloat(), leftRadius.toFloat(), mPaint)
-            drawCircle((pivotX + internal).toFloat(), pivotY.toFloat(), midRadius.toFloat(), mPaint)
-            drawCircle((pivotX - internal).toFloat(), pivotY.toFloat(), rightRadius.toFloat(), mPaint)
-        }
-
-        invalidate()
+    fun showProgressBar(show: Boolean) {
+        progressBar.visibility = if (show) VISIBLE else GONE
     }
 
-    //退出activity时停止动画
-//    override fun onDetachedFromWindow() {
-//        super.onDetachedFromWindow()
-//        leftRadiusAnimator.end()
-//        midRadiusAnimator.end()
-//        rightRadiusAnimator.end()
-//    }
-
-
+    fun showHintText(show: Boolean) {
+        hintTextView.visibility = if (show) VISIBLE else GONE
+    }
 }
