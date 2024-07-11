@@ -13,7 +13,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
-import com.qxtao.easydict.ui.activity.dict.ThesaurusEntry
 import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.SizeUtils
@@ -22,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.TimeZone
 
 
 @SuppressLint("NotifyDataSetChanged")
@@ -39,7 +39,7 @@ class AppUpdateDataAdapter(private val appUpdateDataItems: ArrayList<AppUpdateDa
         holder.tvAppVersionName.text = holder.itemView.context.getString(R.string.update_app_name_version, item.name)
         holder.tvPublishTime.text = holder.itemView.context.getString(
             R.string.update_publish_at,
-            TimeUtils.getFormatDateByPattern(item.publishedAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd HH:mm")
+            TimeUtils.getFormatDateTimeByPattern(item.publishedAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd HH:mm", TimeZone.getTimeZone("UTC"))
         )
 
         val updateLogList = item.body.split("\n")

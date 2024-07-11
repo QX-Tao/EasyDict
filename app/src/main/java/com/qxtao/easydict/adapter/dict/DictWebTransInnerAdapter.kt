@@ -1,8 +1,6 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Html
 import android.text.Spannable
@@ -33,7 +31,7 @@ class DictWebTransInnerAdapter(private val mItemList: ArrayList<WebTrans>) :
         viewType: Int
     ): ViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_dict_web_trans_outer, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_dict_web_trans_inner, parent, false)
         return ViewHolder(view)
     }
 
@@ -55,7 +53,7 @@ class DictWebTransInnerAdapter(private val mItemList: ArrayList<WebTrans>) :
             }
         }
         l.let {
-            if (it.size > 0){
+            if (it.isNotEmpty()){
                 val lineSentenceText = Html.fromHtml("\r" + it.joinToString("\n\r"), Html.FROM_HTML_MODE_COMPACT)
                 val lineSentenceSpannable = SpannableString(lineSentenceText)
                 for (span in lineSentenceText.getSpans(0, lineSentenceText.length, Any::class.java)){

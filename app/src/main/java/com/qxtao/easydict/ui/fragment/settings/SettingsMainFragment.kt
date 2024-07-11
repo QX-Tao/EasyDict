@@ -1,12 +1,20 @@
 package com.qxtao.easydict.ui.fragment.settings
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,19 +35,30 @@ import com.qxtao.easydict.ui.view.CustomPopWindow
 import com.qxtao.easydict.utils.common.ActivityUtils
 import com.qxtao.easydict.utils.common.FileUtils
 import com.qxtao.easydict.utils.common.ShareUtils
+import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.common.ThemeUtils
 import com.qxtao.easydict.utils.constant.ShareConstant.DEF_VOICE
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_QUICK_SEARCH
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_SYSTEM_THEME
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_VIEW
 import com.qxtao.easydict.utils.constant.ShareConstant.MEI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentSettingsMainBinding::inflate) {
     // define variable
     private lateinit var settingsViewModel: SettingsViewModel
+    private var changeSettingsTag = false
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            changeSettingsTag = true
+            ShareUtils.putBoolean(context, IS_USE_QUICK_SEARCH, true)
+        } else { showNotificationPermissionDialog() }
+    }
     // define widget
     private lateinit var clAbout: ConstraintLayout
     private lateinit var clAppBrowser: ConstraintLayout
@@ -50,8 +69,10 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
     private lateinit var tvDefVoiceDesc: TextView
     private lateinit var tvThemeColorDesc: TextView
     private lateinit var clSystemThemeColor: ConstraintLayout
+    private lateinit var clQuickSearch: ConstraintLayout
     private lateinit var clThemeColor: ConstraintLayout
     private lateinit var swAppBrowser: MaterialSwitch
+    private lateinit var swQuickSearch: MaterialSwitch
     private lateinit var swSystemThemeColor: MaterialSwitch
     private lateinit var mtTitle: MaterialToolbar
     private lateinit var clClearHistory: ConstraintLayout
@@ -63,12 +84,14 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
 
     override fun bindViews() {
         clAbout = binding.clAbout
+        swQuickSearch = binding.swQuickSearch
         swSystemThemeColor = binding.swSystemThemeColor
         swAppBrowser = binding.swAppBrowser
         clAppBrowser = binding.clAppBrowser
         clClearCache = binding.clClearCache
         tvClearCacheDesc = binding.tvClearCacheDesc
         clDarkMode = binding.clDarkMode
+        clQuickSearch = binding.clQuickSearch
         clSystemThemeColor = binding.clSystemThemeColor
         clThemeColor = binding.clThemeColor
         tvDarkModeDesc = binding.tvDarkModeDesc
@@ -85,6 +108,7 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
 
     override fun initViews() {
         settingsViewModel = (activity as SettingsActivity).getSettingsViewModel()
+        swQuickSearch.isChecked = ShareUtils.getBoolean(mContext, IS_USE_QUICK_SEARCH, false)
         swAppBrowser.isChecked = ShareUtils.getBoolean(mContext, IS_USE_WEB_VIEW, true)
         swSystemThemeColor.isChecked = ShareUtils.getBoolean(mContext, IS_USE_SYSTEM_THEME, false)
         clSystemThemeColor.visibility = if (ThemeUtils.isDynamicColorAvailable()) View.VISIBLE else View.GONE
@@ -131,7 +155,7 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
                     override fun onMenuItemClick(position: Int) {
                         ShareUtils.putString(mContext, DEF_VOICE, settingsViewModel.defVoiceMap.keys.toList()[position])
                         tvDefVoiceDesc.text = settingsViewModel.defVoiceMap[ShareUtils.getString(mContext, DEF_VOICE, MEI)]
-                        it.first.dissmiss()
+                        it.first.dismiss()
                     }
                 })
             }
@@ -145,7 +169,7 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
                             AppCompatDelegate.setDefaultNightMode(settingsViewModel.darkModeMap.keys.toList()[position])
                         }
                         tvDarkModeDesc.text = settingsViewModel.darkModeMap[ThemeUtils.getDarkTheme(mContext)]
-                        it.first.dissmiss()
+                        it.first.dismiss()
                     }
                 })
             }
@@ -159,7 +183,7 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
                             ActivityUtils.restartAllActivities()
                         }
                         tvThemeColorDesc.text = settingsViewModel.themeColorMap[ThemeUtils.getThemeColor(mContext)]
-                        it.first.dissmiss()
+                        it.first.dismiss()
                     }
                 })
             }
@@ -170,6 +194,18 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
         swSystemThemeColor.setOnCheckedChangeListener { _, isChecked ->
             ShareUtils.putBoolean(mContext, IS_USE_SYSTEM_THEME, isChecked)
             ActivityUtils.restartAllActivities()
+        }
+        clQuickSearch.setOnClickListener { swQuickSearch.isChecked = !swQuickSearch.isChecked }
+        swQuickSearch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                if (!isNotificationsEnabled()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else { showNotificationPermissionDialog() }
+                } else { ShareUtils.putBoolean(mContext, IS_USE_QUICK_SEARCH, true)
+                    mListener.onFragmentInteraction("showQuickSearchNotification") }
+            } else { ShareUtils.delShare(mContext, IS_USE_QUICK_SEARCH)
+               mListener.onFragmentInteraction("cancelQuickSearchNotification") }
         }
     }
 
@@ -190,12 +226,28 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
         return null
     }
 
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch(Dispatchers.IO) {
+            delay(400)
+            withContext(Dispatchers.Main) {
+                if ((changeSettingsTag || ShareUtils.getBoolean(mContext, IS_USE_QUICK_SEARCH, false))
+                    && isNotificationsEnabled()) { swQuickSearch.isChecked = true
+                    mListener.onFragmentInteraction("showQuickSearchNotification")
+                } else {
+                    swQuickSearch.isChecked = false
+                    ShareUtils.delShare(mContext, IS_USE_QUICK_SEARCH)
+                }
+            }
+        }
+    }
+
     private fun showPopupMenu(view: View, popWindowList: List<PopupMenuItem>): Pair<CustomPopWindow, PopupMenuAdapter>{
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_menu_recycleview, null)
+        val parentView = requireActivity().findViewById<ViewGroup>(android.R.id.content)
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_menu_recycleview, parentView, false)
         val popWindow = CustomPopWindow.PopupWindowBuilder(mContext)
             .setView(contentView)
             .create()
-            .showAsDropDown(view, view.right, view.top - view.bottom)
         val recycleView = contentView.findViewById<RecyclerView>(R.id.recyclerView)
         val adapter = PopupMenuAdapter(popWindowList)
         recycleView.adapter = adapter
@@ -203,11 +255,50 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
         adapter.selectItem(popWindowList.find { it.isMenuItemSelected }?.position ?: 0)
         adapter.setOnMenuItemClickListener(object : PopupMenuAdapter.OnMenuItemClickListener{
             override fun onMenuItemClick(position: Int) {
-                popWindow.dissmiss()
+                popWindow.dismiss()
             }
         })
+        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        popWindow.popupWindow?.contentView?.measure(widthMeasureSpec, heightMeasureSpec)
+        val xOff = view.right - (popWindow.popupWindow?.contentView?.measuredWidth ?: 0) - SizeUtils.dp2px(4f)
+        val yOff = view.top - view.bottom
+        popWindow.showAsDropDown(view, xOff, yOff)
         return Pair(popWindow, adapter)
     }
+
+    private fun showNotificationPermissionDialog(){
+        lifecycleScope.launch(Dispatchers.IO) {
+            delay(400)
+            withContext(Dispatchers.Main){
+                swQuickSearch.isChecked = false
+            }
+        }
+        val dialog = AlertDialog.Builder(mContext)
+            .setTitle(mContext.getString(R.string.hint))
+            .setMessage(getString(R.string.notify_permission_desc))
+            .setPositiveButton(mContext.getString(R.string.confirm)){ _, _ ->
+                changeSettingsTag = true
+                openNotificationSettingsForApp(mContext)
+            }
+            .setNegativeButton(mContext.getString(R.string.cancel), null)
+            .create()
+        dialog.show()
+    }
+    // 打开通知设置页面
+    private fun openNotificationSettingsForApp(context: Context) {
+        val intent = Intent()
+        intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+        intent.putExtra("app_package", context.packageName)
+        intent.putExtra("app_uid", context.applicationInfo.uid)
+        intent.putExtra("android.provider.extra.APP_PACKAGE", context.packageName)
+        context.startActivity(intent)
+    }
+    //通知权限
+    private fun isNotificationsEnabled(): Boolean {
+        return NotificationManagerCompat.from(mContext).areNotificationsEnabled()
+    }
+
 
     private fun calculateClashSize(){
         lifecycleScope.launch {
@@ -232,7 +323,4 @@ class SettingsMainFragment : BaseFragment<FragmentSettingsMainBinding>(FragmentS
             }
         }
     }
-
-
-
 }

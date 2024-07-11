@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="?attr/colorSurface"
     android:paddingTop="7dp"
     android:paddingBottom="12dp"
     android:layout_width="match_parent"
@@ -45,13 +44,14 @@
         <com.qxtao.easydict.ui.view.ratingbar.AndRatingBar
             android:id="@+id/rb_star"
             android:isIndicator="true"
-            app:scaleFactor="0.7"
             app:keepOriginColor="true"
             app:starDrawable="@drawable/ic_star_solid"
             app:starColor="?attr/colorPrimary"
             android:layout_marginEnd="10dp"
+            android:minHeight="16dp"
+            android:maxHeight="16dp"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"/>
+            android:layout_height="16dp"/>
 
         <TextView
             android:id="@+id/tv_word_form"

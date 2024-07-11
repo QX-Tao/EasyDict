@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
-import com.qxtao.easydict.adapter.popupmenu.PopupMenuAdapter
 import com.qxtao.easydict.ui.activity.web.WebActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

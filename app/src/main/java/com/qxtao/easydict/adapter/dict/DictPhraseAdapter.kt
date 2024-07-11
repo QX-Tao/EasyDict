@@ -1,12 +1,9 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
-import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Phr
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
-import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,8 +49,8 @@ class DictPhraseAdapter(private val phrItems: ArrayList<Phr>) :
             }
         }
         span.setSpan(clickableSpan, 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        holder.textContent.movementMethod = LinkMovementMethod.getInstance()
         holder.textContent.text = span
+        holder.textContent.movementMethod = LinkClickMovementMethod()
     }
 
     fun setData(data: List<Phr>?) {

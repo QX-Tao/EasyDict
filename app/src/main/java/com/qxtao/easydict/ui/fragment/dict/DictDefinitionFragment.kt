@@ -1,11 +1,7 @@
 package com.qxtao.easydict.ui.fragment.dict
 
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
@@ -14,7 +10,6 @@ import com.qxtao.easydict.databinding.FragmentDictDefinitionBinding
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
-import com.qxtao.easydict.utils.factory.screenRotation
 
 
 class DictDefinitionFragment : BaseFragment<FragmentDictDefinitionBinding>(FragmentDictDefinitionBinding::inflate) {

@@ -1,9 +1,11 @@
 package com.qxtao.easydict.ui.activity.bughandler
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
-import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Environment
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -19,7 +21,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.system.exitProcess
 
 class BugHandlerActivity : BaseActivity<ActivityBugHandlerBinding>(ActivityBugHandlerBinding::inflate) {
     // define variable
@@ -32,12 +33,23 @@ class BugHandlerActivity : BaseActivity<ActivityBugHandlerBinding>(ActivityBugHa
     private lateinit var mtTitle: MaterialToolbar
     private lateinit var tvError: TextView
 
+    companion object {
+        private const val TAG = "BugHandlerActivity"
+        fun start(context: Context, exceptionMessage: String, threadName: String) {
+            Log.e(TAG, "Error on thread $threadName:\n $exceptionMessage")
+            val intent = Intent(context, BugHandlerActivity::class.java)
+            intent.putExtra("exception_message", exceptionMessage)
+            intent.putExtra("thread", threadName)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent)
+        }
+    }
+
     override fun onCreate() {
         dispatcher = onBackPressedDispatcher
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 finish()
-                exitProcess(10)
             }
         }
     }
@@ -54,7 +66,7 @@ class BugHandlerActivity : BaseActivity<ActivityBugHandlerBinding>(ActivityBugHa
         val currentDateTime = Calendar.getInstance().time
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val formattedDateTime = formatter.format(currentDateTime)
-        val easydictVersion = getString(R.string.app_version, BuildConfig.VERSION_NAME)
+        val currentVersion = getString(R.string.app_version, BuildConfig.VERSION_NAME)
 
         val combinedTextBuilder = StringBuilder()
         combinedTextBuilder
@@ -64,7 +76,7 @@ class BugHandlerActivity : BaseActivity<ActivityBugHandlerBinding>(ActivityBugHa
             .append("| |___| (_| |\\__ \\| |_| || |_| || || (__ | |_ ").append('\n')
             .append("|_____|\\_,_||___/  \\__, ||____/ |_| \\___| \\__|").append('\n')
             .append("                   |___/                      ").append('\n').append('\n')
-            .append(getString(R.string.crash_app_name)).append(':').append("   ").append(easydictVersion).append('\n').append('\n')
+            .append(getString(R.string.crash_app_name)).append(':').append("   ").append(currentVersion).append('\n').append('\n')
             .append(getString(R.string.crash_phone_brand)).append(':').append("      ").append(deviceBrand).append('\n')
             .append(getString(R.string.crash_phone_model)).append(':').append("      ").append(deviceModel).append('\n')
             .append(getString(R.string.crash_sdk_level)).append(':').append("  ").append(sdkLevel).append('\n')

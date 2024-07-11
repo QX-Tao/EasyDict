@@ -8,7 +8,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
-import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -220,11 +219,13 @@ class DictHasFragment : BaseFragment<FragmentDictHasBinding>(FragmentDictHasBind
     override fun addListener() {
         rvSearchHistoryAdapter.setOnItemClickListener(object : DictWordLineAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
+                (parentFragment as DictSearchFragment).exitEditTextFocus()
                 mListener.onFragmentInteraction("toDetailFragment", dictViewModel.dictSearchHistory.value!![position].origin)
             }
         })
         rvSearchSuggestionAdapter.setOnItemClickListener(object : DictWordLineAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
+                (parentFragment as DictSearchFragment).exitEditTextFocus()
                 mListener.onFragmentInteraction("toDetailFragment", dictViewModel.dictSearchSuggestion.value!![position].origin)
             }
         })

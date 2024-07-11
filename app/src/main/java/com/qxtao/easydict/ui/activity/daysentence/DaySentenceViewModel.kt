@@ -34,7 +34,7 @@ class DaySentenceViewModel(private val dailySentenceData: DailySentenceData) : V
         } else {
             try {
                 val imgResponse = HttpUtils.requestDisableCertificateValidationResponse(
-                    NetConstant.imgApi + TimeUtils.getFormatDateByPattern(date, "yyyy-MM-dd", "yyyyMMdd"))
+                    NetConstant.imgApi + TimeUtils.getFormatDateTimeByPattern(date, "yyyy-MM-dd", "yyyyMMdd"))
                 val imageUrl = imgResponse.request.url.toString()
 
                 val dailySentenceResponseJson = HttpUtils.requestResult(NetConstant.dailySentenceApi + date)

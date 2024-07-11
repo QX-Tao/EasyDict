@@ -5,6 +5,7 @@ package com.qxtao.easydict.ui.base
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
@@ -26,7 +27,7 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
     protected val mContext get() = _context
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        edgeToEdge()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { edgeToEdge() }
         super.onCreate(savedInstanceState)
         _context = this
         setContentView(binding.root)
@@ -54,7 +55,7 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.TRANSPARENT
-        window.navigationBarDividerColor = Color.TRANSPARENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { window.navigationBarDividerColor = Color.TRANSPARENT }
         /**
          * Init children
          * 装载子类

@@ -31,7 +31,7 @@ class RattingAttr(
 
     private fun createClippedLayerDrawableWithTint(tileResId: Int, tintAttrRes: Int): Drawable {
         val tintColor = if (tintAttrRes == 0) 0 else getColorFromAttrRes(tintAttrRes)
-        return ClipDrawable(createLayerDrawableWithTintColor(tileResId, tintColor), Gravity.LEFT, ClipDrawable.HORIZONTAL)
+        return ClipDrawable(createLayerDrawableWithTintColor(tileResId, tintColor), Gravity.START, ClipDrawable.HORIZONTAL)
     }
 
     private fun createLayerDrawableWithTintColor(tileRes: Int, tintColor: Int): Drawable {

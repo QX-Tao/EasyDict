@@ -1,12 +1,9 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
-import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Trans
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
@@ -55,8 +53,8 @@ class DictHeHeaderExplainAdapter(private val mItemList: ArrayList<Trans>) :
                     }
                 }
                 spannableString.setSpan(clickableSpan, 0, it.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                holder.textEn.movementMethod = LinkMovementMethod.getInstance()
                 holder.textEn.text = spannableString
+                holder.textEn.movementMethod = LinkClickMovementMethod()
             } else return
         }
         holder.imgVoice.setOnClickListener {

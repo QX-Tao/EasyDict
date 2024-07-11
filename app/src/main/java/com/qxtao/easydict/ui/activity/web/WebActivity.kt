@@ -76,12 +76,12 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
     override fun onCreate1(savedInstanceState: Bundle?) {
         super.onCreate1(savedInstanceState)
         webViewModel = ViewModelProvider(this)[WebViewModel::class.java]
-        needLoadUrl = savedInstanceState == null || webViewModel.currentUrl.isNullOrEmpty()
+        needLoadUrl = savedInstanceState == null || webViewModel.currentUrl.isNullOrBlank()
     }
 
     override fun onCreate() {
         if (!ShareUtils.getBoolean(this, IS_USE_WEB_VIEW, true)) {
-            if (initUrl.isNullOrEmpty()) finish()
+            if (initUrl.isNullOrBlank()) finish()
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(initUrl))
             mContext.startActivity(intent)
             finish()
@@ -112,10 +112,16 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             when(it.itemId){
                 R.id.refresh -> { webView.reload() }
                 R.id.copy_url -> {
-                    ClipboardUtils.copyTextToClipboard(mContext, webViewModel.currentUrl, getString(R.string.copied))
+                    val copyText = webViewModel.currentUrl ?: initUrl
+                    if (copyText.isNullOrBlank()){
+                        showShortToast(getString(R.string.web_request_url_empty))
+                        return@setOnMenuItemClickListener true
+                    }
+                    ClipboardUtils.copyTextToClipboard(mContext, copyText, getString(R.string.copied))
                 }
                 R.id.open_in_browser -> {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webViewModel.currentUrl))
+                    val uriString = webViewModel.currentUrl ?: initUrl ?: return@setOnMenuItemClickListener true
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uriString))
                     mContext.startActivity(intent)
                 }
                 R.id.clear_cache -> {
@@ -153,11 +159,13 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             domStorageEnabled = true
             useWideViewPort = true
             blockNetworkImage = false
+            loadWithOverviewMode = true
             mixedContentMode =  WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             cacheMode = if (useCache) WebSettings.LOAD_DEFAULT else WebSettings.LOAD_NO_CACHE
             loadsImagesAutomatically = true
-            builtInZoomControls = false
-            setSupportZoom(false)
+            displayZoomControls = false
+            builtInZoomControls = true
+            setSupportZoom(true)
             if ((resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
                 if (isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
                     WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.settings, true)
@@ -251,8 +259,21 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
 
     private fun loadUrl(){
         if (!needLoadUrl) return
-        val url = webViewModel.currentUrl ?: initUrl ?: return
-        webView.loadUrl(url)
+        val url = webViewModel.currentUrl ?: initUrl
+        if (url.isNullOrBlank()) showLoadBingDialog() else webView.loadUrl(url)
+    }
+
+    private fun showLoadBingDialog(){
+        AlertDialog.Builder(mContext)
+            .setTitle(getString(R.string.hint))
+            .setMessage(getString(R.string.load_bing_hint))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.load_bing)) { _, _ ->
+                webView.loadUrl("https://cn.bing.com/")
+            }
+            .setNegativeButton(getString(R.string.exit)) { _, _ -> finish() }
+            .create()
+            .show()
     }
 
     private fun setTitle(title: String? = webView.title){

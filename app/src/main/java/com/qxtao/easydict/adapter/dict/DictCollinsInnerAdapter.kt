@@ -1,13 +1,13 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
-import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
@@ -25,9 +25,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Entry
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -82,11 +82,15 @@ class DictCollinsInnerAdapter(private val mItemList: ArrayList<Entry>) :
                             if (span is UnderlineSpan){
                                 val clickableSpan = object : ClickableSpan() {
                                     override fun onClick(widget: View) {
-                                        DictActivity.onSearchStr(holder.itemView.context, it.substring(it.getSpanStart(span), it.getSpanEnd(span)))
+                                        DictActivity.onSearchStr(
+                                            holder.itemView.context,
+                                            it.substring(it.getSpanStart(span), it.getSpanEnd(span))
+                                        )
                                     }
                                     override fun updateDrawState(ds: TextPaint) {
                                         ds.isUnderlineText = false
                                         ds.color = ColorUtils.colorTertiary(holder.itemView.context)
+                                        ds.bgColor = Color.TRANSPARENT
                                     }
                                 }
                                 it.setSpan(clickableSpan, tranText.getSpanStart(span), tranText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -94,8 +98,8 @@ class DictCollinsInnerAdapter(private val mItemList: ArrayList<Entry>) :
                         }
                     }
                 }
-                holder.tvTran.movementMethod = LinkMovementMethod.getInstance()
                 holder.tvTran.text = tranTextSpannable
+                holder.tvTran.movementMethod = LinkClickMovementMethod()
             }
 
             val s = mutableListOf<String>()

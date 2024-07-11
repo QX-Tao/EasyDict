@@ -4,6 +4,7 @@
     android:id="@+id/cl_layout"
     android:background="?android:selectableItemBackground"
     android:layout_width="wrap_content"
+    android:minHeight="48dp"
     android:layout_height="wrap_content">
 
     <View
@@ -24,13 +25,11 @@
         app:layout_constraintEnd_toStartOf="@id/iv_image"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp"
         android:id="@+id/tv_text"
         android:textSize="@dimen/text_size_normal"
         android:layout_width="0dp"
         android:layout_weight="1"
-        app:layout_constraintWidth_min="108dp"
+        app:layout_constraintWidth_min="132dp"
         android:layout_height="wrap_content"
         android:textColor="?attr/colorOnSurface"
         android:text="@string/def_str" />

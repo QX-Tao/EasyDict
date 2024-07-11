@@ -1,8 +1,11 @@
 package com.qxtao.easydict.ui.activity.grammarcheck
 
-import android.content.Context
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -81,6 +84,7 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
         grammarCheckAdapter = GrammarCheckAdapter(ArrayList())
         rvCheckResult.adapter = grammarCheckAdapter
         rvCheckResult.layoutManager = LinearLayoutManager(this)
+        if (grammarCheckViewModel.pageType.value == 0) { etRequestFocus(etGrammarCheck) }
         grammarCheckViewModel.pageType.observe(this){
             when(it) {
                 0 -> {
@@ -149,40 +153,36 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
         tvCheck.setOnClickListener {
             val confirmText = textualize(etGrammarCheck.text.toString()).trim()
             if (confirmText.isNotBlank()) {
-                // 关闭软键盘
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(etGrammarCheck.windowToken, 0)
+                etUnRequestFocus(etGrammarCheck)
                 grammarCheckViewModel.check(confirmText.toString())
             }
         }
         tvRetype.setOnClickListener {
             grammarCheckViewModel.pageType.value = 0
-            // 弹出软键盘
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(etGrammarCheck, InputMethodManager.SHOW_IMPLICIT)
-            etGrammarCheck.requestFocus()
+            etRequestFocus(etGrammarCheck)
         }
         ivPaste.setOnClickListener {
-            grammarCheckViewModel.pasteData.value?.second.let {
-                if (it != null){
-                    etGrammarCheck.setText(textualize(it))
-                    etGrammarCheck.setSelection(etGrammarCheck.text?.length ?: 0)
-                }
+            grammarCheckViewModel.pasteData.value?.second?.let {
+                etGrammarCheck.setText(textualize(it))
+                etGrammarCheck.setSelection(etGrammarCheck.text?.length ?: 0)
             }
         }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            grammarCheckViewModel.setPasteData(ClipboardUtils.hasClipboardText(mContext),
-                ClipboardUtils.getClipboardText(mContext)?.let { textualize(it).toString() })
-            if (grammarCheckViewModel.pageType.value == 0){
-                // 弹出软键盘
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(etGrammarCheck, InputMethodManager.SHOW_IMPLICIT)
-                etGrammarCheck.requestFocus()
+        val setPasteData = {
+            if (this::grammarCheckViewModel.isInitialized){
+                grammarCheckViewModel.setPasteData(ClipboardUtils.hasClipboardText(mContext),
+                    ClipboardUtils.getClipboardText(mContext)?.let { textualize(it).toString() })
             }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Handler.createAsync(Looper.getMainLooper())
+                .postDelayed(setPasteData, 200)
+        } else {
+            Handler(Looper.getMainLooper())
+                .postDelayed(setPasteData, 200)
         }
     }
 
@@ -198,6 +198,30 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
             }
         }
         return filteredInput
+    }
+
+    private fun etRequestFocus(editText: EditText){
+        editText.requestFocus()
+        // 延迟200ms 显示软键盘
+        val showSoftInput = {
+            if (editText.isFocused){
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Handler.createAsync(Looper.getMainLooper())
+                .postDelayed(showSoftInput, 200)
+        } else {
+            Handler(Looper.getMainLooper())
+                .postDelayed(showSoftInput, 200)
+        }
+    }
+
+    private fun etUnRequestFocus(editText: EditText){
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(editText.windowToken, 0)
+        editText.clearFocus()
     }
 
 }

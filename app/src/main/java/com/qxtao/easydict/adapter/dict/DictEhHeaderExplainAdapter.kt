@@ -2,6 +2,7 @@ package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
 import android.graphics.Typeface
+import android.os.Build
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ImageSpan
@@ -16,12 +17,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.Trs
+import com.qxtao.easydict.utils.CustomTypefaceSpan
 import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 @SuppressLint("NotifyDataSetChanged")
 class DictEhHeaderExplainAdapter(private val trsItems: ArrayList<Trs>) :
@@ -60,7 +63,11 @@ class DictEhHeaderExplainAdapter(private val trsItems: ArrayList<Trs>) :
         }
         val linesBeginIndexes = listOf(0) + nextParagraphBeginIndexes
         for (i in trsItems.indices){
-            span.setSpan(TypefaceSpan(typeface), linesBeginIndexes[i], linesBeginIndexes[i] + (trsItems[i].pos?.length ?: 0), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                span.setSpan(TypefaceSpan(typeface), linesBeginIndexes[i], linesBeginIndexes[i] + (trsItems[i].pos?.length ?: 0), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                span.setSpan(CustomTypefaceSpan("", typeface), linesBeginIndexes[i], linesBeginIndexes[i] + (trsItems[i].pos?.length ?: 0), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
         }
         holder.textTranslation.setText(span, TextView.BufferType.SPANNABLE)
 

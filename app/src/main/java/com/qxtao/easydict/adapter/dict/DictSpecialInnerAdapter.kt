@@ -1,8 +1,6 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Html
 import android.text.Spannable

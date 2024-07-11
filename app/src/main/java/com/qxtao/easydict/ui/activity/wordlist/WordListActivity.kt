@@ -8,9 +8,9 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -105,10 +105,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                                     .show()
                                 snackBar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
                                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                        when (event){
-                                            DISMISS_EVENT_MANUAL, DISMISS_EVENT_CONSECUTIVE, DISMISS_EVENT_SWIPE,
-                                            DISMISS_EVENT_TIMEOUT -> { wordListViewModel.deleteWordRecord() }
-                                        }
+                                        wordListViewModel.deleteWordRecord()
                                         super.onDismissed(transientBottomBar, event)
                                     }
                                 })
@@ -315,7 +312,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                                     wordListViewModel.clasPopWindowList[position].menuItemText,
                                     wordListViewModel.wordListItems.value?.size)
                                 wordListViewModel.setClasSelected(position)
-                                it.first.dissmiss()
+                                it.first.dismiss()
                             }
                         })
                     }
@@ -336,7 +333,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
                                 if (this@WordListActivity::snackBar.isInitialized) if (snackBar.isShown) snackBar.dismiss()
                                 wordListViewModel.setWordSelected(position)
                                 wordListViewModel.setClasSelected(1)
-                                it.first.dissmiss()
+                                it.first.dismiss()
                             }
                         })
                     }
@@ -376,11 +373,11 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
     }
 
     private fun showPopupMenu(view: View, popWindowList: List<PopupMenuItem>): Pair<CustomPopWindow, PopupMenuAdapter>{
-        val contentView = LayoutInflater.from(this).inflate(R.layout.pop_menu_recycleview, null)
-        val popWindow = CustomPopWindow.PopupWindowBuilder(this)
+        val parentView = findViewById<ViewGroup>(android.R.id.content)
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_menu_recycleview, parentView, false)
+        val popWindow = CustomPopWindow.PopupWindowBuilder(mContext)
             .setView(contentView)
             .create()
-            .showAsDropDown(view, view.right, view.top - view.bottom)
         val recycleView = contentView.findViewById<RecyclerView>(R.id.recyclerView)
         val adapter = PopupMenuAdapter(popWindowList)
         recycleView.adapter = adapter
@@ -388,9 +385,15 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
         adapter.selectItem(popWindowList.find { it.isMenuItemSelected }?.position ?: 0)
         adapter.setOnMenuItemClickListener(object : PopupMenuAdapter.OnMenuItemClickListener{
             override fun onMenuItemClick(position: Int) {
-                popWindow.dissmiss()
+                popWindow.dismiss()
             }
         })
+        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        popWindow.popupWindow?.contentView?.measure(widthMeasureSpec, heightMeasureSpec)
+        val xOff = view.right - (popWindow.popupWindow?.contentView?.measuredWidth ?: 0) - SizeUtils.dp2px(4f)
+        val yOff = view.top - view.bottom
+        popWindow.showAsDropDown(view, xOff, yOff)
         return Pair(popWindow, adapter)
     }
 

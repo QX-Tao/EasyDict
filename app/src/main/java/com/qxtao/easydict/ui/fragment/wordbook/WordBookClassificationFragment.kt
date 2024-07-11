@@ -1,20 +1,14 @@
 package com.qxtao.easydict.ui.fragment.wordbook
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +22,6 @@ import com.qxtao.easydict.ui.activity.wordbook.WordBookViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.screenRotation
 
 class WordBookClassificationFragment : BaseFragment<FragmentWordBookClassificationBinding>(FragmentWordBookClassificationBinding::inflate) {
     // define variable

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:fitsSystemWindowsInsets="top"
+    app:fitsSystemWindowsInsets="top|start|end"
     tools:context=".ui.activity.wordlist.WordListActivity">
 
     <com.google.android.material.appbar.MaterialToolbar

@@ -9,7 +9,7 @@
     <FrameLayout
         android:id="@+id/fl_title"
         android:orientation="horizontal"
-        app:fitsSystemWindowsInsets="top"
+        app:fitsSystemWindowsInsets="top|start|end"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -29,7 +29,7 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_check_result"
         android:visibility="gone"
-        app:fitsSystemWindowsInsets="bottom"
+        app:fitsSystemWindowsInsets="bottom|start|end"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="16dp"
@@ -209,9 +209,10 @@
                             android:layout_height="match_parent"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
+                            android:contentDescription="@string/undo_input"
                             android:focusable="true"
                             android:padding="9dp"
-                            android:src="@drawable/ic_redo" />
+                            android:src="@drawable/ic_undo" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -230,9 +231,10 @@
                         <ImageView
                             android:id="@+id/iv_redo"
                             android:clickable="true"
+                            android:contentDescription="@string/redo_input"
                             android:focusable="true"
                             android:background="?android:attr/selectableItemBackground"
-                            android:src="@drawable/ic_undo"
+                            android:src="@drawable/ic_redo"
                             android:padding="9dp"
                             android:layout_height="match_parent"
                             android:layout_width="match_parent" />
@@ -254,6 +256,7 @@
                         <ImageView
                             android:id="@+id/iv_paste"
                             android:clickable="true"
+                            android:contentDescription="@string/paste_text"
                             android:focusable="true"
                             android:background="?android:attr/selectableItemBackground"
                             android:src="@drawable/ic_paste"

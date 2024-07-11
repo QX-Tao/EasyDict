@@ -1,5 +1,6 @@
 package com.qxtao.easydict.ui.fragment.dict
 
+import android.Manifest
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -19,6 +20,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.qxtao.easydict.R
 import com.qxtao.easydict.databinding.FragmentDictDetailBinding
+import com.qxtao.easydict.ui.activity.dict.DICT_SEARCH_FRAGMENT_TAG
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.activity.dict.SEARCH_LE_EN
@@ -27,7 +29,6 @@ import com.qxtao.easydict.ui.activity.dict.VOICE_NORMAL
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.view.ExpandableTextView
 import com.qxtao.easydict.ui.view.LoadingView
-import com.qxtao.easydict.ui.view.imageviewer.ImageViewer
 import com.qxtao.easydict.ui.view.imageviewer.PhotoView
 import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.ShareUtils
@@ -37,6 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import permissions.dispatcher.NeedsPermission
 
 
 class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictDetailBinding::inflate) {
@@ -108,14 +110,15 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
         clVoice = binding.clVoice
         ivTransCollect = binding.ivTransCollect
         ivWordCollect = binding.ivWordCollect
-
     }
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
         photoView = (activity as DictActivity).photoView
         dictViewModel.playSound = if (ShareUtils.getString(mContext, ShareConstant.DEF_VOICE, ShareConstant.MEI) == ShareConstant.MEI) 0 else 1
-        (parentFragment as? DictSearchFragment)?.exitEditTextFocus()
+        if (dictViewModel.currentFragmentTag == DICT_SEARCH_FRAGMENT_TAG){
+            (parentFragment as DictSearchFragment).exitEditTextFocus()
+        }
         dictViewModel.dataLoadInfo.observe(this) {
             when (it) {
                 0 -> {

@@ -33,6 +33,13 @@ object ColorUtils {
         array1.recycle()
         return color1
     }
+    fun colorPopupMenuBackground(context: Context): Int {
+        val attribute1 = intArrayOf(com.google.android.material.R.attr.popupMenuBackground)
+        val array1: TypedArray = context.theme.obtainStyledAttributes(attribute1)
+        val color1 = array1.getColor(0, Color.TRANSPARENT)
+        array1.recycle()
+        return color1
+    }
     fun colorOnSurfaceVariant(context: Context): Int {
         val attribute1 = intArrayOf(com.google.android.material.R.attr.colorOnSurfaceVariant)
         val array1: TypedArray = context.theme.obtainStyledAttributes(attribute1)

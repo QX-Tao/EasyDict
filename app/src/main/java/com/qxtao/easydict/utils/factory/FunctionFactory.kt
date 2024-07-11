@@ -15,6 +15,7 @@ import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.view.WindowCompat
 
 
@@ -108,6 +109,7 @@ var Activity.isAppearanceLight: Boolean
         }
     }
 
+@RequiresApi(Build.VERSION_CODES.P)
 fun Activity.edgeToEdge() {
     requestWindowFeature(Window.FEATURE_NO_TITLE)
     window.attributes.layoutInDisplayCutoutMode = WindowManager

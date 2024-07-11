@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<paths xmlns:android="http://schemas.android.com/apk/res/android">
+<paths>
     <!--
     1、name对应的属性值，开发者可以自由定义；
     2、path对应的属性值，当前external-path标签下的相对路径

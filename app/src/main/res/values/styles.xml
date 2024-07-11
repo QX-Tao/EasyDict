@@ -1,0 +1,14 @@
+<resources>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@null</item>
+        <item name="android:textColorHighlight">?attr/colorSecondaryContainer</item>
+    </style>
+
+    <style name="AppWidgetStyle" parent="android:Widget">
+        <item name="android:id">@android:id/background</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+    </style>
+
+</resources>

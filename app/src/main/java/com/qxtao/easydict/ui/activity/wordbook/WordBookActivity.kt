@@ -1,6 +1,6 @@
 package com.qxtao.easydict.ui.activity.wordbook
 
-import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -57,9 +57,6 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
         }
         dispatcher.addCallback(this, callback)
     }
-
-    override fun initViews() {}
-    override fun addListener() {}
 
     @Suppress("UNCHECKED_CAST")
     override fun onFragmentInteraction(vararg data: Any?) {
@@ -253,12 +250,18 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
     private fun etRequestFocus(editText: EditText){
         editText.requestFocus()
         // 延迟200ms 显示软键盘
-        Handler.createAsync(Looper.getMainLooper())
-            .postDelayed({
-                if (editText.isFocused){
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-                }
-            }, 200)
+        val showSoftInput = {
+            if (editText.isFocused){
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Handler.createAsync(Looper.getMainLooper())
+                .postDelayed(showSoftInput, 200)
+        } else {
+            Handler(Looper.getMainLooper())
+                .postDelayed(showSoftInput, 200)
+        }
     }
 }

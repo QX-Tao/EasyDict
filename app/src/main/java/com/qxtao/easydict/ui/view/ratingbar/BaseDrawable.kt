@@ -51,7 +51,7 @@ abstract class BaseDrawable : Drawable() {
         }
     }
 
-    override fun isStateful(): Boolean = mTintList?.isStateful ?: false
+    override fun isStateful(): Boolean = mTintList?.isStateful == true
 
     override fun onStateChange(state: IntArray): Boolean = updateTintFilter()
 

@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorSurface"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:fitsSystemWindowsInsets="top"
-    tools:context=".ui.fragment.dict.DictExtraFragment">
+    tools:context=".ui.fragment.settings.SettingsAppUpdateFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mt_title"
@@ -38,7 +37,7 @@
                 android:id="@+id/cv_app_update_hint"
                 app:cardCornerRadius="@dimen/card_view_radius_medium"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="?attr/colorPrimaryContainer"
+                app:cardBackgroundColor="?attr/colorSurfaceContainer"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
                 android:layout_marginStart="20dp"
@@ -49,7 +48,7 @@
                 <TextView
                     android:padding="16dp"
                     android:textSize="@dimen/text_size_normal"
-                    android:textColor="?attr/colorOnPrimaryContainer"
+                    android:textColor="?attr/colorOnSurface"
                     android:id="@+id/tv_app_update_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -74,10 +73,10 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="6dp"
                     android:src="@drawable/ic_down"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"/>
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"/>
 
                 <TextView
                     android:textColor="?attr/colorOnSurface"

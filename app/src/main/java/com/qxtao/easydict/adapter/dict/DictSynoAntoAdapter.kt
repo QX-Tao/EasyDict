@@ -1,14 +1,11 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
-import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
@@ -20,8 +17,8 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.Antonym
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.Synonym
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
-import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,7 +84,10 @@ class DictSynoAntoAdapter<T>(private val mItemData: ArrayList<T>) :
                     if (spa is UnderlineSpan){
                         val clickableSpan = object : ClickableSpan() {
                             override fun onClick(widget: View) {
-                                DictActivity.onSearchStr(holder.itemView.context, it.substring(it.getSpanStart(spa), it.getSpanEnd(spa)))
+                                DictActivity.onSearchStr(
+                                    holder.itemView.context,
+                                    it.substring(it.getSpanStart(spa), it.getSpanEnd(spa))
+                                )
                             }
                             override fun updateDrawState(ds: TextPaint) {
                                 ds.isUnderlineText = false
@@ -99,8 +99,8 @@ class DictSynoAntoAdapter<T>(private val mItemData: ArrayList<T>) :
                 }
             }
         }
-        holder.textContent.movementMethod = LinkMovementMethod.getInstance()
         holder.textContent.text = spannable
+        holder.textContent.movementMethod = LinkClickMovementMethod()
 
     }
 

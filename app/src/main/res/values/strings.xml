@@ -42,6 +42,7 @@
     <string name="input_word_or_sentence">输入单词或句子</string>
     <string name="voice_search_not_available">您的设备不支持该功能</string>
     <string name="notify_record_permission_desc">您需要开启录音权限，否则无法使用该功能。</string>
+    <string name="notify_write_external_permission_desc">您需要开启读写权限，否则无法使用该功能。</string>
     <string name="please_speech">请说</string>
     <string name="go_wrong_try_again">似乎发生错误了，请重新输入</string>
     <string name="speech_input">语音输入</string>
@@ -179,6 +180,10 @@
     <string name="word_learn">单词学习</string>
     <string name="def_voice">默认发音</string>
     <string name="def_voice_desc">适用于查词和背单词</string>
+    <string name="quick_search">快速查词</string>
+    <string name="quick_search_desc">通知栏快速查词</string>
+    <string name="quick_search_desc1">点击此处开始查词</string>
+    <string name="quick_search_notification_channel">QuickSearchNotificationChannel</string>
     <string name="clear_word_book">清空单词本</string>
     <string name="clear_word_book_desc1">这将会删除所有单词本，单词本中的单词也将一并删除，且无法撤销，确认继续吗？</string>
     <string name="clear_history_desc">清除搜索框下全部历史记录</string>
@@ -254,4 +259,25 @@
     <string name="netdisk">网盘</string>
     <string name="current_version_is_latest">😊 当前版本已是最新版本: %1$s</string>
     <string name="found_new_version_desc">😉 发现新版本: %1$s → %2$s</string>
+    <string name="nothing_to_copy">复制内容为空</string>
+    <string name="web_request_url_empty">网页链接为空</string>
+    <string name="load_bing_hint">网页链接不能为空，请选择访问必应或者退出浏览器！</string>
+    <string name="load_bing">访问必应</string>
+    <string name="notify_permission_desc">检测到应用的通知权限尚未开启，是否前往开启？</string>
+    <string name="close_quick_search_desc">未授予通知权限，已关闭快速查词功能</string>
+    <string name="close">关闭</string>
+    <string name="paste">粘贴</string>
+    <string name="search">搜索</string>
+    <string name="clear">清空</string>
+    <string name="no_paste_data">无粘贴数据</string>
+    <string name="error_message">错误信息</string>
+    <string name="undo_input">撤销输入</string>
+    <string name="redo_input">重做输入</string>
+    <string name="paste_text">粘贴文本</string>
+    <string name="clear_input">清空输入</string>
+    <string name="edit_panel">编辑面板</string>
+    <string name="backspace">回退</string>
+    <string name="daily_sentence_image">每日一句图片</string>
+    <string name="unfold_image">展开图片</string>
+    <string name="daily_sentence_sound">每日一句发音</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.qxtao.easydict.database
 
 import android.content.Context
-import android.util.Log
 import net.zetetic.database.sqlcipher.SQLiteDatabase
 import net.zetetic.database.sqlcipher.SQLiteOpenHelper
 

@@ -1,8 +1,6 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_COMPACT
@@ -120,17 +118,10 @@ class DictBlngSentsAdapter(private val mItemSentenceList: ArrayList<SentencePair
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var textEn: TextView
-        var textNum: TextView
-        var textCn: TextView
-        var imgVoice : ImageView
-
-        init {
-            textNum = itemView.findViewById(R.id.tv_item_num)
-            textEn = itemView.findViewById(R.id.tv_item_sen_en)
-            textCn = itemView.findViewById(R.id.tv_item_sen_cn)
-            imgVoice = itemView.findViewById(R.id.iv_item_sen_voice)
-        }
+        var textEn: TextView = itemView.findViewById(R.id.tv_item_sen_en)
+        var textNum: TextView = itemView.findViewById(R.id.tv_item_num)
+        var textCn: TextView = itemView.findViewById(R.id.tv_item_sen_cn)
+        var imgVoice : ImageView = itemView.findViewById(R.id.iv_item_sen_voice)
     }
 
 }

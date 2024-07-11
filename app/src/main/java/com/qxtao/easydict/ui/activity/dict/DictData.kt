@@ -433,6 +433,7 @@ data class DictsResponse(
 data class SearchText(
     val searchText: String?, // 确定搜索的文本
     val editSearchText: String, // 编辑搜索的文本
-    val editCursor: Int // 光标位置
+    val editSelectionStart: Int, // 光标位置
+    val editSelectionEnd: Int // 光标位置
 )
 

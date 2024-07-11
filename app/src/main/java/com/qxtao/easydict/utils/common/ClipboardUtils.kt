@@ -5,13 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
 import androidx.core.content.FileProvider
-import com.qxtao.easydict.R
-import java.io.BufferedInputStream
-import java.io.BufferedReader
 import java.io.File
-import java.io.FileReader
-import java.io.IOException
-import java.io.InputStream
 
 object ClipboardUtils {
 

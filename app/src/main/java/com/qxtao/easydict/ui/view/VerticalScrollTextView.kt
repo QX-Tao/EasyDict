@@ -1,24 +1,28 @@
 package com.qxtao.easydict.ui.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.text.method.ScrollingMovementMethod
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatTextView
 
-class VerticalScrollTextView : AppCompatTextView {
+class VerticalScrollTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     private var mNeedScrollFlag = false
     private var mLastScrollFlag = false
     private var mLastY = 0F
 
-    constructor(context : Context) : this(context, null)
-    constructor(context : Context, attrs : AttributeSet?) : this(context, attrs, 0)
-    constructor(context : Context, attrs : AttributeSet?, defStyleAttr : Int) : super(context, attrs, defStyleAttr) {
+    init {
         isVerticalScrollBarEnabled = true
         movementMethod = ScrollingMovementMethod.getInstance()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         event?.run {
             when (action) {

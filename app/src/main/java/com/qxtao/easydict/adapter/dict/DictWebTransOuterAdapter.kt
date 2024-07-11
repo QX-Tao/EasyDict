@@ -1,12 +1,9 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
-import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +16,7 @@ import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.WebTrans
 import com.qxtao.easydict.ui.activity.dict.WebTranslation
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
@@ -80,8 +78,8 @@ class DictWebTransOuterAdapter(
                 }
             }
             span.setSpan(clickableSpan, 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            holder.textValue.movementMethod = LinkMovementMethod.getInstance()
             holder.textValue.text = span
+            holder.textValue.movementMethod = LinkClickMovementMethod()
         }
         holder.textValue.visibility = if (item.key.isNullOrBlank()) View.GONE else View.VISIBLE
 

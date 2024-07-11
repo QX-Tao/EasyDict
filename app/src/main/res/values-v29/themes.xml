@@ -13,4 +13,10 @@
         <item name="windowNoTitle">true</item>
         <item name="dialogCornerRadius">@dimen/dialog_radius</item>
     </style>
+    <!-- AppWidgetTheme theme. -->
+    <style name="Theme.EasyDict.AppWidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="appWidgetRadius">16dp</item>
+        <item name="appWidgetInnerRadius">8dp</item>
+        <item name="appWidgetPadding">0dp</item>
+    </style>
 </resources>

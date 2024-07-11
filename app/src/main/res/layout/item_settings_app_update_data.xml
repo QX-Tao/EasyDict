@@ -43,7 +43,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="@dimen/text_size_large" />
 
     <TextView
@@ -112,6 +112,8 @@
 
         <ImageView
             android:padding="4dp"
+            android:layout_marginStart="2dp"
+            android:layout_gravity="center|start"
             android:src="@drawable/ic_github"
             android:layout_width="32dp"
             android:layout_height="32dp"/>
@@ -121,13 +123,12 @@
             android:focusable="true"
             android:clickable="true"
             android:background="?android:selectableItemBackground"
-            android:paddingStart="32dp"
+            android:paddingStart="34dp"
             android:paddingEnd="8dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:minHeight="32dp"
             android:text="@string/github"
-            android:drawablePadding="6dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="?attr/colorOnSurface"
@@ -151,6 +152,8 @@
 
         <ImageView
             android:padding="4dp"
+            android:layout_marginStart="2dp"
+            android:layout_gravity="center|start"
             android:src="@drawable/ic_netdisk"
             android:layout_width="32dp"
             android:layout_height="32dp"/>
@@ -160,13 +163,12 @@
             android:focusable="true"
             android:clickable="true"
             android:background="?android:selectableItemBackground"
-            android:paddingStart="32dp"
+            android:paddingStart="34dp"
             android:paddingEnd="8dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:minHeight="32dp"
             android:text="@string/netdisk"
-            android:drawablePadding="6dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="?attr/colorOnSurface"

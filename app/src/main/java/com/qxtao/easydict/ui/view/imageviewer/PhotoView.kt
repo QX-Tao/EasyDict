@@ -36,7 +36,7 @@ class PhotoView(private val activity: Activity) {
                 when (item.itemId) {
                     R.id.copy_to_clipboard -> {
                         val imgUrl = imageDataList[it]
-                        val savePath = activity.cacheDir.path + "/Image/"
+                        val savePath = activity.cacheDir.path + "/image/"
                         val fileName = EncryptUtils.encryptMD5ToString(imgUrl)
                         DataCache(activity).copyImage(imgUrl, fileName, savePath)
                     }
@@ -49,7 +49,7 @@ class PhotoView(private val activity: Activity) {
                     }
                     R.id.share_image -> {
                         val imgUrl = imageDataList[it]
-                        val savePath = activity.cacheDir.path + "/Image/"
+                        val savePath = activity.cacheDir.path + "/image/"
                         val fileName = EncryptUtils.encryptMD5ToString(imgUrl)
                         DataCache(activity).shareImage(imgUrl, fileName, savePath)
                     }
@@ -86,6 +86,46 @@ class PhotoView(private val activity: Activity) {
             alertDialog.show()
             return alertDialog
         }
+        private fun getLocalImagePath(fileName: String, savePath: String): String? {
+            val saveDir = File(savePath)
+            if (saveDir.exists() && saveDir.isDirectory) {
+                val files = saveDir.listFiles()
+                if (files != null) {
+                    for (file in files) {
+                        if (file.isFile && file.name.startsWith(fileName)) {
+                            return file.absolutePath
+                        }
+                    }
+                }
+            }
+            return null
+        }
+        private fun cacheImage(imgUrl: String, fileName: String, savePath: String, callback: ImageCacheCallback){
+            val saveDir = File(savePath)
+            if (!saveDir.exists()) { saveDir.mkdirs() }
+            val localImagePath = getLocalImagePath(fileName, savePath)
+            if (localImagePath != null) {
+                callback.onCached(localImagePath)
+                alertDialog.dismiss()
+                return
+            }
+            XHttp.downLoad(imgUrl)
+                .savePath(savePath)
+                .saveName(fileName)
+                .execute<String>(object : DownloadProgressCallBack<String?>() {
+                    override fun onStart() {}
+                    override fun onError(e: ApiException) {
+                        callback.onError()
+                        alertDialog.dismiss()
+                    }
+                    override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {}
+                    override fun onComplete(path: String) {
+                        callback.onCached(path)
+                        alertDialog.dismiss()
+                    }
+                })
+        }
+
         fun cacheImage(imgUrl: String, fileName: String, savePath: String){
             cacheImage(imgUrl, fileName, savePath, object : ImageCacheCallback {
                 override fun onCached(path: String) {
@@ -125,31 +165,10 @@ class PhotoView(private val activity: Activity) {
                 }
             })
         }
-
-        private fun cacheImage(imgUrl: String, fileName: String, savePath: String, callback: ImageCacheCallback){
-            val saveDir = File(savePath)
-            if (!saveDir.exists()) { saveDir.mkdirs() }
-            XHttp.downLoad(imgUrl)
-                .savePath(savePath)
-                .saveName(fileName)
-                .execute<String>(object : DownloadProgressCallBack<String?>() {
-                    override fun onStart() {}
-                    override fun onError(e: ApiException) {
-                        callback.onError()
-                        alertDialog.dismiss()
-                    }
-                    override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {}
-                    override fun onComplete(path: String) {
-                        callback.onCached(path)
-                        alertDialog.dismiss()
-                    }
-                })
-        }
     }
 
     interface ImageCacheCallback {
         fun onCached(path: String)
         fun onError()
     }
-
 }

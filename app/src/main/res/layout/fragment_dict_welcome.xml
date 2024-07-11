@@ -363,12 +363,10 @@
                     <ImageView
                         android:id="@+id/iv_day_sentence"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:scaleType="center"
+                        android:scaleType="centerCrop"
                         android:clickable="true"
                         android:focusable="true"
                         android:background="?attr/colorSurfaceContainerHighest"
-                        android:src="@drawable/ic_image_holder"
-                        android:padding="3dp"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"/>
 

@@ -20,6 +20,7 @@
         android:layout_height="0dp">
 
         <ImageView
+            android:contentDescription="@string/daily_sentence_image"
             android:id="@+id/iv_ds_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,6 +28,7 @@
             android:scaleType="centerCrop" />
 
         <ImageView
+            android:contentDescription="@string/unfold_image"
             android:clickable="true"
             android:focusable="true"
             android:layout_gravity="bottom|end"
@@ -97,6 +99,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_ds_year" />
 
             <ImageView
+                android:contentDescription="@string/daily_sentence_sound"
                 android:id="@+id/iv_ds_sound"
                 android:layout_width="36dp"
                 android:layout_height="36dp"

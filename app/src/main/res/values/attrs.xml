@@ -1,18 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@null</item>
-        <item name="android:textColorHighlight">?attr/colorSecondaryContainer</item>
-    </style>
-
-    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-    </style>
-    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
-    </style>
+    <declare-styleable name="AppWidgetAttrs">
+        <attr name="appWidgetPadding" format="dimension" />
+        <attr name="appWidgetInnerRadius" format="dimension" />
+        <attr name="appWidgetRadius" format="dimension" />
+    </declare-styleable>
 
     <declare-styleable name="ExpandableTextView">
         <attr name="limitedMaxLines" format="integer" />
@@ -42,7 +33,7 @@
     </declare-styleable>
 
     <declare-styleable name="AlignTextView">
-        <attr name="alignOnlyOneLine" format="boolean"/>
+        <attr name="alignOnlyOneLine" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="MaxHeightRecyclerView">
@@ -50,15 +41,15 @@
     </declare-styleable>
 
     <declare-styleable name="AndRatingBar">
-        <attr format="color|reference" name="starColor"/>
-        <attr format="color|reference" name="subStarColor"/>
-        <attr format="color|reference" name="bgColor"/>
-        <attr format="reference" name="starDrawable"/>
-        <attr format="reference" name="bgDrawable"/>
-        <attr format="boolean" name="keepOriginColor"/>
-        <attr format="float" name="scaleFactor"/>
-        <attr format="dimension" name="starSpacing"/>
-        <attr format="boolean" name="right2Left"/>
+        <attr name="starColor" format="color|reference" />
+        <attr name="subStarColor" format="color|reference" />
+        <attr name="bgColor" format="color|reference" />
+        <attr name="starDrawable" format="reference" />
+        <attr name="bgDrawable" format="reference" />
+        <attr name="keepOriginColor" format="boolean" />
+        <attr name="scaleFactor" format="float" />
+        <attr name="starSpacing" format="dimension" />
+        <attr name="right2Left" format="boolean" />
     </declare-styleable>
 
 </resources>

@@ -3,24 +3,24 @@
     <item
         android:id="@+id/add_word_book"
         android:icon="@drawable/ic_add_folder"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/add_word_book" />
 
     <item
         android:id="@+id/edit_word_book"
         android:icon="@drawable/ic_edit"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/edit_word_book" />
 
     <item
         android:id="@+id/select_all"
         android:icon="@drawable/ic_select_all"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/select_all" />
     <item
         android:id="@+id/unselect_all"
         android:icon="@drawable/ic_unselect_all"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/unselect_all" />
 
 </menu>

@@ -2,7 +2,6 @@ package com.qxtao.easydict.application
 
 import android.app.Activity
 import android.app.Application
-import android.content.Intent
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.qxtao.easydict.ui.activity.bughandler.BugHandlerActivity
@@ -18,21 +17,15 @@ class EasyDictApplication : Application() {
 
     companion object {
         lateinit var instance: EasyDictApplication
-        const val TAG = "EasyDictApplication"
+        private const val TAG = "EasyDictApplication"
     }
 
     override fun onCreate() {
         Thread.setDefaultUncaughtExceptionHandler { _, paramThrowable ->
             val exceptionMessage = Log.getStackTraceString(paramThrowable)
             val threadName = Thread.currentThread().name
-            Log.e(TAG, "Error on thread $threadName:\n $exceptionMessage")
-            activities.forEach { it.finish() }
-            val intent = Intent(this, BugHandlerActivity::class.java)
-            intent.putExtra("exception_message", exceptionMessage)
-            intent.putExtra("thread", threadName)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            exitProcess(10)
+            BugHandlerActivity.start(this, exceptionMessage, threadName)
+            exitProcess(-1)
         }
         super.onCreate()
         instance = this
@@ -66,7 +59,4 @@ class EasyDictApplication : Application() {
     fun removeActivity(activity: Activity) {
         activities.remove(activity)
     }
-
-
-
 }

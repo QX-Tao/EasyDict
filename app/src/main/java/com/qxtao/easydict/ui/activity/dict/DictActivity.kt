@@ -20,9 +20,9 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.FragmentManager
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,7 +46,11 @@ import com.qxtao.easydict.ui.fragment.dict.DictWelcomeFragment
 import com.qxtao.easydict.ui.view.LoadingView
 import com.qxtao.easydict.ui.view.imageviewer.PhotoView
 import com.qxtao.easydict.utils.common.AssetsUtils
+import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.EncryptUtils
+import com.qxtao.easydict.utils.common.ShareUtils
+import com.qxtao.easydict.utils.constant.ActionConstant.ACTION_CREATE_QUICK_SEARCH_NOTIFICATION
+import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_QUICK_SEARCH
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -56,6 +60,7 @@ import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
+import rikka.insets.windowInsetsHelper
 import java.util.Locale
 import kotlin.system.exitProcess
 
@@ -79,6 +84,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     // define widget
     private lateinit var speechDialog: AlertDialog
     private lateinit var lvLoading: LoadingView
+    private lateinit var clRoot: ConstraintLayout
 
     companion object {
         private var isReady = false
@@ -92,19 +98,15 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     override fun onCreate1(savedInstanceState: Bundle?) {
         super.onCreate1(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) displaySplash()
-        if (savedInstanceState == null){
-            if (searchStr.isNullOrBlank()){
-                lifecycleScope.launch(Dispatchers.IO) {
+        if (savedInstanceState == null) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val shouldUnzip = searchStr.isNullOrBlank()
+                if (shouldUnzip) {
                     val res = async { unzipData() }
                     if (withTimeoutOrNull(8000) { res.await() } == true) {
-                        simpleDictData = SimpleDictData(mContext)
-                        searchHistoryData = SearchHistoryData(mContext)
-                        wordBookData = WordBookData(mContext)
-                        dailySentenceData = DailySentenceData(mContext)
-                        wordListData = WordListData(mContext)
-                        withContext(Dispatchers.Main){
-                            dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                                searchHistoryData, wordBookData, dailySentenceData, wordListData))[DictViewModel::class.java]
+                        initializeData()
+                        withContext(Dispatchers.Main) {
+                            initializeViewModel()
                             toWelcomeFragment()
                             lvLoading.visibility = View.GONE
                             isReady = true
@@ -116,38 +118,43 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                             exitProcess(0)
                         }
                     }
-                }
-            } else {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    simpleDictData = SimpleDictData(mContext)
-                    searchHistoryData = SearchHistoryData(mContext)
-                    wordBookData = WordBookData(mContext)
-                    withContext(Dispatchers.Main){
-                        dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                            searchHistoryData, wordBookData))[DictViewModel::class.java]
+                } else {
+                    initializeData(searchStr)
+                    withContext(Dispatchers.Main) {
+                        initializeViewModel(searchStr)
                         toDefinitionFragment(searchStr!!)
                         lvLoading.visibility = View.GONE
                     }
                 }
             }
         } else {
-            if (searchStr.isNullOrBlank()){
-                simpleDictData = SimpleDictData(mContext)
-                searchHistoryData = SearchHistoryData(mContext)
-                wordBookData = WordBookData(mContext)
-                dailySentenceData = DailySentenceData(mContext)
-                wordListData = WordListData(mContext)
-                dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                    searchHistoryData, wordBookData, dailySentenceData, wordListData))[DictViewModel::class.java]
+            if (searchStr.isNullOrBlank()) {
+                initializeData()
+                initializeViewModel()
                 lvLoading.visibility = View.GONE
             } else {
-                simpleDictData = SimpleDictData(mContext)
-                searchHistoryData = SearchHistoryData(mContext)
-                wordBookData = WordBookData(mContext)
-                dictViewModel = ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
-                    searchHistoryData, wordBookData))[DictViewModel::class.java]
+                initializeData(searchStr)
+                initializeViewModel(searchStr)
                 lvLoading.visibility = View.GONE
             }
+        }
+    }
+    private fun initializeData(searchStr: String? = null) {
+        simpleDictData = SimpleDictData(mContext)
+        searchHistoryData = SearchHistoryData(mContext)
+        wordBookData = WordBookData(mContext)
+        if (searchStr == null) {
+            dailySentenceData = DailySentenceData(mContext)
+            wordListData = WordListData(mContext)
+        }
+    }
+    private fun initializeViewModel(searchStr: String? = null) {
+        dictViewModel = if (searchStr == null) {
+            ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
+                searchHistoryData, wordBookData, dailySentenceData, wordListData))[DictViewModel::class.java]
+        } else {
+            ViewModelProvider(this@DictActivity, DictViewModel.Factory(simpleDictData,
+                searchHistoryData, wordBookData))[DictViewModel::class.java]
         }
     }
 
@@ -171,18 +178,23 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
 
     override fun bindViews() {
         lvLoading = binding.lvLoading
+        clRoot = binding.clRoot
     }
-    override fun initViews() {}
-    override fun addListener() {}
+    override fun initViews() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+            clRoot.windowInsetsHelper?.fitSystemWindows = 0x50 or 0x00800003 or 0x00800005
+        }
+        initQuickSearch()
+    }
 
     override fun onFragmentInteraction(vararg data: Any?) {
         if (data.isNotEmpty()) {
             when (data[0]) {
-                "toDictSearchFragment" -> { toSearchFragment(DICT_SEARCH_HAS_FRAGMENT) }
+                "toDictSearchFragment" -> { toSearchFragment(DICT_SEARCH_HAS_FRAGMENT_TAG) }
                 "toExtraFragment"-> { toExtraFragment(data[1] as String) }
-                "toHasFragment" -> { toSearchFragment(DICT_SEARCH_HAS_FRAGMENT) }
+                "toHasFragment" -> { toSearchFragment(DICT_SEARCH_HAS_FRAGMENT_TAG) }
                 "toWelcomeFragment" -> { toWelcomeFragment() }
-                "toDetailFragment" -> { toSearchFragment(DICT_SEARCH_DETAIL_FRAGMENT, data[1] as String) }
+                "toDetailFragment" -> { toSearchFragment(DICT_SEARCH_DETAIL_FRAGMENT_TAG, data[1] as String) }
                 "finishActivity" -> { finish() }
                 "onBackPressed" -> { dispatcher.onBackPressed() }
                 "voiceSearch" -> { checkAndVoiceSearchWithPermissionCheck() }
@@ -250,7 +262,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             }
             recognitionHelper.releaseRecognition()
             dialog.dismiss()
-            toSearchFragment(DICT_SEARCH_DETAIL_FRAGMENT, etInput.text.toString())
+            toSearchFragment(DICT_SEARCH_DETAIL_FRAGMENT_TAG, etInput.text.toString())
         }
         etInput.postDelayed({ etInput.requestFocus() },200)
         dialog.show()
@@ -276,48 +288,58 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         dictViewModel.dictDetailMode = DICT_DETAIL_MODE_DEFINITION
     }
 
-    private fun toSearchFragment(childFragment: String, searchStr: String? = null){
+    private fun toSearchFragment(childFragmentTag: String, searchStr: String? = null){
         val currentFragment = supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
-        val dictSearchFragment = supportFragmentManager.findFragmentByTag(DICT_SEARCH_FRAGMENT_TAG) ?: DictSearchFragment()
         when (currentFragment){
             is DictSearchFragment -> {
-                when (childFragment){
-                    DICT_SEARCH_HAS_FRAGMENT -> {
-                        // 弹出所有fragment
-                        dictSearchFragment.childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        dictSearchFragment.childFragmentManager.commit {
-                            setReorderingAllowed(true)
-                            replace(R.id.dict_search_content_fragment, DictHasFragment(), DICT_SEARCH_HAS_FRAGMENT_TAG)
-                            addToBackStack(null)
+                val toFragment = currentFragment.childFragmentManager.findFragmentByTag(childFragmentTag) ?: when(childFragmentTag){
+                    DICT_SEARCH_HAS_FRAGMENT_TAG -> DictHasFragment()
+                    DICT_SEARCH_DETAIL_FRAGMENT_TAG -> DictDetailFragment()
+                    else -> return
+                }
+                val fromFragment = currentFragment.childFragmentManager.findFragmentByTag(dictViewModel.currentSearchChildFragmentTag)
+                if (fromFragment != null){
+                    if (dictViewModel.addedSearchChildFragment.contains(childFragmentTag)) {
+                        // 使用hide, show方法
+                        currentFragment.childFragmentManager.beginTransaction().apply {
+                            hide(fromFragment)
+                            show(toFragment)
+                            try { commitNow() } catch (_: IllegalStateException) {
+                                commitAllowingStateLoss() }
+                        }
+                    } else {
+                        // 使用add, hide, show方法
+                        currentFragment.childFragmentManager.beginTransaction().apply {
+                            add(R.id.dict_search_content_fragment, toFragment, childFragmentTag)
+                            hide(fromFragment)
+                            show(toFragment)
+                            try { commitNow() } catch (_: IllegalStateException) {
+                                commitAllowingStateLoss() }
                         }
                     }
-                    DICT_SEARCH_DETAIL_FRAGMENT -> {
-                        if (searchStr.isNullOrBlank()) return
-                        val existingDictDetailFragment = dictSearchFragment.childFragmentManager.findFragmentByTag(DICT_SEARCH_DETAIL_FRAGMENT_TAG) as? DictDetailFragment
-                        if (existingDictDetailFragment != null) {
-                            // 判断str与vm中保存的是否相同 相同则return 不同则需要重新查询
-                            if (searchStr == dictViewModel.searchText.value?.searchText) return
-                            else dictViewModel.onlineSearch(searchStr)
-                        } else {
-                            dictViewModel.onlineSearch(searchStr)
-                            // 弹出所有fragment
-                            dictSearchFragment.childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                            dictSearchFragment.childFragmentManager.commit {
-                                setReorderingAllowed(true)
-                                replace(R.id.dict_search_content_fragment, DictDetailFragment(), DICT_SEARCH_DETAIL_FRAGMENT_TAG)
-                                addToBackStack(null)
-                            }
-                        }
+                } else {
+                    currentFragment.childFragmentManager.beginTransaction().apply {
+                        add(R.id.dict_search_content_fragment, toFragment, childFragmentTag)
+                        show(toFragment)
+                        try { commitNow() } catch (_: IllegalStateException) {
+                            commitAllowingStateLoss() }
                     }
                 }
-            }
-            is DictDefinitionFragment -> {
-                if (searchStr.isNullOrBlank()) return
-                dictViewModel.onlineSearch(searchStr)
+                when(childFragmentTag){
+                    DICT_SEARCH_HAS_FRAGMENT_TAG -> {
+                        currentFragment.getEditTextFocus()
+                        dictViewModel.getDictSearchHistory()
+                    }
+                    DICT_SEARCH_DETAIL_FRAGMENT_TAG -> {
+                        if (searchStr.isNullOrBlank()) return else dictViewModel.onlineSearch(searchStr)
+                    }
+                }
+                dictViewModel.addedSearchChildFragment.add(childFragmentTag)
+                dictViewModel.currentSearchChildFragmentTag = childFragmentTag
             }
             else -> {
                 toFragment(DICT_SEARCH_FRAGMENT_TAG)
-                toSearchFragment(childFragment, searchStr)
+                toSearchFragment(childFragmentTag, searchStr)
             }
         }
     }
@@ -382,18 +404,24 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     private fun etRequestFocus(editText: EditText){
         editText.requestFocus()
         // 延迟200ms 显示软键盘
-        Handler.createAsync(Looper.getMainLooper())
-            .postDelayed({
-                if (editText.isFocused){
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-                }
-            }, 200)
+        val showSoftInput = {
+            if (editText.isFocused){
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Handler.createAsync(Looper.getMainLooper())
+                .postDelayed(showSoftInput, 200)
+        } else {
+            Handler(Looper.getMainLooper())
+                .postDelayed(showSoftInput, 200)
+        }
     }
 
     private fun etUnRequestFocus(editText: EditText){
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(editText.windowToken, 0)
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(editText.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         editText.clearFocus()
     }
 
@@ -417,8 +445,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         val index = etInput?.selectionStart ?: -1
         if (index < 0 || index >= editableText!!.length){
             editableText?.append(r)
-        } else
-            editableText.insert(index, r)
+        } else editableText.insert(index, r)
         tvInput?.visibility = View.VISIBLE
     }
     override fun onError(errCode: Int) {
@@ -427,9 +454,31 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         showShortToast(getString(R.string.go_wrong_try_again))
     }
 
+    // 快速查词功能
+    private fun initQuickSearch() {
+        val isNotificationsEnabled = NotificationManagerCompat.from(mContext).areNotificationsEnabled()
+        val isQuickSearchEnabled = ShareUtils.getBoolean(mContext, IS_USE_QUICK_SEARCH, false)
+        if (isNotificationsEnabled && isQuickSearchEnabled) sendBroadcast(Intent(ACTION_CREATE_QUICK_SEARCH_NOTIFICATION)
+            .apply { setPackage(packageName)}) else {
+            if (isQuickSearchEnabled) {
+                showShortToast(getString(R.string.close_quick_search_desc))
+                ShareUtils.delShare(mContext, IS_USE_QUICK_SEARCH)
+            }
+        }
+    }
 
     // 重写函数dispatchTouchEvent，实现点击搜索框外时，收起软键盘
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        // 排除部分控件
+        val currentFragment = if (this@DictActivity::dictViewModel.isInitialized){
+            supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
+        } else null
+        if (currentFragment is DictSearchFragment){
+            val clQuickSearchPanel = findViewById<ConstraintLayout>(R.id.cl_quick_search_panel)
+            // 判断ev是否落在view上
+            if (isTouchPointInView(clQuickSearchPanel, ev.x.toInt(), ev.y.toInt()))
+                return super.dispatchTouchEvent(ev)
+        }
         // 处理ACTION_DOWN事件
         if (ev.action == MotionEvent.ACTION_DOWN) {
             val view = currentFocus
@@ -458,20 +507,37 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
             manager.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS)
         }
     }
+    private fun isTouchPointInView(view: View?, x: Int, y: Int): Boolean {
+        if (view == null) return false
+        val location = IntArray(2)
+        view.getLocationInWindow(location)
+        val left = location[0]
+        val top = location[1]
+        val right = left + view.measuredWidth
+        val bottom = top + view.measuredHeight
+        return view.isClickable && y in top..bottom && x in left .. right
+    }
 
 
     // 程序初始化解压数据
     private suspend fun unzipData() : Boolean {
-        // 将基础词库取出来解压到数据库路径
-        return withContext(Dispatchers.IO){
-            val unzipFile = async {
-                    getDatabasePath(SIMPLE_DICT_FILE_NAME)?.parent?.let { AssetsUtils.unZipAssetsFolder(applicationContext, SIMPLE_DICT_ZIP_FILE_PATH, it) }
+        return withContext(Dispatchers.IO) {
+            val isFileValid = try {
+                val filePath = getDatabasePath(SIMPLE_DICT_FILE_NAME)?.absolutePath
+                filePath != null && EncryptUtils.encryptMD5FileToString(filePath).lowercase() == SIMPLE_DICT_MD5
+            } catch (_: Exception) { false }
+            if (isFileValid) { true } else {
+                val unzipFile = async {
+                    getDatabasePath(SIMPLE_DICT_FILE_NAME)?.parent?.let {
+                        AssetsUtils.unZipAssetsFolder(applicationContext, SIMPLE_DICT_ZIP_FILE_PATH, it)
+                    }
                 }.await() == true
-            val ready = try {
-                if (EncryptUtils.encryptMD5FileToString(getDatabasePath(SIMPLE_DICT_FILE_NAME).absolutePath).lowercase()
-                    == SIMPLE_DICT_MD5) true else unzipFile
-            } catch (e: Exception) { unzipFile }
-            if (ready) return@withContext true else unzipData()
+                val ready = try {
+                    if (EncryptUtils.encryptMD5FileToString(getDatabasePath(SIMPLE_DICT_FILE_NAME).absolutePath).lowercase() == SIMPLE_DICT_MD5) {
+                        true } else { unzipFile }
+                } catch (_: Exception) { unzipFile }
+                if (ready) true else unzipData()
+            }
         }
     }
 
@@ -511,29 +577,32 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         if (fromFragment != null){
             if (dictViewModel.addedFragment.contains(fragmentTag)){
                 // 使用hide, show方法
-                supportFragmentManager.commit {
+                supportFragmentManager.beginTransaction().apply {
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     hide(fromFragment)
                     show(toFragment)
+                    try { commitNow() } catch (_: IllegalStateException) {
+                        commitAllowingStateLoss() }
                 }
-                supportFragmentManager.executePendingTransactions()
             } else {
                 // 使用add, hide, show方法
-                supportFragmentManager.commit {
+                supportFragmentManager.beginTransaction().apply {
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     add(R.id.dict_fragment, toFragment, fragmentTag)
                     hide(fromFragment)
                     show(toFragment)
+                    try { commitNow() } catch (_: IllegalStateException) {
+                        commitAllowingStateLoss() }
                 }
-                supportFragmentManager.executePendingTransactions()
             }
         } else {
             // 使用add, show方法，这时候就不要加动画了
-            supportFragmentManager.commit {
+            supportFragmentManager.beginTransaction().apply {
                 add(R.id.dict_fragment, toFragment, fragmentTag)
                 show(toFragment)
+                try { commitNow() } catch (_: IllegalStateException) {
+                    commitAllowingStateLoss() }
             }
-            supportFragmentManager.executePendingTransactions()
         }
         dictViewModel.addedFragment.add(fragmentTag)
         dictViewModel.addedFragmentStack.add(fragmentTag)
@@ -545,13 +614,31 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         val toFragment = supportFragmentManager.findFragmentByTag(tFragmentTag) ?: return
         val fromFragment = supportFragmentManager.findFragmentByTag(cFragmentTag) ?: return
         // 使用hide, show方法
-        supportFragmentManager.commit {
+        supportFragmentManager.beginTransaction().apply {
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
             hide(fromFragment)
             show(toFragment)
+            try { commitNow() } catch (_: IllegalStateException) {
+                commitAllowingStateLoss() }
         }
-        supportFragmentManager.executePendingTransactions()
         dictViewModel.currentFragmentTag = tFragmentTag
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        val setPasteData = {
+            if (this::dictViewModel.isInitialized){
+                dictViewModel.setPasteData(
+                    ClipboardUtils.hasClipboardText(mContext),
+                    ClipboardUtils.getClipboardText(mContext)?.toString())
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Handler.createAsync(Looper.getMainLooper())
+                .postDelayed(setPasteData, 300)
+        } else {
+            Handler(Looper.getMainLooper())
+                .postDelayed(setPasteData, 300)
+        }
+    }
 }

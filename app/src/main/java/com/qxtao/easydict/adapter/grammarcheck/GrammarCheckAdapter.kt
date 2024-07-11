@@ -1,12 +1,9 @@
 package com.qxtao.easydict.adapter.grammarcheck
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
-import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
@@ -16,6 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.grammarcheck.GrammarCheckViewModel
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
@@ -65,7 +63,7 @@ class GrammarCheckAdapter(private val sentFeedbackItems: ArrayList<GrammarCheckV
             spannableString.setSpan(clickableSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         holder.tvRawSent.text = spannableString
-        holder.tvRawSent.movementMethod = LinkMovementMethod.getInstance()
+        holder.tvRawSent.movementMethod = LinkClickMovementMethod()
 
         holder.tvSuggestion.fixTextSelection()
         holder.tvCorrectSent.fixTextSelection()

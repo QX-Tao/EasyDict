@@ -44,9 +44,9 @@ class RecognitionHelper(private val context: Context) : RecognitionListener {
             return false
         }
         recognizer =  if (isRecognizerServiceValid) {
-            SpeechRecognizer.createSpeechRecognizer(context);
+            SpeechRecognizer.createSpeechRecognizer(context)
         } else {
-            SpeechRecognizer.createSpeechRecognizer(context, currentRecognitionCmp);
+            SpeechRecognizer.createSpeechRecognizer(context, currentRecognitionCmp)
         }
         recognizer.setRecognitionListener(this)
         mResultListener = resultListener

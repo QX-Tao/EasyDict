@@ -7,7 +7,6 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
-import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
@@ -24,9 +23,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.CollinsEntry
-import com.qxtao.easydict.ui.activity.dict.Entry
 import com.qxtao.easydict.ui.activity.dict.DictActivity
+import com.qxtao.easydict.ui.activity.dict.Entry
 import com.qxtao.easydict.ui.view.ratingbar.AndRatingBar
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import kotlinx.coroutines.CoroutineScope
@@ -48,6 +48,7 @@ class DictCollinsOuterAdapter(private val mItemList: ArrayList<CollinsEntry>) :
         return ViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item: CollinsEntry = mItemList[position]
         holder.tvHeadWord.text = item.headword
@@ -92,7 +93,10 @@ class DictCollinsOuterAdapter(private val mItemList: ArrayList<CollinsEntry>) :
                             if (span is UnderlineSpan){
                                 val clickableSpan = object : ClickableSpan() {
                                     override fun onClick(widget: View) {
-                                        DictActivity.onSearchStr(holder.itemView.context, it.substring(it.getSpanStart(span), it.getSpanEnd(span)))
+                                        DictActivity.onSearchStr(
+                                            holder.itemView.context,
+                                            it.substring(it.getSpanStart(span), it.getSpanEnd(span))
+                                        )
                                     }
                                     override fun updateDrawState(ds: TextPaint) {
                                         ds.isUnderlineText = false
@@ -104,8 +108,8 @@ class DictCollinsOuterAdapter(private val mItemList: ArrayList<CollinsEntry>) :
                         }
                     }
                 }
-                holder.tvTran.movementMethod = LinkMovementMethod.getInstance()
                 holder.tvTran.text = tranTextSpannable
+                holder.tvTran.movementMethod = LinkClickMovementMethod()
             }
 
             val s = mutableListOf<String>()
@@ -119,7 +123,7 @@ class DictCollinsOuterAdapter(private val mItemList: ArrayList<CollinsEntry>) :
                     holder.tvExam.visibility = View.GONE
                 }
             }
-            if (s.size > 0){
+            if (s.isNotEmpty()){
                 val examText = "\r" + s.joinToString("\n\r")
                 val d = ContextCompat.getDrawable(holder.itemView.context, R.drawable.ic_bullist_dot)
                 d!!.setBounds(0, 0, d.intrinsicWidth, d.intrinsicHeight)

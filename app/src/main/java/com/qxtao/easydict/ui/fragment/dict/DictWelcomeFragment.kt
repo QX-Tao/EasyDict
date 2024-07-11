@@ -5,11 +5,11 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
@@ -175,7 +175,7 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
             dictViewModel.getWordListInfo()
         }
         tvSearchBox.setOnClickListener {
-            dictViewModel.setSearchText(getString(R.string.empty_string),  0)
+            dictViewModel.setSearchText(getString(R.string.empty_string),  0, 0)
             mListener.onFragmentInteraction("toDictSearchFragment")
         }
         ivVoice.setOnClickListener {
@@ -231,5 +231,4 @@ class DictWelcomeFragment : BaseFragment<FragmentDictWelcomeBinding>(FragmentDic
         }
         return null
     }
-
 }

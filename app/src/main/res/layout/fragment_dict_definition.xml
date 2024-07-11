@@ -21,6 +21,7 @@
     <androidx.fragment.app.FragmentContainerView
         app:layout_constraintTop_toBottomOf="@id/mt_title"
         app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout="@layout/fragment_dict_detail"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/dict_definition_fragment"/>

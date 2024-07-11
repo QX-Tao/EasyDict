@@ -1,13 +1,15 @@
 package com.qxtao.easydict.adapter.dict
 
 import android.annotation.SuppressLint
-import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_COMPACT
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.AuthSentence
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
@@ -69,7 +72,17 @@ class DictAuthSentsAdapter(private val mItemSentenceList: ArrayList<AuthSentence
                     sourceText.getSpanStart(span), sourceText.getSpanEnd(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
+        sourceSpannable.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                sourceUrlClickListener?.onSourceUrlClick(holder.absoluteAdapterPosition)
+            }
+            override fun updateDrawState(ds: TextPaint) {
+                ds.isUnderlineText = false
+                ds.color = ColorUtils.colorTertiary(holder.itemView.context)
+            }
+        }, 0, sourceSpannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         holder.source.text = sourceSpannable
+        holder.source.movementMethod = LinkClickMovementMethod()
 
         val imageResId = if (position == playPosition) {
             R.drawable.ic_voice_on
@@ -79,9 +92,6 @@ class DictAuthSentsAdapter(private val mItemSentenceList: ArrayList<AuthSentence
             playPosition = holder.absoluteAdapterPosition
             holder.imgVoice.setImageResource(imageResId)
             playButtonClickListener?.onPlayButtonClick(position)
-        }
-        holder.source.setOnClickListener {
-            sourceUrlClickListener?.onSourceUrlClick(position)
         }
 
         holder.textEn.fixTextSelection()

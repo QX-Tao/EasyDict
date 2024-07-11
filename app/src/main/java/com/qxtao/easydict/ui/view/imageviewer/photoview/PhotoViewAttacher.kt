@@ -26,6 +26,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 @Suppress("unused")
+@SuppressLint("ClickableViewAccessibility")
 class PhotoViewAttacher(private val mImageView: ImageView) : OnTouchListener, OnLayoutChangeListener {
     private var mInterpolator: Interpolator = AccelerateDecelerateInterpolator()
     private var mZoomDuration: Int = DEFAULT_ZOOM_DURATION
@@ -252,7 +253,6 @@ class PhotoViewAttacher(private val mImageView: ImageView) : OnTouchListener, On
         initialize()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun initialize(){
         mImageView.setOnTouchListener(this)
         mImageView.addOnLayoutChangeListener(this)
@@ -335,7 +335,6 @@ class PhotoViewAttacher(private val mImageView: ImageView) : OnTouchListener, On
 
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onTouch(v: View, ev: MotionEvent): Boolean {
         var handled = false
         if (isZoomEnabled && Util.hasDrawable(v as ImageView)) {
@@ -343,18 +342,15 @@ class PhotoViewAttacher(private val mImageView: ImageView) : OnTouchListener, On
                 MotionEvent.ACTION_DOWN -> {
                     x = ev.x
                     y = ev.y
-                    // First, disable the Parent from intercepting the touch
-                    // event
-                    // If we're flinging, and the user presses down, cancel
-                    // fling
+                    // First, disable the Parent from intercepting the touch event
+                    // If we're flinging, and the user presses down, cancel fling
                     cancelFling()
                     v.getParent()?.requestDisallowInterceptTouchEvent(true)
                 }
 
                 MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
                     isTopEnd = false
-                    // If the user has zoomed less than min scale, zoom back
-                    // to min scale
+                    // If the user has zoomed less than min scale, zoom back to min scale
                     if (scale < mMinScale) {
                         val rect: RectF? = displayRect
                         if (rect != null) {
@@ -461,10 +457,6 @@ class PhotoViewAttacher(private val mImageView: ImageView) : OnTouchListener, On
         scale: Float, focalX: Float, focalY: Float,
         animate: Boolean
     ) {
-        // Check to see if the scale is within bounds
-//        if (scale < mMinScale || scale > mMaxScale) {
-//            throw new IllegalArgumentException("Scale must be within the range of minScale and maxScale");
-//        }
         if (animate) {
             mImageView.post(
                 AnimatedZoomRunnable(

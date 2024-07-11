@@ -1,14 +1,14 @@
 package com.qxtao.easydict.utils.common
 
-import android.content.Context
-import android.net.ConnectivityManager
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 import java.net.URL
+import java.security.KeyStore
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
+import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 
@@ -88,13 +88,6 @@ object HttpUtils {
         } catch (e: Exception) {
             false
         }
-    }
-
-    // 网络是否连接
-    fun isConnected(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
     }
 }
 

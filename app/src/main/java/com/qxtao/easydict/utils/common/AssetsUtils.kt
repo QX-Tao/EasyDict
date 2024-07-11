@@ -21,7 +21,7 @@ object AssetsUtils {
             try {
                 val inPutZip = ZipInputStream(context.assets.open(zipFileString))
                 var zipEntry: ZipEntry
-                var szName = ""
+                var szName: String
                 while (inPutZip.nextEntry.also { zipEntry = it } != null) {
                     szName = zipEntry.name
                     if (zipEntry.isDirectory) {

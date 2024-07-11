@@ -135,7 +135,6 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                             lvLoadFailed.visibility = View.GONE
                         }
                         2 -> {
-                            showShortToast(getString(R.string.loading_failure))
                             lvLoading.visibility = View.GONE
                             lvLoadFailed.visibility = View.VISIBLE
                         }
@@ -209,7 +208,6 @@ class DictExtraFragment : BaseFragment<FragmentDictExtraBinding>(FragmentDictExt
                             lvLoadFailed.visibility = View.GONE
                         }
                         2 -> {
-                            showShortToast(getString(R.string.loading_failure))
                             lvLoading.visibility = View.GONE
                             lvLoadFailed.visibility = View.VISIBLE
                         }

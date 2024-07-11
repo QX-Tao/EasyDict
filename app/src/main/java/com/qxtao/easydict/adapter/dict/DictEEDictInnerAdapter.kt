@@ -8,7 +8,6 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
-import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ImageSpan
 import android.text.style.LeadingMarginSpan
@@ -22,9 +21,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.R
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.EETranslationItem
+import com.qxtao.easydict.utils.LinkClickMovementMethod
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.SizeUtils
-import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -91,7 +90,10 @@ class DictEEDictInnerAdapter(private val mItemList: ArrayList<EETranslationItem>
                     if (spa is UnderlineSpan){
                         val clickableSpan = object : ClickableSpan() {
                             override fun onClick(widget: View) {
-                                DictActivity.onSearchStr(holder.itemView.context, it.substring(it.getSpanStart(spa), it.getSpanEnd(spa)))
+                                DictActivity.onSearchStr(
+                                    holder.itemView.context,
+                                    it.substring(it.getSpanStart(spa), it.getSpanEnd(spa))
+                                )
                             }
                             override fun updateDrawState(ds: TextPaint) {
                                 ds.isUnderlineText = false
@@ -103,8 +105,8 @@ class DictEEDictInnerAdapter(private val mItemList: ArrayList<EETranslationItem>
                 }
             }
         }
-        holder.tvWord.movementMethod = LinkMovementMethod.getInstance()
         holder.tvWord.text = spannable
+        holder.tvWord.movementMethod = LinkClickMovementMethod()
     }
 
     override fun getItemCount(): Int {

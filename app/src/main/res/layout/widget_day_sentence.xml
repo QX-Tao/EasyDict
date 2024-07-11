@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AppWidgetStyle"
+    android:theme="@style/Theme.EasyDict.AppWidgetTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/tv_ds_en"
+        android:id="@+id/appwidget_image"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_above="@id/tv_ds_cn"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:id="@+id/tv_ds_en"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_normal"/>
+
+    <TextView
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:id="@+id/tv_ds_cn"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

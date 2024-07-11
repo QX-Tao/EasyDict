@@ -4,9 +4,6 @@ const val SIMPLE_DICT_MD5 = "8b81915ef6f53264b5c1b4b49cbf6f99"
 const val SIMPLE_DICT_FILE_NAME = "simple_dict.db"
 const val SIMPLE_DICT_ZIP_FILE_PATH = "dict/simple_dict.zip"
 
-const val DICT_SEARCH_HAS_FRAGMENT = "dict_search_has_fragment"
-const val DICT_SEARCH_DETAIL_FRAGMENT = "dict_search_detail_fragment"
-
 const val DICT_WELCOME_FRAGMENT_TAG = "dict_welcome_fragment_tag"
 const val DICT_SEARCH_FRAGMENT_TAG = "dict_search_fragment_tag"
 const val DICT_EXTRA_FRAGMENT_TAG = "dict_extra_fragment_tag"

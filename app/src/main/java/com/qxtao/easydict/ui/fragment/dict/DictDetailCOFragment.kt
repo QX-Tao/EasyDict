@@ -1,17 +1,12 @@
 package com.qxtao.easydict.ui.fragment.dict
 
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.qxtao.easydict.adapter.dict.DictCollinsOuterAdapter
 import com.qxtao.easydict.databinding.FragmentDictDetailCoBinding
-import com.qxtao.easydict.ui.activity.dict.CO_FRAGMENT
 import com.qxtao.easydict.ui.activity.dict.DictActivity
 import com.qxtao.easydict.ui.activity.dict.DictViewModel
 import com.qxtao.easydict.ui.base.BaseFragment
-import com.qxtao.easydict.utils.common.SizeUtils
 
 
 class DictDetailCOFragment : BaseFragment<FragmentDictDetailCoBinding>(FragmentDictDetailCoBinding::inflate) {
@@ -37,9 +32,6 @@ class DictDetailCOFragment : BaseFragment<FragmentDictDetailCoBinding>(FragmentD
                 rvDictCollinsOuterAdapter.setData(it?.collins_entries)
             }
         }
-    }
-
-    override fun addListener() {
     }
 
 }

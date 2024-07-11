@@ -5,6 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
@@ -18,17 +25,58 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:taskAffinity="com.qxtao.easydict.taskaffinity"
         android:theme="@style/Theme.EasyDict"
         android:usesCleartextTraffic="true"
         tools:targetApi="34">
-        <activity
-            android:name=".ui.activity.bughandler.BugHandlerActivity"
-            android:exported="false" />
+        <receiver
+            android:name=".ui.widget.QuickSearchWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_search_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".ui.widget.DaySentenceWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/day_sentence_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".ui.activity.quicksearch.QuickSearchReceiver"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.qxtao.easydict.action.CLOSE_QUICK_SEARCH_NOTIFICATION" />
+                <action android:name="com.qxtao.easydict.action.CREATE_QUICK_SEARCH_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="android.app.WallpaperSupport"
             android:value="true" />
 
+        <activity
+            android:name=".ui.activity.quicksearch.QuickSearchActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.qxtao.easydict.taskaffinity.quicksearch"
+            android:theme="@style/Theme.EasyDict.QuickSearchTheme"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.activity.bughandler.BugHandlerActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.settings.SettingsActivity"
             android:exported="false" />
@@ -40,7 +88,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.daysentence.DaySentenceActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.activity.wordlist.WordListActivity"
             android:exported="false" />

@@ -43,6 +43,7 @@ abstract class BaseFragment<VB : ViewBinding>(val bindingBlock:(LayoutInflater, 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        onCreateView()
         _binding = bindingBlock(inflater,container,false)
         return _binding.root
     }

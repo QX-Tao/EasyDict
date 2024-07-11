@@ -1,5 +1,6 @@
 package com.qxtao.easydict.ui.activity.settings
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -15,14 +16,13 @@ import com.qxtao.easydict.databinding.ActivitySettingsBinding
 import com.qxtao.easydict.ui.base.BaseActivity
 import com.qxtao.easydict.ui.base.BaseFragment
 import com.qxtao.easydict.ui.fragment.settings.SettingsMainFragment
+import com.qxtao.easydict.utils.constant.ActionConstant.ACTION_CLOSE_QUICK_SEARCH_NOTIFICATION
+import com.qxtao.easydict.utils.constant.ActionConstant.ACTION_CREATE_QUICK_SEARCH_NOTIFICATION
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsBinding::inflate),
     BaseFragment.OnFragmentInteractionListener{
@@ -52,10 +52,6 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsB
         dispatcher.addCallback(this, callback)
     }
 
-    override fun initViews() {}
-
-    override fun addListener() {}
-
     override fun onFragmentInteraction(vararg data: Any?) {
         if (data.isNotEmpty()){
             when(data[0]){
@@ -64,6 +60,8 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsB
                 "clearHistory" -> showClearHistoryDialog()
                 "clearWordBook" -> showClearWordBookDialog()
                 "clearWordList" -> showClearWordListDialog()
+                "showQuickSearchNotification" -> sendBroadcast(Intent(ACTION_CREATE_QUICK_SEARCH_NOTIFICATION).apply { setPackage(packageName)})
+                "cancelQuickSearchNotification" -> sendBroadcast(Intent(ACTION_CLOSE_QUICK_SEARCH_NOTIFICATION).apply { setPackage(packageName)})
             }
         }
     }

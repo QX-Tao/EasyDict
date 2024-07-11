@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.qxtao.easydict.utils.common
 
 import android.content.Context

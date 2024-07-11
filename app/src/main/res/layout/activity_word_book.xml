@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/word_book_fragment"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    tools:context=".ui.activity.wordbook.WordBookActivity" />
+    app:fitsSystemWindowsInsets="start|end"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.wordbook.WordBookActivity"
+    tools:layout="@layout/fragment_word_book_classification" />

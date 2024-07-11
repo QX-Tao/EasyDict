@@ -1,6 +1,7 @@
 package com.qxtao.easydict.ui.fragment.settings
 
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -163,13 +164,19 @@ class SettingsWelcomeScreenFragment : BaseFragment<FragmentSettingsWelcomeScreen
     private fun etRequestFocus(editText: EditText){
         editText.requestFocus()
         // 延迟200ms 显示软键盘
-        Handler.createAsync(Looper.getMainLooper())
-            .postDelayed({
-                if (editText.isFocused){
-                    val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-                }
-            }, 200)
+        val showSoftInput = {
+            if (editText.isFocused){
+                val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Handler.createAsync(Looper.getMainLooper())
+                .postDelayed(showSoftInput, 200)
+        } else {
+            Handler(Looper.getMainLooper())
+                .postDelayed(showSoftInput, 200)
+        }
     }
 
 

@@ -50,7 +50,9 @@ class DictViewModel(
         "toefl" to "托福词汇", "xiaoxue" to "小学词汇", "chuzhong" to "初中大纲", "gaokao" to "高考大纲", "tem4" to "专四大纲", "tem8" to "专八大纲")
     private val voiceSoundMap = mapOf(-1 to NetConstant.dictVoice, 0 to NetConstant.voiceUs, 1 to NetConstant.voiceUk)
     var currentFragmentTag: String? = null
+    var currentSearchChildFragmentTag: String? = null
     var addedFragment = mutableSetOf<String>()
+    var addedSearchChildFragment = mutableSetOf<String>()
     var addedFragmentStack = Stack<String>()
     var extraFragmentStyle = MutableLiveData<String>()
 
@@ -80,6 +82,7 @@ class DictViewModel(
     var hasSearchResult = MutableLiveData<Boolean>() // 初始化-1 无结果0 有结果1
     var isSearchTextFavorite = MutableLiveData<Boolean>() // 搜索文本是否已收藏
     var dictDetailMode = DICT_DETAIL_MODE_NORMAL
+    var pasteData = MutableLiveData<Pair<Boolean, String?>>() // 粘贴板数据 <是否显示，内容>
 
     // 词典搜索信息
     var searchInfoResponse = MutableLiveData<SearchInfoResponse?>()
@@ -133,17 +136,22 @@ class DictViewModel(
         dataSuggestionLoadInfo.value = -1
         isSearchTextFavorite.value = false
         hasShowRvInfo.value = DICT_RV_HISTORY
-        searchText.value = SearchText(null, "",  0)
+        searchText.value = SearchText(null, "",  0, 0)
         dailySentenceItem.value = null
         wordListInfo.value = null
     }
 
+    // 设置可粘贴数据
+    fun setPasteData(isShow: Boolean, data: String? = pasteData.value?.second){
+        pasteData.value = Pair(isShow, data)
+    }
+
     // 设置搜索文本
-    fun setSearchText(editSearchText: String, editCursor: Int){
-        this.searchText.value = SearchText(this.searchText.value?.searchText, editSearchText, editCursor)
+    fun setSearchText(editSearchText: String, selectionStart:Int, selectionEnd: Int){
+        this.searchText.value = SearchText(this.searchText.value?.searchText, editSearchText, selectionStart, selectionEnd)
     }
     private fun setSearchText(searchText: String?, editSearchText: String = searchText ?: ""){
-        this.searchText.value = SearchText(searchText, editSearchText, searchText?.length ?: editSearchText.length)
+        this.searchText.value = SearchText(searchText, editSearchText, searchText?.length ?: editSearchText.length, searchText?.length ?: editSearchText.length)
     }
 
     // 获取搜索记录
@@ -218,7 +226,7 @@ class DictViewModel(
             } else {
                 try {
                     val imgResponse = HttpUtils.requestDisableCertificateValidationResponse(
-                        NetConstant.imgApi + TimeUtils.getFormatDateByPattern(date, "yyyy-MM-dd", "yyyyMMdd"))
+                        NetConstant.imgApi + TimeUtils.getFormatDateTimeByPattern(date, "yyyy-MM-dd", "yyyyMMdd"))
                     val imageUrl = imgResponse.request.url.toString()
 
                     val dailySentenceResponseJson = HttpUtils.requestResult(NetConstant.dailySentenceApi + date)
