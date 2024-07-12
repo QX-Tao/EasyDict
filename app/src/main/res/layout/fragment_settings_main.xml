@@ -66,6 +66,7 @@
                     android:scaleType="centerCrop" />
 
                 <TextView
+                    app:layout_constraintVertical_chainStyle="packed"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/tv_quick_search_desc1"
                     app:layout_constraintStart_toEndOf="@id/iv_quick_search"

@@ -1,6 +1,5 @@
 package com.qxtao.easydict.ui.fragment.dict
 
-import android.Manifest
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -38,7 +37,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import permissions.dispatcher.NeedsPermission
 
 
 class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictDetailBinding::inflate) {
