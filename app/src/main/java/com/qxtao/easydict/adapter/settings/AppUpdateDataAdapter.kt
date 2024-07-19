@@ -17,6 +17,7 @@ import com.qxtao.easydict.ui.activity.web.WebActivity
 import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.SizeUtils
 import com.qxtao.easydict.utils.common.TimeUtils
+import com.qxtao.easydict.utils.factory.fixTextSelection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -68,6 +69,7 @@ class AppUpdateDataAdapter(private val appUpdateDataItems: ArrayList<AppUpdateDa
             WebActivity.start(holder.itemView.context, url)
             ClipboardUtils.copyTextToClipboard(holder.itemView.context, "kDva", holder.itemView.context.getString(R.string.pwd_eee, "kDva"))
         }
+        holder.tvUpdateLogDesc.fixTextSelection()
     }
 
     override fun getItemCount(): Int = appUpdateDataItems.size
