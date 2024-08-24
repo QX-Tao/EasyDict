@@ -28,7 +28,6 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
     // define variable
     private val daySentencePagerAdapter by lazy { DaySentencePagerAdapter(this) }
     private val dailySentenceData by lazy { DailySentenceData(mContext) }
-    val photoView by lazy { PhotoView(this@DaySentenceActivity) }
     private lateinit var daySentenceViewModel: DaySentenceViewModel
     private lateinit var dispatcher: OnBackPressedDispatcher
     private lateinit var callback: OnBackPressedCallback

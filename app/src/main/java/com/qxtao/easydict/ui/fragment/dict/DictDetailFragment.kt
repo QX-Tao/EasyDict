@@ -44,7 +44,6 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
     private lateinit var dictDetailPagerAdapter : DictDetailPagerAdapter
     private val tabLayoutMap = mapOf(0 to "简明", 1 to "柯林斯", 2 to "英英")
     private lateinit var dictViewModel: DictViewModel
-    private lateinit var photoView: PhotoView
     // define widget
     private lateinit var searchDetailTablayout: TabLayout
     private lateinit var searchDetailViewpager: ViewPager2
@@ -112,7 +111,6 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
 
     override fun initViews() {
         dictViewModel = (activity as DictActivity).getDictViewModel()
-        photoView = (activity as DictActivity).photoView
         dictViewModel.playSound = if (ShareUtils.getString(mContext, ShareConstant.DEF_VOICE, ShareConstant.MEI) == ShareConstant.MEI) 0 else 1
         if (dictViewModel.currentFragmentTag == DICT_SEARCH_FRAGMENT_TAG){
             (parentFragment as DictSearchFragment).exitEditTextFocus()

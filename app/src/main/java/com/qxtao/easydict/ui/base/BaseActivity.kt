@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
 import com.qxtao.easydict.application.EasyDictApplication
+import com.qxtao.easydict.ui.view.imageviewer.PhotoView
 import com.qxtao.easydict.utils.common.ThemeUtils
 import com.qxtao.easydict.utils.factory.edgeToEdge
 import com.qxtao.easydict.utils.factory.isNotSystemInDarkMode
@@ -25,6 +26,7 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
     protected val binding by lazy{ block(layoutInflater) }
     private lateinit var _context: Context
     protected val mContext get() = _context
+    protected val photoView by lazy { PhotoView(this@BaseActivity) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { edgeToEdge() }

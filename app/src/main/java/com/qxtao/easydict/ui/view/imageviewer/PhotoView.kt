@@ -1,7 +1,9 @@
 package com.qxtao.easydict.ui.view.imageviewer
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,9 +13,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.R
+import com.qxtao.easydict.utils.EasyPermissions
 import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.ColorUtils
 import com.qxtao.easydict.utils.common.EncryptUtils
+import com.qxtao.easydict.utils.constant.PermissionConstant
 import com.xuexiang.xhttp2.XHttp
 import com.xuexiang.xhttp2.callback.DownloadProgressCallBack
 import com.xuexiang.xhttp2.exception.ApiException
@@ -45,7 +49,18 @@ class PhotoView(private val activity: Activity) {
                         val savePath = Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_PICTURES).absolutePath + "/EasyDict/"
                         val fileName = EncryptUtils.encryptMD5ToString(imgUrl)
-                        DataCache(activity).cacheImage(imgUrl, fileName, savePath)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            DataCache(activity).cacheImage(imgUrl, fileName, savePath)
+                        } else {
+                            val easyPermissions = EasyPermissions(activity)
+                            easyPermissions.need(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                .subscribe(object : EasyPermissions.Subscribe {
+                                    override fun onResult(requestCode: Int, allGranted: Boolean,
+                                                          permissions: Array<String>?) {
+                                        if (allGranted) DataCache(activity).cacheImage(imgUrl, fileName, savePath)
+                                    }
+                                }).request(PermissionConstant.REQUEST_CODE_WRITE_EXTERNAL_STORAGE)
+                        }
                     }
                     R.id.share_image -> {
                         val imgUrl = imageDataList[it]

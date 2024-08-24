@@ -43,6 +43,7 @@
     <string name="voice_search_not_available">您的设备不支持该功能</string>
     <string name="notify_record_permission_desc">您需要开启录音权限，否则无法使用该功能。</string>
     <string name="notify_write_external_permission_desc">您需要开启读写权限，否则无法使用该功能。</string>
+    <string name="notify_eee_permission_desc">您需要开启%1$s，否则无法使用该功能。</string>
     <string name="please_speech">请说</string>
     <string name="go_wrong_try_again">似乎发生错误了，请重新输入</string>
     <string name="speech_input">语音输入</string>
@@ -280,4 +281,6 @@
     <string name="daily_sentence_image">每日一句图片</string>
     <string name="unfold_image">展开图片</string>
     <string name="daily_sentence_sound">每日一句发音</string>
+    <string name="permission_write_external_storage">存储权限</string>
+    <string name="permission_record_audio">录音权限</string>
 </resources>

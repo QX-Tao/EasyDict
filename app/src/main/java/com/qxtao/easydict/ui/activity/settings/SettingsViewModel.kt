@@ -153,14 +153,6 @@ class SettingsViewModel : ViewModel() {
         )
         openSourceItems.add(
             OpenSourceItem(
-                "PermissionsDispatcher - Google",
-                "A declarative API to handle Android runtime permissions.",
-                "https://github.com/permissions-dispatcher/PermissionsDispatcher",
-                "Apache-2.0 License"
-            )
-        )
-        openSourceItems.add(
-            OpenSourceItem(
                 "AndRatingBar - wdsqjq",
                 "A RatingBar library for android, you can customize size, color, spacing and image easily! Support right to left.",
                 "https://github.com/wdsqjq/AndRatingBar",

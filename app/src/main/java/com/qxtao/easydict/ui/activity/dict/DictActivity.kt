@@ -44,28 +44,23 @@ import com.qxtao.easydict.ui.fragment.dict.DictHasFragment
 import com.qxtao.easydict.ui.fragment.dict.DictSearchFragment
 import com.qxtao.easydict.ui.fragment.dict.DictWelcomeFragment
 import com.qxtao.easydict.ui.view.LoadingView
-import com.qxtao.easydict.ui.view.imageviewer.PhotoView
+import com.qxtao.easydict.utils.EasyPermissions
 import com.qxtao.easydict.utils.common.AssetsUtils
 import com.qxtao.easydict.utils.common.ClipboardUtils
 import com.qxtao.easydict.utils.common.EncryptUtils
 import com.qxtao.easydict.utils.common.ShareUtils
 import com.qxtao.easydict.utils.constant.ActionConstant.ACTION_CREATE_QUICK_SEARCH_NOTIFICATION
+import com.qxtao.easydict.utils.constant.PermissionConstant
 import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_QUICK_SEARCH
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.OnNeverAskAgain
-import permissions.dispatcher.OnPermissionDenied
-import permissions.dispatcher.RuntimePermissions
 import rikka.insets.windowInsetsHelper
 import java.util.Locale
 import kotlin.system.exitProcess
 
-
-@RuntimePermissions
 class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::inflate),
     BaseFragment.OnFragmentInteractionListener, ASRResultListener{
     // define variable
@@ -79,7 +74,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     private lateinit var callback: OnBackPressedCallback
     private val recognitionHelper: RecognitionHelper by lazy { RecognitionHelper(this) }
     private val searchStr by lazy { intent?.getStringExtra("onSearch") }
-    val photoView by lazy { PhotoView(this@DictActivity) }
 
     // define widget
     private lateinit var speechDialog: AlertDialog
@@ -197,7 +191,7 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
                 "toDetailFragment" -> { toSearchFragment(DICT_SEARCH_DETAIL_FRAGMENT_TAG, data[1] as String) }
                 "finishActivity" -> { finish() }
                 "onBackPressed" -> { dispatcher.onBackPressed() }
-                "voiceSearch" -> { checkAndVoiceSearchWithPermissionCheck() }
+                "voiceSearch" -> { checkAndVoiceSearch() }
                 "editTextGetFocus" -> { etRequestFocus(data[1] as EditText) }
                 "editTextClearFocus" -> { etUnRequestFocus(data[1] as EditText) }
                 "showSelectWordBookDialog" -> { showSelectWordBookDialog() }
@@ -207,34 +201,21 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
 
     fun getDictViewModel(): DictViewModel = dictViewModel
 
-    @NeedsPermission(Manifest.permission.RECORD_AUDIO)
-    fun checkAndVoiceSearch(){
-        if (recognitionHelper.prepareRecognition(this)) recognitionHelper.startRecognition()
-        else {
-            showShortToast(getString(R.string.voice_search_not_available))
-            return
-        }
-        speechDialog = showVoiceInputDialog()
-    }
-
-    @OnNeverAskAgain(Manifest.permission.RECORD_AUDIO)
-    @OnPermissionDenied(Manifest.permission.RECORD_AUDIO)
-    fun showRecordPermissionDialog(){
-        val dialog = AlertDialog.Builder(mContext)
-            .setTitle(mContext.getString(R.string.hint))
-            .setMessage(mContext.getString(R.string.notify_record_permission_desc))
-            .setCancelable(true)
-            .setPositiveButton(mContext.getString(R.string.confirm)){ _, _ ->
-                toSettingsIntent()
-            }
-            .setNegativeButton(mContext.getString(R.string.cancel), null)
-            .create()
-        dialog.show()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
+    private fun checkAndVoiceSearch(){
+        val easyPermissions = EasyPermissions(this@DictActivity)
+        easyPermissions.need(Manifest.permission.RECORD_AUDIO)
+            .subscribe(object : EasyPermissions.Subscribe {
+                override fun onResult(requestCode: Int, allGranted: Boolean, permissions: Array<String>?) {
+                    if (allGranted) {
+                        if (recognitionHelper.prepareRecognition(this@DictActivity)) recognitionHelper.startRecognition()
+                        else {
+                            showShortToast(getString(R.string.voice_search_not_available))
+                            return
+                        }
+                        speechDialog = showVoiceInputDialog()
+                    }
+                }
+            }).request(PermissionConstant.REQUEST_CODE_RECORD_AUDIO)
     }
 
     private fun showVoiceInputDialog() : AlertDialog{

@@ -29,7 +29,6 @@ class DaySentenceFragment : BaseFragment<FragmentDaySentenceBinding>(FragmentDay
     private var d: Int = -1
     private var dailySentenceItem: DailySentenceData.DailySentence? = null
     private lateinit var daySentenceViewModel: DaySentenceViewModel
-    private lateinit var photoView: PhotoView
     // define widget
     private lateinit var lvLoading: LoadingView
     private lateinit var ivDsImage: ImageView
@@ -69,7 +68,6 @@ class DaySentenceFragment : BaseFragment<FragmentDaySentenceBinding>(FragmentDay
 
     override fun initViews() {
         daySentenceViewModel = (activity as DaySentenceActivity).getDaySentenceViewModel()
-        photoView = (activity as DaySentenceActivity).photoView
         date = getDate()
         d = TimeUtils.calculateDateDifference(date,"yyyy-MM-dd").toInt()
         prepareDailyData()
