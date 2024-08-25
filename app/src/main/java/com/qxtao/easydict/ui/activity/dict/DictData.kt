@@ -414,6 +414,14 @@ data class Etym(
 )
 
 /**
+ * Lan match
+ */
+data class LanMatchResponse(
+    val match: Boolean?
+)
+
+
+/**
  * 搜索信息
  */
 data class SearchInfoResponse(

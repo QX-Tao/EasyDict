@@ -24,8 +24,6 @@ import java.util.Locale
 
 class BugHandlerActivity : BaseActivity<ActivityBugHandlerBinding>(ActivityBugHandlerBinding::inflate) {
     // define variable
-    private lateinit var dispatcher: OnBackPressedDispatcher
-    private lateinit var callback: OnBackPressedCallback
     private val exceptionMessage by lazy { intent?.getStringExtra("exception_message") }
     private val threadName by lazy { intent?.getStringExtra("thread") }
 
@@ -45,14 +43,7 @@ class BugHandlerActivity : BaseActivity<ActivityBugHandlerBinding>(ActivityBugHa
         }
     }
 
-    override fun onCreate() {
-        dispatcher = onBackPressedDispatcher
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                finish()
-            }
-        }
-    }
+    override fun onHandleBackPressed() = finish()
 
     override fun bindViews() {
         mtTitle = binding.mtTitle

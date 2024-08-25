@@ -107,6 +107,7 @@ class DictViewModel(
     var webTransResponse = MutableLiveData<WebTransResponse?>()
     var etymResponse = MutableLiveData<EtymResponse?>()
     var specialResponse = MutableLiveData<SpecialResponse?>()
+    var lanMatchResponse = MutableLiveData<LanMatchResponse?>()
     // 双语例句
     var blngClassification = MutableLiveData<List<DictBlngClassificationAdapter.DictBlngClassificationItem>?>()
     var blngSents = MutableLiveData<Map<String, List<SentencePair>?>?>()
@@ -371,6 +372,7 @@ class DictViewModel(
         webTransResponse.value = null
         etymResponse.value = null
         specialResponse.value = null
+        lanMatchResponse.value = null
         dataMoreAuthLoadInfo.value = -1
         dataMoreBlngLoadInfo.value = -1
         hasSearchResult.value = true
@@ -757,6 +759,7 @@ class DictViewModel(
                                 picDictResponse.value = gson.fromJson(gson.toJson(res["pic_dict"]), PicDictResponse::class.java)
                                 inflectionResponse.value = gson.fromJson(gson.toJson(res["inflection"]), InflectionResponse::class.java)
                                 topicResponse.value = gson.fromJson(gson.toJson(res["topic"]), TopicResponse::class.java)
+                                lanMatchResponse.value = gson.fromJson(gson.toJson(res["lan_match"]), LanMatchResponse::class.java)
                                 setDictDetailData()
                                 setSearchHistoryItem(str)
                                 result.complete(true)

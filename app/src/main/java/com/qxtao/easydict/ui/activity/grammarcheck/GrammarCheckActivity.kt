@@ -58,6 +58,8 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
         grammarCheckViewModel = ViewModelProvider(this)[GrammarCheckViewModel::class.java]
     }
 
+    override fun onHandleBackPressed() = finish()
+
     override fun bindViews() {
         mtTitle = binding.mtTitle
         tvCheck = binding.tvCheck
@@ -132,7 +134,7 @@ class GrammarCheckActivity : BaseActivity<ActivityGrammarCheckBinding>(ActivityG
     }
 
     override fun addListener() {
-        mtTitle.setNavigationOnClickListener { finish() }
+        mtTitle.setNavigationOnClickListener { dispatcher.onBackPressed() }
         ivRedo.setOnClickListener { performEdit.redo() }
         ivUndo.setOnClickListener { performEdit.undo() }
         etGrammarCheck.doAfterTextChanged {

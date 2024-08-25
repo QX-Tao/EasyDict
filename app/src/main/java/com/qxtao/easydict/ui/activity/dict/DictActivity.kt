@@ -3,13 +3,11 @@ package com.qxtao.easydict.ui.activity.dict
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -17,8 +15,6 @@ import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationManagerCompat
@@ -70,8 +66,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
     private lateinit var wordBookData: WordBookData
     private lateinit var dailySentenceData: DailySentenceData
     private lateinit var wordListData: WordListData
-    private lateinit var dispatcher: OnBackPressedDispatcher
-    private lateinit var callback: OnBackPressedCallback
     private val recognitionHelper: RecognitionHelper by lazy { RecognitionHelper(this) }
     private val searchStr by lazy { intent?.getStringExtra("onSearch") }
 
@@ -152,28 +146,22 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         }
     }
 
-    override fun onCreate() {
-        dispatcher = onBackPressedDispatcher
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (photoView.imageViewer.handleBackPressed()) return
-                val currentFragment = if (this@DictActivity::dictViewModel.isInitialized){
-                        supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
-                    } else null
-                when(currentFragment){
-                    is DictWelcomeFragment, is DictDefinitionFragment -> finish()
-                    is DictSearchFragment, is DictExtraFragment -> backFragment()
-                    null -> finish()
-                }
-            }
+    override fun onHandleBackPressed() {
+        val currentFragment = if (this@DictActivity::dictViewModel.isInitialized){
+            supportFragmentManager.findFragmentByTag(dictViewModel.currentFragmentTag)
+        } else null
+        when(currentFragment){
+            is DictWelcomeFragment, is DictDefinitionFragment -> finish()
+            is DictSearchFragment, is DictExtraFragment -> backFragment()
+            null -> finish()
         }
-        dispatcher.addCallback(this, callback)
     }
 
     override fun bindViews() {
         lvLoading = binding.lvLoading
         clRoot = binding.clRoot
     }
+
     override fun initViews() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
             clRoot.windowInsetsHelper?.fitSystemWindows = 0x50 or 0x00800003 or 0x00800005
@@ -248,12 +236,6 @@ class DictActivity : BaseActivity<ActivityDictBinding>(ActivityDictBinding::infl
         etInput.postDelayed({ etInput.requestFocus() },200)
         dialog.show()
         return dialog
-    }
-
-    private fun toSettingsIntent(){
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.fromParts("package", mContext.packageName, null)
-        mContext.startActivity(intent)
     }
 
     private fun toWelcomeFragment() = toFragment(DICT_WELCOME_FRAGMENT_TAG)

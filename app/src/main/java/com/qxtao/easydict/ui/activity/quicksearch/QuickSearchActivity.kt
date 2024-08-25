@@ -56,9 +56,7 @@ class QuickSearchActivity: BaseActivity<ActivityQuickSearchBinding>(ActivityQuic
     private lateinit var simpleDictData: SimpleDictData
     private lateinit var searchHistoryData: SearchHistoryData
     private lateinit var quickSearchViewModel: QuickSearchViewModel
-    private lateinit var dispatcher: OnBackPressedDispatcher
     private lateinit var performEdit: PerformEdit
-    private lateinit var callback: OnBackPressedCallback
     private lateinit var rvSearchHistoryAdapter: QuickSearchWordLineAdapter<SearchHistoryData.SearchHistory>
     private lateinit var rvSearchSuggestionAdapter: QuickSearchWordLineAdapter<SimpleDictData.SimpleDict>
     private lateinit var snackBar: Snackbar
@@ -203,16 +201,7 @@ class QuickSearchActivity: BaseActivity<ActivityQuickSearchBinding>(ActivityQuic
             QuickSearchViewModel.Factory(simpleDictData, searchHistoryData))[QuickSearchViewModel::class.java]
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        dispatcher = onBackPressedDispatcher
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                finish()
-            }
-        }
-        dispatcher.addCallback(this, callback)
-    }
+    override fun onHandleBackPressed() = finish()
 
     override fun bindViews() {
         ivBack = binding.ivBack

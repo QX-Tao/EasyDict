@@ -488,7 +488,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvExternalDictPartMean.adapter = rvExternalDictAdapter
         rvExternalDictPartMean.layoutManager = FlexboxLayoutManager(requireActivity())
         dictViewModel.dictExternalDict.observe(this){
-            if ((it?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_EXTERNAL, true)){
+            if ((it?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_EXTERNAL, true) && dictViewModel.hasSearchResult.value == false){
                 clExternalDictPart.visibility = View.VISIBLE
                 rvExternalDictAdapter.setData(it?.take((requireActivity().appWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
             } else {
@@ -501,7 +501,7 @@ class DictDetailJMFragment : BaseFragment<FragmentDictDetailJmBinding>(FragmentD
         rvExternalTransPartMean.adapter = rvExternalTransAdapter
         rvExternalTransPartMean.layoutManager = FlexboxLayoutManager(requireActivity())
         dictViewModel.dictExternalTrans.observe(this){
-            if ((it?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_EXTERNAL, true)){
+            if ((it?.size ?: 0) > 0 && ShareUtils.getBoolean(mContext, IS_USE_EXTERNAL, true) && dictViewModel.hasSearchResult.value == false){
                 clExternalTransPart.visibility = View.VISIBLE
                 rvExternalTransAdapter.setData(it?.take((requireActivity().appWidth - SizeUtils.dp2px(30f)) / SizeUtils.dp2px(76f)))
             } else {

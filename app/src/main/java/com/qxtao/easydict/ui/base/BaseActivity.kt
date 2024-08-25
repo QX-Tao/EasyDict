@@ -10,6 +10,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
@@ -24,9 +26,11 @@ import rikka.material.app.MaterialActivity
 abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->VB) : MaterialActivity() {
 
     protected val binding by lazy{ block(layoutInflater) }
+    protected lateinit var dispatcher: OnBackPressedDispatcher
     private lateinit var _context: Context
     protected val mContext get() = _context
-    protected val photoView by lazy { PhotoView(this@BaseActivity) }
+    private val _photoViewDelegate = lazy { PhotoView(this@BaseActivity) }
+    val photoView by _photoViewDelegate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { edgeToEdge() }
@@ -65,6 +69,7 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
         onCreate()
         initViews()
         addListener()
+        handleBackPressed()
     }
 
 
@@ -112,6 +117,23 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
      * 回调 [addListener] 方法
      */
     protected open fun addListener() {}
+
+    /**
+     * Callback [onBackPressed] method
+     * 回调 [onBackPressed] 方法
+     */
+    private fun handleBackPressed() {
+        dispatcher = onBackPressedDispatcher
+        dispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (_photoViewDelegate.isInitialized()){
+                    if (photoView.imageViewer.handleBackPressed()) return
+                }
+                else onHandleBackPressed()
+            }
+        })
+    }
+    protected open fun onHandleBackPressed() {}
 
     /**
      * show short toast

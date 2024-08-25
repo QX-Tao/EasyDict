@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.qxtao.easydict.ui.view.imageviewer.PhotoView
 
 
 abstract class BaseFragment<VB : ViewBinding>(val bindingBlock:(LayoutInflater, ViewGroup?,Boolean) -> VB) : Fragment() {
@@ -19,7 +18,7 @@ abstract class BaseFragment<VB : ViewBinding>(val bindingBlock:(LayoutInflater, 
     protected val binding get() = _binding
     protected val mContext get() = _context
     protected val mListener get() = _listener!!
-    protected val photoView by lazy { PhotoView(requireActivity()) }
+    protected val photoView by lazy { (requireActivity() as BaseActivity<*>).photoView }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

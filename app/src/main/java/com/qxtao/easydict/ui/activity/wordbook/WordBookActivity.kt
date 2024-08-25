@@ -30,8 +30,6 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
     // define variable
     private lateinit var wordBookViewModel: WordBookViewModel
     private lateinit var wordBookData: WordBookData
-    private lateinit var dispatcher: OnBackPressedDispatcher
-    private lateinit var callback: OnBackPressedCallback
 
     override fun onCreate1(savedInstanceState: Bundle?) {
         super.onCreate1(savedInstanceState)
@@ -40,22 +38,16 @@ class WordBookActivity : BaseActivity<ActivityWordBookBinding>(ActivityWordBookB
         if (savedInstanceState == null){ toClassificationFragment() }
     }
 
-    override fun onCreate() {
-        dispatcher = onBackPressedDispatcher
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // 判断是否只有一个fragment 如果是则finish 不是则pop
-                if (supportFragmentManager.backStackEntryCount == 1) {
-                    finish()
-                } else {
-                    val currentFragment = supportFragmentManager.findFragmentById(R.id.word_book_fragment)
-                    if (currentFragment is WordBookDetailFragment && wordBookViewModel.detailMode.value == BOOK_WORD_MODE_CONTROL){
-                        wordBookViewModel.detailMode.value = BOOK_WORD_MODE_NORMAL
-                    } else supportFragmentManager.popBackStack(null, 0)
-                }
-            }
+    override fun onHandleBackPressed() {
+        // 判断是否只有一个fragment 如果是则finish 不是则pop
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            finish()
+        } else {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.word_book_fragment)
+            if (currentFragment is WordBookDetailFragment && wordBookViewModel.detailMode.value == BOOK_WORD_MODE_CONTROL){
+                wordBookViewModel.detailMode.value = BOOK_WORD_MODE_NORMAL
+            } else supportFragmentManager.popBackStack(null, 0)
         }
-        dispatcher.addCallback(this, callback)
     }
 
     @Suppress("UNCHECKED_CAST")

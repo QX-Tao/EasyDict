@@ -35,8 +35,6 @@ import com.qxtao.easydict.utils.constant.ShareConstant.IS_USE_WEB_VIEW
 
 class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate){
     // define variable
-    private lateinit var dispatcher: OnBackPressedDispatcher
-    private lateinit var callback: OnBackPressedCallback
     private lateinit var webViewModel: WebViewModel
     private var needLoadUrl = true
     private val initUrl by lazy { intent.getStringExtra("extra_initUrl") }
@@ -86,13 +84,10 @@ class WebActivity : BaseActivity<ActivityWebBinding>(ActivityWebBinding::inflate
             mContext.startActivity(intent)
             finish()
         }
-        dispatcher = onBackPressedDispatcher
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (webView.canGoBack()) webView.goBack() else finish()
-            }
-        }
-        dispatcher.addCallback(callback)
+    }
+
+    override fun onHandleBackPressed() {
+        if (webView.canGoBack()) webView.goBack() else finish()
     }
 
     override fun bindViews() {

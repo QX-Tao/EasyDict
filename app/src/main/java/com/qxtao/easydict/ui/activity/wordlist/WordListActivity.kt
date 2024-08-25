@@ -235,6 +235,8 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
         wordListViewModel = ViewModelProvider(this, WordListViewModel.Factory(wordListData))[WordListViewModel::class.java]
     }
 
+    override fun onHandleBackPressed() = finish()
+
     override fun initViews() {
         isInitView = true
         mtTitle.title = getString(R.string.word_list)
@@ -299,7 +301,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding>(ActivityWordListB
     }
 
     override fun addListener() {
-        mtTitle.setNavigationOnClickListener{ finish() }
+        mtTitle.setNavigationOnClickListener { dispatcher.onBackPressed() }
         swList.setOnClickListener { v ->
             when(wordListViewModel.dataLoadInfo.value){
                 1, 3 -> {

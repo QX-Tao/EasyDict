@@ -28,8 +28,6 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsB
     BaseFragment.OnFragmentInteractionListener{
     // define variable
     private lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var dispatcher: OnBackPressedDispatcher
-    private lateinit var callback: OnBackPressedCallback
 
     override fun onCreate1(savedInstanceState: Bundle?) {
         super.onCreate1(savedInstanceState)
@@ -37,19 +35,13 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsB
         if (savedInstanceState == null) { toMainFragment()  }
     }
 
-    override fun onCreate() {
-        dispatcher = onBackPressedDispatcher
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // 判断是否只有一个fragment 如果是则finish 不是则pop
-                if (supportFragmentManager.backStackEntryCount == 1) {
-                    finish()
-                } else {
-                    supportFragmentManager.popBackStack(null, 0)
-                }
-            }
+    override fun onHandleBackPressed() {
+        // 判断是否只有一个fragment 如果是则finish 不是则pop
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            finish()
+        } else {
+            supportFragmentManager.popBackStack(null, 0)
         }
-        dispatcher.addCallback(this, callback)
     }
 
     override fun onFragmentInteraction(vararg data: Any?) {

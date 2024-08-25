@@ -29,23 +29,16 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
     private val daySentencePagerAdapter by lazy { DaySentencePagerAdapter(this) }
     private val dailySentenceData by lazy { DailySentenceData(mContext) }
     private lateinit var daySentenceViewModel: DaySentenceViewModel
-    private lateinit var dispatcher: OnBackPressedDispatcher
-    private lateinit var callback: OnBackPressedCallback
     // define widget
     private lateinit var mtTitle : MaterialToolbar
     private lateinit var daySentenceViewPager : ViewPager2
 
     override fun onCreate() {
-        daySentenceViewModel = ViewModelProvider(this, DaySentenceViewModel.Factory(dailySentenceData))[DaySentenceViewModel::class.java]
-        dispatcher = onBackPressedDispatcher
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (photoView.imageViewer.handleBackPressed()) return
-                finish()
-            }
-        }
-        dispatcher.addCallback(callback)
+        daySentenceViewModel = ViewModelProvider(this,
+            DaySentenceViewModel.Factory(dailySentenceData))[DaySentenceViewModel::class.java]
     }
+
+    override fun onHandleBackPressed() = finish()
 
     override fun bindViews() {
         mtTitle = binding.mtTitle
@@ -57,7 +50,7 @@ class DaySentenceActivity : BaseActivity<ActivityDaySentenceBinding>(ActivityDay
     }
 
     override fun addListener() {
-        mtTitle.setNavigationOnClickListener { finish() }
+        mtTitle.setNavigationOnClickListener { dispatcher.onBackPressed() }
         mtTitle.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.back_to_today -> daySentenceViewPager.setCurrentItem(0, false)

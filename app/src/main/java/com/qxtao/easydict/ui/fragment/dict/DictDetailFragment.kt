@@ -223,6 +223,14 @@ class DictDetailFragment : BaseFragment<FragmentDictDetailBinding>(FragmentDictD
                 }
             }
         }
+        dictViewModel.lanMatchResponse.observe(this){
+            if (it != null && it.match == false){
+                clWordHeader.visibility = View.VISIBLE
+                clTransHeader.visibility = View.GONE
+                clVoice.visibility = View.GONE
+                ivWdPic.visibility = View.GONE
+            }
+        }
         dictViewModel.picDictResponse.observe(this) {
             if (it != null && (it.pic?.size ?: 0) > 0) {
                 ivWdPic.visibility = View.VISIBLE
