@@ -126,10 +126,8 @@ abstract class BaseActivity<VB : ViewBinding>(open val block:(LayoutInflater)->V
         dispatcher = onBackPressedDispatcher
         dispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (_photoViewDelegate.isInitialized()){
-                    if (photoView.imageViewer.handleBackPressed()) return
-                }
-                else onHandleBackPressed()
+                if (_photoViewDelegate.isInitialized() && photoView.imageViewer.handleBackPressed())
+                    return else onHandleBackPressed()
             }
         })
     }

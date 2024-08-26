@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.androidx.webkit)
     implementation(libs.androidx.transition.ktx)
     implementation(libs.androidx.sqlite.ktx)
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

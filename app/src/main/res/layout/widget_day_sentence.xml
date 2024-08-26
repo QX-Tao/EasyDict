@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/AppWidgetStyle"
+    android:id="@+id/appwidget_container"
     android:theme="@style/Theme.EasyDict.AppWidgetTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent">

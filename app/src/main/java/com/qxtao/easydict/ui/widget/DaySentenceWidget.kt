@@ -3,18 +3,18 @@ package com.qxtao.easydict.ui.widget
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.Rect
-import android.graphics.RectF
 import android.widget.RemoteViews
 import androidx.core.graphics.drawable.toBitmap
+import androidx.work.Constraints
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.qxtao.easydict.R
@@ -29,6 +29,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 
 class DaySentenceWidget : AppWidgetProvider() {
@@ -43,7 +45,7 @@ class DaySentenceWidget : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
+        scheduleDailyUpdate(context)
     }
 
     override fun onDisabled(context: Context) {
@@ -56,7 +58,7 @@ class DaySentenceWidget : AppWidgetProvider() {
         appWidgetId: Int
     ) {
         val remoteViews = RemoteViews(context.packageName, R.layout.widget_day_sentence)
-        remoteViews.setOnClickPendingIntent(R.id.appwidget_image, openAppPendingIntent(context))
+        remoteViews.setOnClickPendingIntent(R.id.appwidget_container, openAppPendingIntent(context))
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
 
         CoroutineScope(Dispatchers.IO).launch{
@@ -123,4 +125,53 @@ class DaySentenceWidget : AppWidgetProvider() {
             }
         }
     }
+
+    inner class DailyUpdateWorker(
+        context: Context,
+        workerParams: WorkerParameters
+    ) : CoroutineWorker(context, workerParams) {
+
+        override suspend fun doWork(): Result {
+            val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(applicationContext, DaySentenceWidget::class.java))
+
+            for (appWidgetId in appWidgetIds) {
+                DaySentenceWidget().updateAppWidget(applicationContext, appWidgetManager, appWidgetId)
+            }
+
+            return Result.success()
+        }
+    }
+
+    private fun scheduleDailyUpdate(context: Context) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val dailyWorkRequest = PeriodicWorkRequestBuilder<DailyUpdateWorker>(1, TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .setInitialDelay(calculateInitialDelay(), TimeUnit.MILLISECONDS)
+            .build()
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            "DailyUpdateWork",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            dailyWorkRequest
+        )
+    }
+
+    private fun calculateInitialDelay(): Long {
+        val currentTime = Calendar.getInstance()
+        val dueTime = Calendar.getInstance()
+        dueTime.set(Calendar.HOUR_OF_DAY, 0)
+        dueTime.set(Calendar.MINUTE, 30)
+        dueTime.set(Calendar.SECOND, 0)
+
+        if (dueTime.before(currentTime)) {
+            dueTime.add(Calendar.HOUR_OF_DAY, 24)
+        }
+
+        return dueTime.timeInMillis - currentTime.timeInMillis
+    }
+
 }

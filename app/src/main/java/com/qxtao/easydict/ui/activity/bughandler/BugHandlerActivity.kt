@@ -7,8 +7,6 @@ import android.os.Build
 import android.os.Environment
 import android.util.Log
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import com.google.android.material.appbar.MaterialToolbar
 import com.qxtao.easydict.BuildConfig
 import com.qxtao.easydict.R
